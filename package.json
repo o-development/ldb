@@ -6,8 +6,13 @@
     "dev:ios": "expo start -c --ios",
     "dev:web": "expo start -c --web",
     "dev:android": "expo start -c --android",
+    "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:web:watch\"",
     "clean": "rm -rf .expo node_modules",
-    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css"
+    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
+    "build:web": "expo export -p web",
+    "build:web:watch": "npx chokidar '**/*' -i 'dist/**' -i 'node_modules/**' -c 'npm run build:web'",
+    "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
+    "build:ldo": "ldo build --input .shapes --output .ldo"
   },
   "dependencies": {
     "@radix-ui/react-progress": "^1.1.7",
@@ -43,7 +48,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
+    "@solid/community-server": "^7.1.7",
     "@types/react": "~19.0.14",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.1.2",
     "typescript": "^5.8.3"
   },
   "private": true
