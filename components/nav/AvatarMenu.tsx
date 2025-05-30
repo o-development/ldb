@@ -1,4 +1,5 @@
-import { useResource, useSolidAuth, useSubject } from "@ldo/solid-react";
+import React from 'react';
+import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import {
   Avatar,
   Button,
@@ -8,13 +9,13 @@ import {
   MenuItem,
   Popover,
   Text,
-} from "@ui-kitten/components";
-import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
-import { FunctionComponent, useState } from "react";
-import { StyleSheet, View } from "react-native";
+} from '@ui-kitten/components';
+import { TouchableWithoutFeedback } from '@ui-kitten/components/devsupport';
+import { FunctionComponent, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import { ThemeToggleMenu } from "./ThemeToggleMenu";
-import { SolidProfileShapeShapeType } from "../.ldo/profile.shapeTypes";
+import { ThemeToggleMenu } from './ThemeToggleMenu';
+import { SolidProfileShapeShapeType } from '../.ldo/profile.shapeTypes';
 
 export const AvatarMenu: FunctionComponent = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -27,7 +28,7 @@ export const AvatarMenu: FunctionComponent = () => {
   const renderAvatar = () => (
     <TouchableWithoutFeedback onPress={() => setMenuVisible(true)}>
       <Avatar
-        source={{ uri: "https://api.lorem.space/image/face?w=150&h=150" }}
+        source={{ uri: 'https://api.lorem.space/image/face?w=150&h=150' }}
       />
     </TouchableWithoutFeedback>
   );
@@ -38,15 +39,16 @@ export const AvatarMenu: FunctionComponent = () => {
       visible={menuVisible}
       placement="bottom end"
       onBackdropPress={() => setMenuVisible(false)}
-      style={styles.popover}>
+      style={styles.popover}
+    >
       <Layout>
         <View style={styles.profileHeader}>
           <Avatar
             size="giant"
-            source={{ uri: "https://api.lorem.space/image/face?w=150&h=150" }}
+            source={{ uri: 'https://api.lorem.space/image/face?w=150&h=150' }}
           />
           <View style={styles.profileText}>
-            <Text category="h6">{profile?.fn || ""}</Text>
+            <Text category="h6">{profile?.fn || ''}</Text>
             <Button size="tiny">Edit your profile</Button>
           </View>
         </View>
@@ -64,13 +66,13 @@ export const AvatarMenu: FunctionComponent = () => {
 };
 
 const styles = StyleSheet.create({
-  popover: { width: 300, overflow: "hidden", borderRadius: 12 },
-  profileHeader: { padding: 8, flexDirection: "row", alignItems: "center" },
+  popover: { width: 300, overflow: 'hidden', borderRadius: 12 },
+  profileHeader: { padding: 8, flexDirection: 'row', alignItems: 'center' },
   profileText: {
     marginLeft: 8,
-    justifyContent: "space-around",
-    alignSelf: "stretch",
-    alignItems: "flex-start",
+    justifyContent: 'space-around',
+    alignSelf: 'stretch',
+    alignItems: 'flex-start',
     flex: 1,
   },
 });

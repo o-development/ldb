@@ -1,19 +1,17 @@
-import { Icon, Input, Text, useTheme } from "@ui-kitten/components";
 import { FunctionComponent, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Input } from "~/components/ui/input";
 
 const url = "https://noat.io/jackson/chats/chat1.ttl";
 const split = ["noat.io", "jackson", "chats", "chat1"];
 
 export const AddressBox: FunctionComponent = () => {
-  const theme = useTheme();
   const [isTextMode, setIsTextMode] = useState(false);
 
   return (
     <View style={styles.boxContainer}>
       <Input
         style={styles.input}
-        textStyle={styles.inputText}
         onFocus={() => {
           setIsTextMode(true);
         }}
