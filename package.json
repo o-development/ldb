@@ -15,6 +15,7 @@
     "build:ldo": "ldo build --input .shapes --output .ldo"
   },
   "dependencies": {
+    "@ldo/solid-react": "^1.0.0-alpha.24",
     "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-navigation/native": "^7.0.0",
