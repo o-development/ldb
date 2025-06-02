@@ -1,19 +1,15 @@
 import React from 'react';
 import { useSolidAuth } from '@ldo/solid-react';
 import { FunctionComponent } from 'react';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { View } from 'react-native';
 
 import { AddressBox } from './AddressBox';
 import { AvatarMenu } from './AvatarMenu';
 import { SignInMenu } from './SignInMenu';
 import { ViewMenu } from './ViewMenu';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
 import { Card } from '~/components/ui/card';
-import { Text } from '~/components/ui/text';
 
 export const Header: FunctionComponent = () => {
-  const { width } = useWindowDimensions();
   const { session } = useSolidAuth();
 
   return (

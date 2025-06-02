@@ -2,7 +2,6 @@ import { useSolidAuth } from '@ldo/solid-react';
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import { ThemeToggleMenu } from './ThemeToggleMenu';
 import { Button } from '../ui/button';
 import { Text } from '../ui/text';
 import { EllipsisVertical } from '~/lib/icons/EllipsisVertical';

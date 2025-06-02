@@ -1,16 +1,10 @@
 import React from 'react';
 import { FunctionComponent, useState } from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { Input } from '~/components/ui/input';
 import { ChevronRight } from '~/lib/icons/ChevronRight';
 import { ChevronsRight } from '~/lib/icons/ChevronsRight';
 import { TextCursorInput } from '~/lib/icons/TextCursorInput';
-import { ArrowRight } from '~/lib/icons/ArrowRight';
 import { RefreshCw } from '~/lib/icons/RefreshCw';
 import { Button } from '~/components/ui/button';
 

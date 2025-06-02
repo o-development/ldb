@@ -15,6 +15,7 @@
     "build:ldo": "ldo build --input .shapes --output .ldo"
   },
   "dependencies": {
+    "@inrupt/solid-client-authn-browser": "^2.5.0",
     "@ldo/solid-react": "^1.0.0-alpha.24",
     "@radix-ui/react-navigation-menu": "^1.2.13",
     "@radix-ui/react-popover": "^1.1.14",
