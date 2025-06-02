@@ -146,7 +146,7 @@ function NavigationMenuViewport({
   ref?: React.RefObject<NavigationMenuPrimitive.ViewportRef>;
 }) {
   return (
-    <View className={cn('absolute left-0 top-full flex justify-center')}>
+    <View className={cn('fixed right-0 top-12 mr-2 ml-2 flex justify-center')}>
       <View
         className={cn(
           'web:origin-top-center relative mt-1.5 web:h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg web:animate-in web:zoom-in-90',

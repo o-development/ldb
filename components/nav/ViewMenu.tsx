@@ -15,16 +15,18 @@ import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '~/lib/utils';
 import { ViewIcon } from '~/lib/icons/ViewIcon';
+import { Button } from '../ui/button';
+import { LucideIcon } from 'lucide-react-native';
 
 const menuItems = [
   {
-    icon: Code,
+    icon: Folders,
     title: 'Container',
     description:
       'The Container Navigator displays all the contents of a container.',
   },
   {
-    icon: Folders,
+    icon: Code,
     title: 'Raw Code',
     description:
       '<ADVANCED> The Raw Code viewer lets you see and modify the raw underlying document.',
@@ -33,7 +35,6 @@ const menuItems = [
 
 export const ViewMenu: FunctionComponent = () => {
   const insets = useSafeAreaInsets();
-  console.log(insets);
   const contentInsets = {
     top: insets.top,
     bottom: insets.bottom,
@@ -54,21 +55,21 @@ export const ViewMenu: FunctionComponent = () => {
       )}
       <NavigationMenu value={value} onValueChange={setValue}>
         <NavigationMenuList>
-          <NavigationMenuItem value="components">
+          <NavigationMenuItem value="views">
             <NavigationMenuTrigger>
               <ViewIcon />
-              <Text className="text-foreground">Views</Text>
+              <Text className="sm:block hidden">Views</Text>
             </NavigationMenuTrigger>
             <NavigationMenuContent insets={contentInsets}>
               <View
                 role="list"
-                className="web:grid w-[400px] gap-3 p-4 md:w-[500px] web:md:grid-cols-2 lg:w-[600px] "
+                className="web:grid w-dvw gap-3 p-4 md:w-[500px] web:md:grid-cols-2 lg:w-[600px] "
               >
                 {menuItems.map((menuItem) => (
                   <ListItem
                     key={menuItem.title}
                     title={menuItem.title}
-                    href="/"
+                    icon={menuItem.icon}
                   >
                     {menuItem.description}
                   </ListItem>
@@ -84,26 +85,28 @@ export const ViewMenu: FunctionComponent = () => {
 
 const ListItem = React.forwardRef<
   ViewRef,
-  React.ComponentPropsWithoutRef<typeof View> & { title: string; href: string }
->(({ className, title, children, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof View> & {
+    title: string;
+    icon: LucideIcon;
+  }
+>(({ className, title, children, icon, ...props }, ref) => {
   // TODO: add navigationn to `href` on `NavigationMenuLink` onPress
+  const Icon = icon;
   return (
     <View role="listitem">
-      <NavigationMenuLink
+      <View
         ref={ref}
         className={cn(
-          'web:block web:select-none gap-1 rounded-md p-3 leading-none no-underline text-foreground web:outline-none web:transition-colors web:hover:bg-accent active:bg-accent web:hover:text-accent-foreground web:focus:bg-accent web:focus:text-accent-foreground',
+          'web:select-none flex-row items-center overflow-hidden rounded-md p-3 leading-none no-underline text-foreground web:outline-none web:transition-colors web:hover:bg-accent active:bg-accent web:hover:text-accent-foreground web:focus:bg-accent web:focus:text-accent-foreground cursor-pointer',
           className,
         )}
         {...props}
       >
-        <Text className="text-sm native:text-base font-medium text-foreground leading-none">
+        <Icon size={20} />
+        <Text className="text-sm native:text-base font-medium text-foreground leading-none ml-2">
           {title}
         </Text>
-        <Text className="line-clamp-2 text-sm native:text-base leading-snug text-muted-foreground">
-          {children}
-        </Text>
-      </NavigationMenuLink>
+      </View>
     </View>
   );
 });

@@ -23,28 +23,10 @@ export const AddressBox: FunctionComponent = () => {
   return (
     <View className="flex-1">
       <Input
-        className="flex-1 bg-secondary border-none pl-10 pr-10 web:focus-visible:ring-0 web:focus-visible:ring-transparent web:focus-visible:ring-offset-0 web:focus:outline-none web:outline-none"
+        className="flex-1 bg-secondary web:py-2.5 border-none pl-10 pr-10 h-[40px] text-sm web:focus-visible:ring-0 web:focus-visible:ring-transparent web:focus-visible:ring-offset-0 web:focus:outline-none web:outline-none"
         onFocus={() => setIsTextMode(true)}
         onBlur={() => setIsTextMode(false)}
         value={isTextMode ? url : ''}
-        // accessoryLeft={(props) => (
-        //   <Icon
-        //     {...props}
-        //     className={`${props?.className || ''} mx-0`}
-        //     name={isTextMode ? 'arrowhead-right' : 'edit-2'}
-        //   />
-        // )}
-        // accessoryRight={
-        //   isTextMode
-        //     ? (props) => (
-        //         <Icon
-        //           {...props}
-        //           className={`${props?.className || ''} mx-0`}
-        //           name="arrow-forward"
-        //         />
-        //       )
-        //     : undefined
-        // }
       />
       <Button
         variant="secondary"

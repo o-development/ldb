@@ -16,8 +16,6 @@ export const Header: FunctionComponent = () => {
   const { width } = useWindowDimensions();
   const { session } = useSolidAuth();
 
-  console.log('Rendering');
-
   return (
     <Card
       className={
@@ -28,7 +26,7 @@ export const Header: FunctionComponent = () => {
       <View className="mr-1" />
       <ViewMenu />
       <View className="mr-1" />
-      {/* {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />} */}
+      {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />}
     </Card>
   );
 };
