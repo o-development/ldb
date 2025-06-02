@@ -48,7 +48,7 @@ export const AddressBox: FunctionComponent = () => {
       />
       <Button
         variant="secondary"
-        className="absolute left-0 w-10 h-9"
+        className="absolute left-0 w-10 h-10"
         onPress={() => setIsTextMode((val) => !val)}
       >
         {isTextMode ? (
@@ -59,13 +59,13 @@ export const AddressBox: FunctionComponent = () => {
       </Button>
       <Button
         variant="secondary"
-        className="absolute right-0 w-10 h-9"
+        className="absolute right-0 w-10 h-10"
         onPress={() => console.log('go!')}
       >
         <RefreshCw size={20} />
       </Button>
       <View
-        className="absolute top-0 left-0 right-0 bottom-0 flex-row items-center ml-10 overflow-x-auto scrollbar-hide"
+        className="absolute top-0 left-0 right-0 bottom-0 flex-row items-center ml-10 mr-10 overflow-x-auto scrollbar-hide"
         pointerEvents="none"
       >
         {!isTextMode &&

@@ -25,7 +25,9 @@ export const Header: FunctionComponent = () => {
       }
     >
       <AddressBox />
-      {/* <ViewMenu /> */}
+      <View className="mr-1" />
+      <ViewMenu />
+      <View className="mr-1" />
       {/* {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />} */}
     </Card>
   );
