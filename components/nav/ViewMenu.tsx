@@ -1,49 +1,20 @@
-import { Button, Icon, MenuItem, OverflowMenu } from "@ui-kitten/components";
-import { FunctionComponent, useState } from "react";
-import { StyleSheet } from "react-native";
+import { FunctionComponent } from 'react';
+import { Code } from '~/lib/icons/Code';
+import { Folders } from '~/lib/icons/Folders';
 
 const menuItems = [
   {
-    icon: "file-text",
-    name: "a noat",
+    icon: Code,
+    name: 'Container',
+    description:
+      'The Container Navigator displays all the contents of a container.',
   },
   {
-    icon: "code",
-    name: "code",
+    icon: Folders,
+    title: 'Raw Code',
+    description:
+      '<ADVANCED> The Raw Code viewer lets you see and modify the raw underlying document.',
   },
 ];
 
-export const ViewMenu: FunctionComponent = () => {
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  const renderButton = () => (
-    <Button
-      style={styles.menuButton}
-      onPress={() => setMenuVisible(true)}
-      appearance="ghost"
-      accessoryRight={(props) => <Icon {...props} name="keypad" />}
-    />
-  );
-
-  return (
-    <OverflowMenu
-      anchor={renderButton}
-      visible={menuVisible}
-      placement="bottom end"
-      onBackdropPress={() => setMenuVisible(false)}
-      style={styles.menu}>
-      {menuItems.map((item) => (
-        <MenuItem
-          key={item.icon}
-          title={`View as ${item.name}`}
-          accessoryLeft={(props) => <Icon {...props} name={item.icon} />}
-        />
-      ))}
-    </OverflowMenu>
-  );
-};
-
-const styles = StyleSheet.create({
-  menuButton: { width: 40 },
-  menu: { overflow: "hidden", borderRadius: 12 },
-});
+export const ViewMenu: FunctionComponent = () => {};

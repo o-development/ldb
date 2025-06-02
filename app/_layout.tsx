@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { Appearance, Platform } from 'react-native';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -16,6 +16,7 @@ import { PortalHost } from '@rn-primitives/portal';
 import { ThemeToggle } from '~/components/ThemeToggle';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { BrowserSolidLdoProvider } from '@ldo/solid-react';
+import { Header } from '~/components/nav/Header';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -45,15 +46,11 @@ export default function RootLayout() {
     <BrowserSolidLdoProvider>
       <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              title: 'Starter Base',
-              headerRight: () => <ThemeToggle />,
-            }}
-          />
-        </Stack>
+        <Stack
+          screenOptions={{
+            header: ({ navigation, route, options, back }) => <Header />,
+          }}
+        />
         <PortalHost />
       </ThemeProvider>
     </BrowserSolidLdoProvider>

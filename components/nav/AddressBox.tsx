@@ -1,60 +1,85 @@
-import { FunctionComponent, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Input } from "~/components/ui/input";
+import React from 'react';
+import { FunctionComponent, useState } from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Input } from '~/components/ui/input';
+import { ChevronRight } from '~/lib/icons/ChevronRight';
+import { ChevronsRight } from '~/lib/icons/ChevronsRight';
+import { TextCursorInput } from '~/lib/icons/TextCursorInput';
+import { ArrowRight } from '~/lib/icons/ArrowRight';
+import { RefreshCw } from '~/lib/icons/RefreshCw';
+import { Button } from '~/components/ui/button';
 
-const url = "https://noat.io/jackson/chats/chat1.ttl";
-const split = ["noat.io", "jackson", "chats", "chat1"];
+const url = 'https://noat.io/jackson/chats/chat1.ttl';
+const split = ['noat.io', 'jackson', 'chats', 'chat1'];
 
 export const AddressBox: FunctionComponent = () => {
   const [isTextMode, setIsTextMode] = useState(false);
 
   return (
-    <View style={styles.boxContainer}>
+    <View className="flex-1">
       <Input
-        style={styles.input}
-        onFocus={() => {
-          setIsTextMode(true);
-        }}
-        onBlur={() => {
-          setIsTextMode(false);
-        }}
-        value={isTextMode ? url : ""}
-        accessoryLeft={(props) => (
-          <Icon
-            {...props}
-            style={[props?.style, styles.inputAccessory]}
-            name={isTextMode ? "arrowhead-right" : "edit-2"}
-          />
-        )}
-        accessoryRight={
-          isTextMode
-            ? (props) => (
-                <Icon
-                  {...props}
-                  style={[props?.style, styles.inputAccessory]}
-                  name="arrow-forward"
-                />
-              )
-            : undefined
-        }
+        className="flex-1 bg-secondary border-none pl-10 pr-10 web:focus-visible:ring-0 web:focus-visible:ring-transparent web:focus-visible:ring-offset-0 web:focus:outline-none web:outline-none"
+        onFocus={() => setIsTextMode(true)}
+        onBlur={() => setIsTextMode(false)}
+        value={isTextMode ? url : ''}
+        // accessoryLeft={(props) => (
+        //   <Icon
+        //     {...props}
+        //     className={`${props?.className || ''} mx-0`}
+        //     name={isTextMode ? 'arrowhead-right' : 'edit-2'}
+        //   />
+        // )}
+        // accessoryRight={
+        //   isTextMode
+        //     ? (props) => (
+        //         <Icon
+        //           {...props}
+        //           className={`${props?.className || ''} mx-0`}
+        //           name="arrow-forward"
+        //         />
+        //       )
+        //     : undefined
+        // }
       />
-      <View style={styles.textModeBox} pointerEvents="none">
+      <Button
+        variant="secondary"
+        className="absolute left-0 w-10 h-9"
+        onPress={() => setIsTextMode((val) => !val)}
+      >
+        {isTextMode ? (
+          <ChevronsRight size={20} />
+        ) : (
+          <TextCursorInput size={20} />
+        )}
+      </Button>
+      <Button
+        variant="secondary"
+        className="absolute right-0 w-10 h-9"
+        onPress={() => console.log('go!')}
+      >
+        <RefreshCw size={20} />
+      </Button>
+      <View
+        className="absolute top-0 left-0 right-0 bottom-0 flex-row items-center ml-10 overflow-x-auto scrollbar-hide"
+        pointerEvents="none"
+      >
         {!isTextMode &&
           split.map((item, index) => (
-            <View style={styles.pathPartContainer} key={item}>
+            <View className="flex-row" key={item}>
               <TouchableOpacity>
                 <View pointerEvents="auto">
-                  <Text style={styles.pathPartText} category="s2">
-                    {item}
-                  </Text>
+                  <Text className="mr-0.5 underline text-sm">{item}</Text>
                 </View>
               </TouchableOpacity>
-              {index !== split.length - 1 && (
-                <Icon
-                  name="arrow-ios-forward"
-                  fill={theme["text-basic-color"]}
-                  style={styles.pathPartIcon}
-                />
+              {index !== split.length - 1 ? (
+                <ChevronRight className="w-4 h-4 mr-0.5 mt-0.5 text-gray-500" />
+              ) : (
+                <View className="w-2" />
               )}
             </View>
           ))}
@@ -62,28 +87,3 @@ export const AddressBox: FunctionComponent = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  boxContainer: { flex: 1 },
-  input: { flex: 1 },
-  inputText: { minWidth: 0 },
-  inputAccessory: { marginHorizontal: 0 },
-  textModeBox: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    flexDirection: "row",
-    overflow: "scroll",
-    marginLeft: 44,
-    alignItems: "center",
-  },
-  pathPartContainer: { flexDirection: "row" },
-  pathPartText: { marginRight: 2, textDecorationLine: "underline" },
-  pathPartIcon: {
-    marginRight: 2,
-    width: 16,
-    height: 16,
-  },
-});

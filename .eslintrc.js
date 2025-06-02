@@ -7,6 +7,7 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error'],
-    "react/no-unstable-nested-components": false
+    'react/no-unstable-nested-components': 0,
+    '@typescript-eslint/no-unused-vars': 1,
   },
 };
