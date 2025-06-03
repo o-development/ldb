@@ -14,6 +14,17 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { ThemeToggleMenu } from './ThemeToggleMenu';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog';
+import { Input } from '../ui/input';
 
 const DEFAULT_ISSUER = 'http://localhost:3000';
 
@@ -71,15 +82,45 @@ export const SignInMenu: FunctionComponent = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64 native:w-72">
             <DropdownMenuGroup>
-              <DropdownMenuItem className="sm:hidden flex">
+              <DropdownMenuItem
+                className="sm:hidden flex"
+                onPress={() => signUp(DEFAULT_ISSUER)}
+              >
                 <Text>Sign Up</Text>
               </DropdownMenuItem>
-              <DropdownMenuItem className="sm:hidden flex">
+              <DropdownMenuItem
+                className="sm:hidden flex"
+                onPress={() => login(DEFAULT_ISSUER)}
+              >
                 <Text>Log In</Text>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Text>Log in with Another Pod</Text>
-              </DropdownMenuItem>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem closeOnPress={false}>
+                    <Text>Log in with Another Pod</Text>
+                  </DropdownMenuItem>
+                </DialogTrigger>
+                <DialogContent className="w-[400px]">
+                  <DialogHeader>
+                    <DialogTitle>Solid WebId or Identity Provider</DialogTitle>
+                    <DialogDescription>
+                      <Input
+                        value={idpValue}
+                        placeholder={DEFAULT_ISSUER}
+                        onChangeText={(newText) => setIdpValue(newText)}
+                        onSubmitEditing={onIdpSubmit}
+                      />
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button onPress={onIdpSubmit}>
+                        <Text>OK</Text>
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <ThemeToggleMenu />

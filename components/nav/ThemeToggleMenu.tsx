@@ -16,6 +16,7 @@ export const ThemeToggleMenu: FunctionComponent = () => {
         setColorScheme(colorScheme === 'light' ? 'dark' : 'light');
       }}
       className="justify-between"
+      closeOnPress={false}
     >
       <Text className="flex flex-row gap-1 items-center">
         {colorScheme === 'dark' ? <MoonStar /> : <Sun />} Dark Mode
@@ -30,23 +31,4 @@ export const ThemeToggleMenu: FunctionComponent = () => {
       />
     </DropdownMenuItem>
   );
-
-  // return (
-  //   <MenuItem
-  //     {...props}
-  //     title="Dark Mode"
-  //     onPress={() => setColorScheme(colorScheme === 'light' ? 'dark' : 'light')}
-  //     accessoryLeft={(props) => (
-  //       <Icon {...props} name={colorScheme === 'dark' ? 'moon' : 'sun'} />
-  //     )}
-  //     accessoryRight={(props) => (
-  //       <Toggle
-  //         {...props}
-  //         style={styles.toggle}
-  //         checked={colorScheme === 'dark'}
-  //         onChange={}
-  //       />
-  //     )}
-  //   />
-  // );
 };

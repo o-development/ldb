@@ -17,6 +17,7 @@
   "dependencies": {
     "@inrupt/solid-client-authn-browser": "^2.5.0",
     "@ldo/solid-react": "^1.0.0-alpha.25",
+    "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-navigation-menu": "^1.2.13",
@@ -28,6 +29,7 @@
     "@react-native-async-storage/async-storage": "2.1.2",
     "@react-navigation/native": "^7.0.0",
     "@rn-primitives/avatar": "~1.2.0",
+    "@rn-primitives/dialog": "^1.2.0",
     "@rn-primitives/dropdown-menu": "^1.2.0",
     "@rn-primitives/label": "^1.2.0",
     "@rn-primitives/navigation-menu": "^1.2.0",

@@ -54,10 +54,10 @@ export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
 
   useEffect(() => {
     const lookupCurColorScheme = async () => {
+      setColorScheme(Appearance.getColorScheme() ?? 'system');
       const storedColorSchemeName: ColorSchemeName =
         ((await AsyncStorage.getItem(COLOR_SCHEME_KEY)) as ColorSchemeName) ||
         Appearance.getColorScheme();
-      console.log('Stored Color Scheme', storedColorSchemeName);
       if (storedColorSchemeName) {
         setColorScheme(storedColorSchemeName);
       }
@@ -79,12 +79,10 @@ export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
     [loadingColorScheme, colorScheme, setColorScheme],
   );
 
-  console.log('Color Scheme', colorScheme);
-
   return (
     <>
       <ApplicationThemeProvider
-        value={colorScheme === 'light' ? LIGHT_THEME : DARK_THEME}
+        value={context.colorScheme === 'light' ? LIGHT_THEME : DARK_THEME}
       >
         <ThemeProviderContext.Provider value={context}>
           {children}
