@@ -10,15 +10,9 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import Animated, { FadeIn } from 'react-native-reanimated';
 import { ThemeToggleMenu } from './ThemeToggleMenu';
 
 const DEFAULT_ISSUER = 'http://localhost:3000';

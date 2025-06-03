@@ -6,7 +6,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '~/components/ui/navigation-menu';
@@ -15,7 +14,6 @@ import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '~/lib/utils';
 import { ViewIcon } from '~/lib/icons/ViewIcon';
-import { Button } from '../ui/button';
 import { LucideIcon } from 'lucide-react-native';
 
 const menuItems = [
@@ -91,7 +89,7 @@ const ListItem = React.forwardRef<
     title: string;
     icon: LucideIcon;
   }
->(({ className, title, children, icon, ...props }, ref) => {
+>(({ className, title, icon, ...props }, ref) => {
   // TODO: add navigationn to `href` on `NavigationMenuLink` onPress
   const Icon = icon;
   return (
