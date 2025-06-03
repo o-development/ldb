@@ -1,31 +1,13 @@
 import '~/global.css';
-
-import {
-  DarkTheme,
-  DefaultTheme,
-  Theme,
-  ThemeProvider,
-} from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Appearance, Platform } from 'react-native';
-import { NAV_THEME } from '~/lib/constants';
-import { useColorScheme } from '~/lib/useColorScheme';
 import { PortalHost } from '@rn-primitives/portal';
-import { ThemeToggle } from '~/components/ThemeToggle';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { BrowserSolidLdoProvider } from '@ldo/solid-react';
 import { Header } from '~/components/nav/Header';
-
-const LIGHT_THEME: Theme = {
-  ...DefaultTheme,
-  colors: NAV_THEME.light,
-};
-const DARK_THEME: Theme = {
-  ...DarkTheme,
-  colors: NAV_THEME.dark,
-};
+import { ThemeProvider } from '~/components/ThemeProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -40,12 +22,11 @@ const usePlatformSpecificSetup = Platform.select({
 
 export default function RootLayout() {
   usePlatformSpecificSetup();
-  const { isDarkColorScheme } = useColorScheme();
 
   return (
     <BrowserSolidLdoProvider>
-      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+      <ThemeProvider>
+        <StatusBar />
         <Stack
           screenOptions={{
             header: ({ navigation, route, options, back }) => <Header />,

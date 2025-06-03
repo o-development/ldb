@@ -5,6 +5,21 @@ import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Button } from '../ui/button';
 import { Text } from '../ui/text';
 import { EllipsisVertical } from '~/lib/icons/EllipsisVertical';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { ThemeToggleMenu } from './ThemeToggleMenu';
 
 const DEFAULT_ISSUER = 'http://localhost:3000';
 
@@ -47,14 +62,35 @@ export const SignInMenu: FunctionComponent = () => {
         >
           <Text>Log In</Text>
         </Button>
-        <Button
-          key="setMemu"
-          variant="ghost"
-          style={styles.buttonGroupButton}
-          onPress={() => setMenuVisible(true)}
-        >
-          <EllipsisVertical size={20} />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              key="setMemu"
+              variant="ghost"
+              style={styles.buttonGroupButton}
+              onPress={() => setMenuVisible(true)}
+            >
+              <Text>
+                <EllipsisVertical size={20} />
+              </Text>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64 native:w-72">
+            <DropdownMenuGroup>
+              <DropdownMenuItem className="sm:hidden flex">
+                <Text>Sign Up</Text>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="sm:hidden flex">
+                <Text>Log In</Text>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Text>Log in with Another Pod</Text>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <ThemeToggleMenu />
+          </DropdownMenuContent>
+        </DropdownMenu>
       </View>
     );
   };

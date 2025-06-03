@@ -57,7 +57,9 @@ export const ViewMenu: FunctionComponent = () => {
         <NavigationMenuList>
           <NavigationMenuItem value="views">
             <NavigationMenuTrigger>
-              <ViewIcon />
+              <Text>
+                <ViewIcon />
+              </Text>
               <Text className="sm:block hidden">Views</Text>
             </NavigationMenuTrigger>
             <NavigationMenuContent insets={contentInsets}>

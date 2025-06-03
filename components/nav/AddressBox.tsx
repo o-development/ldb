@@ -1,12 +1,13 @@
 import React from 'react';
 import { FunctionComponent, useState } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Input } from '~/components/ui/input';
 import { ChevronRight } from '~/lib/icons/ChevronRight';
 import { ChevronsRight } from '~/lib/icons/ChevronsRight';
 import { TextCursorInput } from '~/lib/icons/TextCursorInput';
 import { RefreshCw } from '~/lib/icons/RefreshCw';
 import { Button } from '~/components/ui/button';
+import { Text } from '../ui/text';
 
 const url = 'https://noat.io/jackson/chats/chat1.ttl';
 const split = ['noat.io', 'jackson', 'chats', 'chat1'];
@@ -27,18 +28,22 @@ export const AddressBox: FunctionComponent = () => {
         className="absolute left-0 w-10 h-10"
         onPress={() => setIsTextMode((val) => !val)}
       >
-        {isTextMode ? (
-          <ChevronsRight size={20} />
-        ) : (
-          <TextCursorInput size={20} />
-        )}
+        <Text>
+          {isTextMode ? (
+            <ChevronsRight size={20} />
+          ) : (
+            <TextCursorInput size={20} />
+          )}
+        </Text>
       </Button>
       <Button
         variant="secondary"
         className="absolute right-0 w-10 h-10"
         onPress={() => console.log('go!')}
       >
-        <RefreshCw size={20} />
+        <Text>
+          <RefreshCw size={20} />
+        </Text>
       </Button>
       <View
         className="absolute top-0 left-0 right-0 bottom-0 flex-row items-center ml-10 mr-10 overflow-x-auto scrollbar-hide"
