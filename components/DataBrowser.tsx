@@ -11,6 +11,7 @@ export interface DataBrowserConfig {
   views: string[];
   mode: 'standalone-app' | 'server-ui';
   defaultIssuer: string;
+  host: string;
   renderHomepage?: () => ReactNode;
   renderLogo?: () => ReactNode;
 }

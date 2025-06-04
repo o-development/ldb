@@ -10,6 +10,7 @@ export default function Screen() {
       defaultIssuer="http://localhost:3000"
       renderHomepage={() => <Text>Hopepage</Text>}
       renderLogo={() => <Text>Logo</Text>}
+      host="localhost:8081"
     />
   );
 }
