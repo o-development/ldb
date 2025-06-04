@@ -8,6 +8,7 @@ import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { BrowserSolidLdoProvider } from '@ldo/solid-react';
 import { Header } from '~/components/nav/Header';
 import { ThemeProvider } from '~/components/ThemeProvider';
+import { TargetResourceProvider } from '~/components/TargetResourceProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -24,17 +25,14 @@ export default function RootLayout() {
   usePlatformSpecificSetup();
 
   return (
-    <BrowserSolidLdoProvider>
-      <ThemeProvider>
-        <StatusBar />
-        <Stack
-          screenOptions={{
-            header: ({ navigation, route, options, back }) => <Header />,
-          }}
-        />
-        <PortalHost />
-      </ThemeProvider>
-    </BrowserSolidLdoProvider>
+    <>
+      <StatusBar />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+    </>
   );
 }
 

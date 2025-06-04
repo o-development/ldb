@@ -46,22 +46,22 @@ export const AddressBox: FunctionComponent = () => {
         </Text>
       </Button>
       <View
-        className="absolute top-0 left-0 right-0 bottom-0 flex-row items-center ml-10 mr-10 overflow-x-auto scrollbar-hide"
+        className="absolute top-0 left-0 right-0 bottom-0 flex-row-reverse items-center ml-10 mr-10 overflow-x-auto scrollbar-hide [direction:rtl]"
         pointerEvents="none"
       >
         {!isTextMode &&
           split.map((item, index) => (
             <View className="flex-row" key={item}>
-              <TouchableOpacity>
-                <View pointerEvents="auto">
-                  <Text className="mr-0.5 underline text-sm">{item}</Text>
-                </View>
-              </TouchableOpacity>
               {index !== split.length - 1 ? (
                 <ChevronRight className="w-4 h-4 mr-0.5 mt-0.5 text-gray-500" />
               ) : (
                 <View className="w-2" />
               )}
+              <TouchableOpacity>
+                <View pointerEvents="auto">
+                  <Text className="mr-0.5 underline text-sm">{item}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           ))}
       </View>
