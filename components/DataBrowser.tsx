@@ -5,6 +5,7 @@ import { ThemeProvider } from './ThemeProvider';
 import { Header } from './nav/Header';
 import { RenderView } from './RenderView';
 import { PortalHost } from '@rn-primitives/portal';
+import { TargetResourceProvider } from './TargetResourceProvider';
 
 export interface DataBrowserConfig {
   views: string[];
@@ -26,9 +27,11 @@ export const DataBrowser: FunctionComponent<DataBrowserConfig> = (props) => {
     <BrowserSolidLdoProvider>
       <ThemeProvider>
         <DataBrowserConfigContext.Provider value={props}>
-          <Header />
-          <RenderView />
-          <PortalHost />
+          <TargetResourceProvider>
+            <Header />
+            <RenderView />
+            <PortalHost />
+          </TargetResourceProvider>
         </DataBrowserConfigContext.Provider>
       </ThemeProvider>
     </BrowserSolidLdoProvider>

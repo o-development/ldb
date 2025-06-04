@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FunctionComponent, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Input } from '~/components/ui/input';
@@ -8,12 +8,23 @@ import { TextCursorInput } from '~/lib/icons/TextCursorInput';
 import { RefreshCw } from '~/lib/icons/RefreshCw';
 import { Button } from '~/components/ui/button';
 import { Text } from '../ui/text';
-
-const url = 'https://noat.io/jackson/chats/chat1.ttl';
-const split = ['noat.io', 'jackson', 'chats', 'chat1'];
+import { useTargetResource } from '../TargetResourceProvider';
 
 export const AddressBox: FunctionComponent = () => {
   const [isTextMode, setIsTextMode] = useState(false);
+  const { targetUri } = useTargetResource();
+
+  const split = useMemo(() => {
+    if (!targetUri) return [];
+    try {
+      const uri = new URL(targetUri);
+      const origin = uri.host;
+      const pathSplit = uri.pathname.split('/').filter((val) => val !== '');
+      return [origin, ...pathSplit];
+    } catch {
+      return [];
+    }
+  }, [targetUri]);
 
   return (
     <View className="flex-1">
@@ -21,7 +32,7 @@ export const AddressBox: FunctionComponent = () => {
         className="flex-1 bg-secondary web:py-2.5 border-none pl-10 pr-10 h-[40px] text-sm web:focus-visible:ring-0 web:focus-visible:ring-transparent web:focus-visible:ring-offset-0 web:focus:outline-none web:outline-none"
         onFocus={() => setIsTextMode(true)}
         onBlur={() => setIsTextMode(false)}
-        value={isTextMode ? url : ''}
+        value={isTextMode ? targetUri : ''}
       />
       <Button
         variant="secondary"
