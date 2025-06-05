@@ -3,13 +3,9 @@ import React, {
   Dispatch,
   FunctionComponent,
   SetStateAction,
-  useMemo,
-  useState,
 } from 'react';
 import { useTargetResource } from '../TargetResourceProvider';
-import { useDataBrowserConfig } from '../DataBrowser';
 import { ResourceViewConfig } from '../ResourceView';
-import { EyeOff } from '~/lib/icons/EyeOff';
 import { ErrorMessageResourceView } from './utilityResourceViews/ErrorMessageResourceView';
 import { TextCursorInput } from '~/lib/icons/TextCursorInput';
 import { CircleSlash } from '~/lib/icons/CircleSlash';

@@ -15,6 +15,7 @@ import { cn } from '~/lib/utils';
 import { ViewIcon } from '~/lib/icons/ViewIcon';
 import { LucideIcon } from 'lucide-react-native';
 import { useValidView } from '../useValidView';
+import { ResourceViewConfig } from '~/components/ResourceView';
 
 export const ViewMenu: FunctionComponent = () => {
   const insets = useSafeAreaInsets();
@@ -24,10 +25,7 @@ export const ViewMenu: FunctionComponent = () => {
     left: 12,
     right: 12,
   };
-  const { setCurViewConfig, curViewConfig, validViews } = useValidView();
-
-  console.log(validViews);
-  console.log(curViewConfig);
+  const { validViews } = useValidView();
 
   const [isOpen, setIsOpen] = React.useState<string>();
 
@@ -47,11 +45,7 @@ export const ViewMenu: FunctionComponent = () => {
               className="web:grid w-dvw gap-3 p-4 md:w-[500px] web:md:grid-cols-2 lg:w-[600px] "
             >
               {validViews.map((menuItem) => (
-                <ListItem
-                  key={menuItem.name}
-                  title={menuItem.displayName}
-                  icon={menuItem.displayIcon}
-                >
+                <ListItem key={menuItem.name} viewConfig={menuItem}>
                   {menuItem.displayName}
                 </ListItem>
               ))}
@@ -66,12 +60,12 @@ export const ViewMenu: FunctionComponent = () => {
 const ListItem = React.forwardRef<
   ViewRef,
   React.ComponentPropsWithoutRef<typeof View> & {
-    title: string;
-    icon: LucideIcon;
+    viewConfig: ResourceViewConfig;
   }
->(({ className, title, icon, ...props }, ref) => {
+>(({ className, viewConfig, ...props }, ref) => {
   // TODO: add navigationn to `href` on `NavigationMenuLink` onPress
-  const Icon = icon;
+  const { curViewConfig, setCurViewConfig } = useValidView();
+  const Icon = viewConfig.displayIcon;
   return (
     <View role="listitem">
       <NavigationMenuLink
@@ -79,12 +73,14 @@ const ListItem = React.forwardRef<
         className={cn(
           'web:select-none flex-row items-center overflow-hidden rounded-md p-3 leading-none no-underline text-foreground web:outline-none web:transition-colors web:hover:bg-accent active:bg-accent web:hover:text-accent-foreground web:focus:bg-accent web:focus:text-accent-foreground cursor-pointer',
           className,
+          curViewConfig.name === viewConfig.name ? 'bg-secondary' : '',
         )}
+        onPress={() => setCurViewConfig(viewConfig)}
         {...props}
       >
         <Icon size={20} />
         <Text className="text-sm native:text-base font-medium text-foreground leading-none ml-2">
-          {title}
+          {viewConfig.displayName}
         </Text>
       </NavigationMenuLink>
     </View>
