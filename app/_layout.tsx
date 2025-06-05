@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Appearance, Platform } from 'react-native';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { ThemeProvider } from '~/components/ThemeProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -20,14 +21,14 @@ export default function RootLayout() {
   usePlatformSpecificSetup();
 
   return (
-    <>
+    <ThemeProvider>
       <StatusBar />
       <Stack
         screenOptions={{
           headerShown: false,
         }}
       />
-    </>
+    </ThemeProvider>
   );
 }
 

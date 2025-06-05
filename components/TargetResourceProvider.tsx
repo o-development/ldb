@@ -39,7 +39,6 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
   const router = useRouter();
 
   const targetUri = useMemo<string | undefined>(() => {
-    console.log('globalSearchParamsUri', globalSearchParams.uri);
     if (globalSearchParams.uri)
       return Array.isArray(globalSearchParams.uri)
         ? globalSearchParams.uri[0]
@@ -61,12 +60,10 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
 
   const navigateTo = useCallback(
     (newRoute: string) => {
-      console.log('navigateTo');
       const newUrl = new URL(newRoute);
       if (mode === 'server-ui' && newUrl.host === host) {
         router.navigate(`${newUrl.pathname}${newUrl.hash}` as Href);
       }
-      console.log('Pushing Router');
       router.navigate(`/?uri=${encodeURIComponent(newRoute)}`);
     },
     [host, mode, router],

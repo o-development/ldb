@@ -8,8 +8,8 @@ import { TextCursorInput } from '~/lib/icons/TextCursorInput';
 import { RefreshCw } from '~/lib/icons/RefreshCw';
 import { ArrowRight } from '~/lib/icons/ArrowRight';
 import { Button } from '~/components/ui/button';
-import { Text } from '../ui/text';
-import { useTargetResource } from '../TargetResourceProvider';
+import { Text } from '../../ui/text';
+import { useTargetResource } from '../../TargetResourceProvider';
 
 export const AddressBox: FunctionComponent = () => {
   const [isTextMode, setIsTextMode] = useState(false);

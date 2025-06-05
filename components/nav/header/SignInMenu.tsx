@@ -2,8 +2,8 @@ import { useSolidAuth } from '@ldo/solid-react';
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { View } from 'react-native';
 
-import { Button } from '../ui/button';
-import { Text } from '../ui/text';
+import { Button } from '../../ui/button';
+import { Text } from '../../ui/text';
 import { EllipsisVertical } from '~/lib/icons/EllipsisVertical';
 import {
   DropdownMenu,
@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog';
-import { Input } from '../ui/input';
+import { Input } from '../../ui/input';
 
 const DEFAULT_ISSUER = 'http://localhost:3000';
 

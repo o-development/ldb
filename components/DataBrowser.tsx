@@ -1,14 +1,13 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { BrowserSolidLdoProvider } from '@ldo/solid-react';
 import React, { FunctionComponent } from 'react';
-import { ThemeProvider } from './ThemeProvider';
-import { Header } from './nav/Header';
-import { RenderView } from './RenderView';
+import { Layout } from './nav/Layout';
 import { PortalHost } from '@rn-primitives/portal';
 import { TargetResourceProvider } from './TargetResourceProvider';
+import { ResourceViewConfig } from './ResourceView';
 
 export interface DataBrowserConfig {
-  views: string[];
+  views: ResourceViewConfig[];
   mode: 'standalone-app' | 'server-ui';
   defaultIssuer: string;
   host: string;
@@ -26,15 +25,12 @@ export function useDataBrowserConfig() {
 export const DataBrowser: FunctionComponent<DataBrowserConfig> = (props) => {
   return (
     <BrowserSolidLdoProvider>
-      <ThemeProvider>
-        <DataBrowserConfigContext.Provider value={props}>
-          <TargetResourceProvider>
-            <Header />
-            <RenderView />
-            <PortalHost />
-          </TargetResourceProvider>
-        </DataBrowserConfigContext.Provider>
-      </ThemeProvider>
+      <DataBrowserConfigContext.Provider value={props}>
+        <TargetResourceProvider>
+          <Layout />
+          <PortalHost />
+        </TargetResourceProvider>
+      </DataBrowserConfigContext.Provider>
     </BrowserSolidLdoProvider>
   );
 };

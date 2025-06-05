@@ -2,10 +2,10 @@ import React from 'react';
 import { FunctionComponent } from 'react';
 import { MoonStar } from '~/lib/icons/MoonStar';
 import { Sun } from '~/lib/icons/Sun';
-import { Text } from '../ui/text';
-import { Switch } from '../ui/switch';
-import { DropdownMenuItem } from '../ui/dropdown-menu';
-import { useThemeChange } from '../ThemeProvider';
+import { Text } from '../../ui/text';
+import { Switch } from '../../ui/switch';
+import { DropdownMenuItem } from '../../ui/dropdown-menu';
+import { useThemeChange } from '../../ThemeProvider';
 
 export const ThemeToggleMenu: FunctionComponent = () => {
   const { colorScheme, setColorScheme } = useThemeChange();

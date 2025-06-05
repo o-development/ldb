@@ -15,7 +15,7 @@ export const Header: FunctionComponent = () => {
   return (
     <Card
       className={
-        'h-12 flex-row justify-between items-center rounded-none border-t-0 border-l-0 border-r-0 sm:p-2 p-1'
+        'h-12 flex-row justify-between items-center rounded-none border-0 sm:p-2 p-1'
       }
     >
       <AddressBox />

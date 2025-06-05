@@ -5,7 +5,7 @@ import { FunctionComponent, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemeToggleMenu } from './ThemeToggleMenu';
-import { SolidProfileShapeShapeType } from '../../.ldo/profile.shapeTypes';
+import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
 
 export const AvatarMenu: FunctionComponent = () => {
   return <></>;
