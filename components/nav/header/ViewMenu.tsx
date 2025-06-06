@@ -13,7 +13,6 @@ import { View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '~/lib/utils';
 import { ViewIcon } from '~/lib/icons/ViewIcon';
-import { LucideIcon } from 'lucide-react-native';
 import { useValidView } from '../useValidView';
 import { ResourceViewConfig } from '~/components/ResourceView';
 

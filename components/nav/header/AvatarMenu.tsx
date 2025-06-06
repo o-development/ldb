@@ -1,11 +1,7 @@
 import React from 'react';
-import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 
-import { FunctionComponent, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-
-import { ThemeToggleMenu } from './ThemeToggleMenu';
-import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
+import { FunctionComponent } from 'react';
+import { StyleSheet } from 'react-native';
 
 export const AvatarMenu: FunctionComponent = () => {
   return <></>;

@@ -1,6 +1,6 @@
 import { SolidContainer, SolidLeaf } from '@ldo/connected-solid';
 import { LucideIcon } from 'lucide-react-native';
-import React, { ElementType, ReactElement } from 'react';
+import { ElementType } from 'react';
 
 export interface ResourceViewConfig {
   name: string;
