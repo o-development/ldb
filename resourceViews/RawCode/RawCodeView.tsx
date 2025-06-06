@@ -58,8 +58,6 @@ export const RawCodeView: FunctionComponent = () => {
       />
       <Button
         className="absolute bottom-2 right-2 z-10"
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{ bottom: 8, right: 8 }}
         onPress={submitChanges}
       >
         <Text>Save Changes</Text>

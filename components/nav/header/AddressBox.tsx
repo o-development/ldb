@@ -26,16 +26,18 @@ export const AddressBox: FunctionComponent = () => {
     try {
       const uri = new URL(targetUri);
       const pathSplit = uri.pathname.split('/').filter((val) => val !== '');
+      const endsInSlash = uri.pathname.endsWith('/');
 
-      let curUri = uri.origin;
+      let curUri = `${uri.origin}/`;
       const info: { name: string; uri: string }[] = [
         {
           name: uri.host,
           uri: curUri,
         },
       ];
-      pathSplit.forEach((name) => {
-        curUri += `/${name}`;
+      pathSplit.forEach((name, index) => {
+        curUri +=
+          index === pathSplit.length - 1 && !endsInSlash ? name : `${name}/`;
         info.push({
           uri: curUri,
           name,

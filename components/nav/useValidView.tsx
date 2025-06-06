@@ -1,5 +1,5 @@
 import createContainer from 'constate';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDataBrowserConfig } from '../DataBrowser';
 import { useTargetResource } from '../TargetResourceProvider';
 import { ResourceViewConfig } from '../ResourceView';
@@ -39,6 +39,9 @@ export const [ValidViewProvider, useValidView] = createContainer(() => {
   const [curViewConfig, setCurViewConfig] = useState<ResourceViewConfig>(
     validViews[0],
   );
+  useEffect(() => {
+    setCurViewConfig(validViews[0]);
+  }, [targetUri, validViews]);
 
   return {
     validViews,
