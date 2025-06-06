@@ -63,7 +63,6 @@ export const RenderView: FunctionComponent = () => {
       />
     );
   } else if (targetResource?.isDoingInitialFetch()) {
-    console.log('Render doing initial fetch');
     return <></>;
   } else if (targetResource?.isAbsent()) {
     return (
@@ -89,7 +88,6 @@ export const RenderView: FunctionComponent = () => {
           />
         );
       case 'unauthenticatedError':
-        console.log('Unauthenticated');
         return (
           <ErrorMessageResourceView
             icon={ShieldX}
@@ -114,7 +112,6 @@ export const RenderView: FunctionComponent = () => {
         );
     }
   }
-  console.log('Rendering curview');
   const CurView = curViewConfig.view;
   return <CurView />;
 };
