@@ -1,20 +1,35 @@
 // components/DialogProvider.tsx
-import React, { createContext, useContext, useState, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from '~/components/ui/alert-dialog';
-import { Text, TextInput, View } from 'react-native';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from '~/components/ui/dialog';
+import { TextInput, View } from 'react-native';
+import { Button } from '~/components/ui/button';
+import { Text } from '../ui/text';
 
 type DialogOptions =
   | { type: 'confirm'; title: string; message?: string }
   | { type: 'prompt'; title: string; message?: string; defaultValue?: string };
 
 type DialogContextType = {
+  prompt: (
+    title: string,
+    message?: string,
+    defaultValue?: string,
+  ) => Promise<null | string>;
+  confirm: (title: string, message?: string) => Promise<boolean>;
   showDialog: (options: DialogOptions) => Promise<boolean | string>;
 };
 
@@ -32,16 +47,46 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({
   const [visible, setVisible] = useState(false);
   const [options, setOptions] = useState<DialogOptions | null>(null);
   const [inputValue, setInputValue] = useState('');
-  const resolver = useRef<(val: boolean | string) => void>();
+  const resolver = useRef<(val: boolean | string) => void>(() => {});
 
-  const showDialog = (opts: DialogOptions): Promise<boolean | string> => {
-    return new Promise((resolve) => {
-      resolver.current = resolve;
-      setOptions(opts);
-      setInputValue(opts.type === 'prompt' ? (opts.defaultValue ?? '') : '');
-      setVisible(true);
-    });
-  };
+  const showDialog = useCallback(
+    (opts: DialogOptions): Promise<boolean | string> => {
+      return new Promise((resolve) => {
+        resolver.current = resolve;
+        setOptions(opts);
+        setInputValue(opts.type === 'prompt' ? (opts.defaultValue ?? '') : '');
+        setVisible(true);
+      });
+    },
+    [],
+  );
+
+  const prompt = useCallback(
+    async (
+      title: string,
+      message?: string,
+      defaultValue?: string,
+    ): Promise<null | string> => {
+      return showDialog({
+        type: 'prompt',
+        title,
+        message,
+        defaultValue,
+      }) as Promise<string | null>;
+    },
+    [showDialog],
+  );
+
+  const confirm = useCallback(
+    async (title: string, message?: string): Promise<boolean> => {
+      return showDialog({
+        type: 'confirm',
+        title,
+        message,
+      }) as Promise<boolean>;
+    },
+    [showDialog],
+  );
 
   const handleCancel = () => {
     setVisible(false);
@@ -54,14 +99,17 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <DialogContext.Provider value={{ showDialog }}>
+    <DialogContext.Provider value={{ showDialog, prompt, confirm }}>
       {children}
-      <AlertDialog open={visible}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <Text className="text-lg font-bold">{options?.title}</Text>
-            {options?.message && <Text>{options.message}</Text>}
-          </AlertDialogHeader>
+      <Dialog open={visible} onOpenChange={setVisible}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{options?.title}</DialogTitle>
+            {options?.message && (
+              <DialogDescription>{options.message}</DialogDescription>
+            )}
+          </DialogHeader>
+
           {options?.type === 'prompt' && (
             <View className="my-2">
               <TextInput
@@ -69,15 +117,24 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({
                 onChangeText={setInputValue}
                 placeholder="Enter text..."
                 className="border p-2 rounded"
+                autoFocus
+                onSubmitEditing={handleConfirm}
               />
             </View>
           )}
-          <AlertDialogFooter>
-            <AlertDialogCancel onPress={handleCancel}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onPress={handleConfirm}>OK</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="ghost" onPress={handleCancel}>
+                <Text>Cancel</Text>
+              </Button>
+            </DialogClose>
+            <Button onPress={handleConfirm}>
+              <Text>Ok</Text>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DialogContext.Provider>
   );
 };

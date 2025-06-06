@@ -15,6 +15,7 @@ import { CircleX } from '~/lib/icons/CircleX';
 import { Header } from './header/Header';
 import { View } from 'react-native';
 import { useValidView, ValidViewProvider } from './useValidView';
+import { DialogProvider } from './DialogProvider';
 
 export const ValidViewContext = createContext<{
   validViews: ResourceViewConfig[];
@@ -25,14 +26,14 @@ export const ValidViewContext = createContext<{
 
 export const Layout: FunctionComponent = () => {
   return (
-    <>
+    <DialogProvider>
       <ValidViewProvider>
         <Header />
         <View className="flex-1 z-0">
           <RenderView />
         </View>
       </ValidViewProvider>
-    </>
+    </DialogProvider>
   );
 };
 
