@@ -5,6 +5,7 @@ import { Layout } from './nav/Layout';
 import { PortalHost } from '@rn-primitives/portal';
 import { TargetResourceProvider } from './TargetResourceProvider';
 import { ResourceViewConfig } from './ResourceView';
+import { NotifierWrapper } from 'react-native-notifier';
 
 export interface DataBrowserConfig {
   views: ResourceViewConfig[];
@@ -25,12 +26,14 @@ export function useDataBrowserConfig() {
 export const DataBrowser: FunctionComponent<DataBrowserConfig> = (props) => {
   return (
     <BrowserSolidLdoProvider>
-      <DataBrowserConfigContext.Provider value={props}>
-        <TargetResourceProvider>
-          <Layout />
-          <PortalHost />
-        </TargetResourceProvider>
-      </DataBrowserConfigContext.Provider>
+      <NotifierWrapper>
+        <DataBrowserConfigContext.Provider value={props}>
+          <TargetResourceProvider>
+            <Layout />
+            <PortalHost />
+          </TargetResourceProvider>
+        </DataBrowserConfigContext.Provider>
+      </NotifierWrapper>
     </BrowserSolidLdoProvider>
   );
 };

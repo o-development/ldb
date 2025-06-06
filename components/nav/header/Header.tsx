@@ -15,8 +15,10 @@ export const Header: FunctionComponent = () => {
   return (
     <Card
       className={
-        'h-12 flex-row justify-between items-center rounded-none border-0 sm:p-2 p-1 z-10'
+        'h-12 flex-row justify-between items-center rounded-none border-0 sm:p-2 p-1'
       }
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{ zIndex: 1 }}
     >
       <AddressBox />
       <View className="mr-1" />
