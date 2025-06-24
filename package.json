@@ -6,13 +6,15 @@
     "dev:ios": "expo start -c --ios",
     "dev:web": "expo start -c --web",
     "dev:android": "expo start -c --android",
-    "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:web:watch\"",
-    "clean": "rm -rf .expo node_modules",
+    "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:server:watch\"",
+    "clean": "rm -rf .expo node_modules dist-standalone dist-server",
     "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
-    "build:web": "expo export -p web",
-    "build:web:watch": "npx chokidar '**/*' -i 'dist/**' -i 'node_modules/**' -c 'npm run build:web'",
+    "build:standalone": "expo export -p web --output-dir dist-standalone",
+    "build:server": "expo export -p web --output-dir dist-server && node scripts/adjust-server-paths.js",
+    "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -c 'npm run build:server'",
     "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
-    "build:ldo": "ldo build --input .shapes --output .ldo"
+    "build:ldo": "ldo build --input .shapes --output .ldo",
+    "build": "npm run build:standalone && npm run build:server"
   },
   "dependencies": {
     "@inrupt/solid-client-authn-browser": "^2.5.0",

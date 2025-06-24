@@ -43,7 +43,7 @@
       "@id": "urn:solid-server:default:DefaultUiConverter",
       "@type": "ConstantConverter",
       "contentType": "text/html",
-      "filePath": "./dist/index.html",
+      "filePath": "./dist-server/index.html",
       "options_container": true,
       "options_document": true,
       "options_minQuality": 1
@@ -56,7 +56,7 @@
       },
       "overrideParameters": {
         "@type": "StaticAssetEntry",
-        "filePath": "./dist/index.html"
+        "filePath": "./dist-server/index.html"
       }
     },
     {
@@ -67,7 +67,7 @@
         {
           "@type": "StaticAssetEntry",
           "relativeUrl": "/.ui-static/",
-          "filePath": "./dist/"
+          "filePath": "./dist-server/"
         }
       ]
     }
