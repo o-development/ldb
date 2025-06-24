@@ -34,7 +34,6 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const { mode, host } = useDataBrowserConfig();
-  const pathname = usePathname();
   const globalSearchParams = useGlobalSearchParams();
   const router = useRouter();
 
@@ -47,10 +46,11 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
     if (mode === 'standalone-app') return undefined;
     // Must be in web if this is server-hosted
     const origin = window.location.origin;
+    const pathname = window.location.pathname;
     return `${origin}${pathname}`;
-  }, [globalSearchParams.uri, mode, pathname]);
+  }, [globalSearchParams.uri, mode]);
 
-  console.log(targetUri);
+  console.log('targetUri', targetUri);
 
   const targetResource = useResource(targetUri);
 

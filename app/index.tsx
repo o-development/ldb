@@ -7,7 +7,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 
 export function Screen() {
-  const mode = process.env.IS_SERVER_HOSTED ? 'server-ui' : 'standalone-app';
+  const mode = process.env.EXPO_PUBLIC_IS_SERVER_HOSTED
+    ? 'server-ui'
+    : 'standalone-app';
 
   return (
     <SafeAreaProvider>
