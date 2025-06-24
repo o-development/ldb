@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import '~/global.css';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   FunctionComponent,
@@ -8,7 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Appearance, ColorSchemeName } from 'react-native';
+import { Appearance, ColorSchemeName, Platform } from 'react-native';
 import {
   ThemeProvider as ApplicationThemeProvider,
   DarkTheme,
@@ -17,6 +18,7 @@ import {
 } from '@react-navigation/native';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from 'nativewind';
+import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 
 const COLOR_SCHEME_KEY = 'colorScheme';
 
@@ -46,11 +48,19 @@ export function useThemeChange() {
   return useContext(ThemeProviderContext);
 }
 
+const usePlatformSpecificSetup = Platform.select({
+  web: useSetWebBackgroundClassName,
+  android: useSetAndroidNavigationBar,
+  default: noop,
+});
+
 export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const { colorScheme, setColorScheme } = useColorScheme();
   const [loadingColorScheme, setLoadingColorScheme] = useState(true);
+
+  usePlatformSpecificSetup();
 
   useEffect(() => {
     const lookupCurColorScheme = async () => {
@@ -91,3 +101,23 @@ export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
     </>
   );
 };
+
+const useIsomorphicLayoutEffect =
+  Platform.OS === 'web' && typeof window === 'undefined'
+    ? React.useEffect
+    : React.useLayoutEffect;
+
+function useSetWebBackgroundClassName() {
+  useIsomorphicLayoutEffect(() => {
+    // Adds the background color to the html element to prevent white background on overscroll.
+    document.documentElement.classList.add('bg-background');
+  }, []);
+}
+
+function useSetAndroidNavigationBar() {
+  React.useLayoutEffect(() => {
+    setAndroidNavigationBar(Appearance.getColorScheme() ?? 'light');
+  }, []);
+}
+
+function noop() {}

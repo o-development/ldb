@@ -7,6 +7,7 @@ import { TargetResourceProvider } from './TargetResourceProvider';
 import { ResourceViewConfig } from './ResourceView';
 import { NotifierWrapper } from 'react-native-notifier';
 import { Platform } from 'react-native';
+import { ThemeProvider } from '~/components/ThemeProvider';
 
 export interface DataBrowserConfig {
   views: ResourceViewConfig[];
@@ -38,15 +39,17 @@ export const DataBrowser: FunctionComponent<DataBrowserConfig> = (props) => {
   }, [props]);
 
   return (
-    <BrowserSolidLdoProvider>
-      <NotifierWrapper>
-        <DataBrowserConfigContext.Provider value={providerProps}>
-          <TargetResourceProvider>
-            <Layout />
-            <PortalHost />
-          </TargetResourceProvider>
-        </DataBrowserConfigContext.Provider>
-      </NotifierWrapper>
-    </BrowserSolidLdoProvider>
+    <ThemeProvider>
+      <BrowserSolidLdoProvider>
+        <NotifierWrapper>
+          <DataBrowserConfigContext.Provider value={providerProps}>
+            <TargetResourceProvider>
+              <Layout />
+              <PortalHost />
+            </TargetResourceProvider>
+          </DataBrowserConfigContext.Provider>
+        </NotifierWrapper>
+      </BrowserSolidLdoProvider>
+    </ThemeProvider>
   );
 };
