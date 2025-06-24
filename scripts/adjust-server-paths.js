@@ -10,13 +10,19 @@ fs.readFile(indexHtmlPath, 'utf8', (err, data) => {
     return;
   }
 
-  // Updated regex to prefix all root-relative href and src paths,
+  // Regex to prefix all root-relative href and src paths,
   // unless they already contain '/.ui-static/'
-  const modifiedData = data.replace(
+  let modifiedData = data.replace(
     /(href|src)=["'](\/(?!\.ui-static\/)\S*?)["']/g,
     (match, attr, urlPath) => {
       return `${attr}="/.ui-static${urlPath}"`;
     },
+  );
+
+  // Modify the hydration flag for server-hosted build to false
+  modifiedData = modifiedData.replace(
+    /globalThis\.__EXPO_ROUTER_HYDRATE__=true;/,
+    'globalThis.__EXPO_ROUTER_HYDRATE__=false;',
   );
 
   fs.writeFile(indexHtmlPath, modifiedData, 'utf8', (err2) => {
@@ -24,6 +30,8 @@ fs.readFile(indexHtmlPath, 'utf8', (err, data) => {
       console.error('Error writing index.html:', err2);
       return;
     }
-    console.log('Successfully adjusted paths in dist-server/index.html');
+    console.log(
+      'Successfully adjusted paths and hydration flag in dist-server/index.html',
+    );
   });
 });

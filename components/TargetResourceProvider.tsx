@@ -50,6 +50,8 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
     return `${origin}${pathname}`;
   }, [globalSearchParams.uri, mode, pathname]);
 
+  console.log(targetUri);
+
   const targetResource = useResource(targetUri);
 
   const refresh = useCallback(async () => {

@@ -5,14 +5,14 @@ import { RawCodeConfig } from '~/resourceViews/RawCode/RawCodeConfig';
 import { ContainerConfig } from '~/resourceViews/Container/ContainerConfig';
 
 export default function Screen() {
+  const mode = process.env.IS_SERVER_HOSTED ? 'server-ui' : 'standalone-app';
+
   return (
     <DataBrowser
       views={[ContainerConfig, RawCodeConfig]}
-      mode="standalone-app"
-      defaultIssuer="http://localhost:3000"
+      mode={mode}
       renderHomepage={() => <Text>Hopepage</Text>}
       renderLogo={() => <Text>Logo</Text>}
-      host="localhost:8081"
     />
   );
 }
