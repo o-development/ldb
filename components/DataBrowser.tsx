@@ -13,7 +13,7 @@ export interface DataBrowserConfig {
   views: ResourceViewConfig[];
   mode: 'standalone-app' | 'server-ui';
   defaultIssuer?: string;
-  host?: string;
+  origin?: string;
   renderHomepage?: () => ReactNode;
   renderLogo?: () => ReactNode;
 }
@@ -28,8 +28,10 @@ export function useDataBrowserConfig() {
 export const DataBrowser: FunctionComponent<DataBrowserConfig> = (props) => {
   const providerProps = useMemo<DataBrowserConfig>(() => {
     return {
-      host:
-        Platform.OS === 'web' && !props.host ? window.location.host : undefined,
+      origin:
+        Platform.OS === 'web' && !props.origin
+          ? window.location.origin
+          : undefined,
       defaultIssuer:
         props.mode === 'server-ui'
           ? window.location.origin

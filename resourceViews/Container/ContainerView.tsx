@@ -26,7 +26,7 @@ import { Notifier } from 'react-native-notifier';
 
 export const ContainerView: FunctionComponent = () => {
   const { targetResource, navigateTo } = useTargetResource();
-  const { prompt, confirm } = useDialog();
+  const { prompt } = useDialog();
 
   const onCreateContainer = useCallback(async () => {
     if (targetResource?.type !== 'SolidContainer') return;
@@ -131,7 +131,9 @@ export const ContainerView: FunctionComponent = () => {
                       className="h-6 p-0"
                       onPress={() => onDelete(item)}
                     >
-                      <Trash size={20} />
+                      <Text>
+                        <Trash size={20} />
+                      </Text>
                     </Button>
                   </View>
                 </TouchableWithoutFeedback>
