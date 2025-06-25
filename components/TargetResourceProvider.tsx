@@ -98,7 +98,8 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
     // Must be in web if this is server-hosted
     const curOrigin = currentUrl.origin;
     const curPathname = currentUrl.pathname;
-    return `${curOrigin}${curPathname}`;
+    const curHash = currentUrl.hash;
+    return `${curOrigin}${curPathname}${curHash}`;
   }, [currentUrl, mode]);
 
   const targetResource = useResource(targetUri);
