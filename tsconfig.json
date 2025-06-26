@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@linked-data-browser/*": [
+        "packages/*/src"
+      ]
+    },
+    "allowJs": true
+  }
+}

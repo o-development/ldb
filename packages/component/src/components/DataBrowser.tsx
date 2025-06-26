@@ -7,7 +7,7 @@ import { TargetResourceProvider } from './TargetResourceProvider';
 import { ResourceViewConfig } from './ResourceView';
 import { NotifierWrapper } from 'react-native-notifier';
 import { Platform } from 'react-native';
-import { ThemeProvider } from '~/components/ThemeProvider';
+import { ThemeProvider } from './ThemeProvider';
 
 export interface DataBrowserConfig {
   views: ResourceViewConfig[];

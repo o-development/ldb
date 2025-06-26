@@ -1,0 +1,33 @@
+{
+  "name": "linked-data-browser",
+  "main": "index.js",
+  "version": "1.0.0",
+  "scripts": {
+    "dev:ios": "expo start -c --ios",
+    "dev:web": "concurrently \"npm run solid-server\" \"expo start -c --web\"",
+    "dev:android": "expo start -c --android",
+    "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:server:watch\"",
+    "clean": "rm -rf .expo node_modules dist-standalone dist-server",
+    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
+    "build:standalone": "expo export -p web --output-dir dist-standalone && node scripts/adjust-standalone-paths.js",
+    "build:server": "EXPO_PUBLIC_IS_SERVER_HOSTED=true expo export -p web --output-dir dist-server && node scripts/adjust-server-paths.js",
+    "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -c 'npm run build:server'",
+    "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
+    "build:ldo": "ldo build --input .shapes --output .ldo",
+    "build": "npm run build:standalone && npm run build:server"
+  },
+  "dependencies": {
+    "expo": "^53.0.9",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-native": "0.79.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@react-native-community/eslint-config": "^3.2.0",
+    "@solid/community-server": "^7.1.7",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.1.2"
+  },
+  "private": true
+}

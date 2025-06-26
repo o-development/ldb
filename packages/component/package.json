@@ -1,20 +1,41 @@
 {
-  "name": "linked-data-browser",
-  "main": "index.js",
-  "version": "1.0.0",
+  "name": "@linked-data-browser/component",
+  "version": "0.0.0-alpha.1",
+  "description": "A react component for a data browser",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
-    "dev:ios": "expo start -c --ios",
-    "dev:web": "concurrently \"npm run solid-server\" \"expo start -c --web\"",
-    "dev:android": "expo start -c --android",
-    "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:server:watch\"",
-    "clean": "rm -rf .expo node_modules dist-standalone dist-server",
-    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
-    "build:standalone": "expo export -p web --output-dir dist-standalone && node scripts/adjust-standalone-paths.js",
-    "build:server": "EXPO_PUBLIC_IS_SERVER_HOSTED=true expo export -p web --output-dir dist-server && node scripts/adjust-server-paths.js",
-    "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -c 'npm run build:server'",
-    "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
-    "build:ldo": "ldo build --input .shapes --output .ldo",
-    "build": "npm run build:standalone && npm run build:server"
+    "build": "rimraf dist && npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "test": "vitest run --coverage",
+    "prepublishOnly": " npm run build",
+    "build:ldo": "ldo build --input src/shapes --output src/ldo",
+    "lint": "eslint src/** --fix --no-error-on-unmatched-pattern",
+    "remove-dist": "rimraf dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o-development/ldb.git"
+  },
+  "author": "Jackson Morgan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/o-development/ldb/issues"
+  },
+  "homepage": "https://github.com/o-development/ldb/tree/main/packages/solid-react#readme",
+  "devDependencies": {
+    "@ldo/cli": "^1.0.0-alpha.21"
   },
   "dependencies": {
     "@inrupt/solid-client-authn-browser": "^2.5.0",
@@ -70,20 +91,12 @@
     "tailwindcss": "3.3.5",
     "tailwindcss-animate": "^1.0.7"
   },
-  "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@ldo/cli": "^1.0.0-alpha.21",
-    "@react-native-community/eslint-config": "^3.2.0",
-    "@solid/community-server": "^7.1.7",
-    "@types/jsonld": "^1.5.15",
-    "@types/react": "~19.0.14",
-    "@types/shexj": "^2.1.7",
-    "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.1.2",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.1",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.3"
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
-  "private": true
+  "gitHead": "840910c56ec3f61416f031cc76771a5673af6757"
 }
