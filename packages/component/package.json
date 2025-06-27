@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "rimraf dist && npm run build:cjs",
-    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:cjs": "tsc --project tsconfig.cjs.json && babel dist/cjs --out-dir dist/cjs --extensions \".js,.jsx,.ts,.tsx\" --source-maps inline",
     "build:esm": "tsc --project tsconfig.esm.json",
     "test": "vitest run --coverage",
     "prepublishOnly": " npm run build",
@@ -32,7 +32,10 @@
   },
   "homepage": "https://github.com/o-development/ldb/tree/main/packages/solid-react#readme",
   "devDependencies": {
-    "@ldo/cli": "^1.0.0-alpha.21"
+    "@babel/cli": "^7.27.2",
+    "@babel/core": "^7.27.7",
+    "@ldo/cli": "^1.0.0-alpha.21",
+    "babel-plugin-module-resolver": "^5.0.2"
   },
   "dependencies": {
     "@inrupt/solid-client-authn-browser": "^2.5.0",

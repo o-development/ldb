@@ -66,6 +66,7 @@ function NavigationMenuTrigger({
   children?: React.ReactNode;
   ref?: React.RefObject<NavigationMenuPrimitive.TriggerRef>;
 }) {
+  // @ts-ignore
   const { value } = NavigationMenuPrimitive.useRootContext();
   const { value: itemValue } = NavigationMenuPrimitive.useItemContext();
 
@@ -112,6 +113,7 @@ function NavigationMenuContent({
   portalHost?: string;
   ref?: React.RefObject<NavigationMenuPrimitive.ContentRef>;
 }) {
+  // @ts-ignore
   const { value } = NavigationMenuPrimitive.useRootContext();
   const { value: itemValue } = NavigationMenuPrimitive.useItemContext();
   return (
@@ -167,6 +169,7 @@ function NavigationMenuIndicator({
 }: NavigationMenuPrimitive.IndicatorProps & {
   ref?: React.RefObject<NavigationMenuPrimitive.IndicatorRef>;
 }) {
+  // @ts-ignore
   const { value } = NavigationMenuPrimitive.useRootContext();
   const { value: itemValue } = NavigationMenuPrimitive.useItemContext();
 
