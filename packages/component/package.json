@@ -12,14 +12,10 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rimraf dist && npm run build:cjs",
-    "build:cjs": "tsc --project tsconfig.cjs.json && babel dist/cjs --out-dir dist/cjs --extensions \".js,.jsx,.ts,.tsx\" --source-maps inline",
-    "build:esm": "tsc --project tsconfig.esm.json",
     "test": "vitest run --coverage",
     "prepublishOnly": " npm run build",
     "build:ldo": "ldo build --input src/shapes --output src/ldo",
-    "lint": "eslint src/** --fix --no-error-on-unmatched-pattern",
-    "remove-dist": "rimraf dist/"
+    "lint": "eslint src/** --fix --no-error-on-unmatched-pattern"
   },
   "repository": {
     "type": "git",
