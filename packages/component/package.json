@@ -15,7 +15,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rimraf dist && npm run build:cjs && npm run build:esm",
+    "build": "rimraf dist && npm run build:cjs",
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build:esm": "tsc --project tsconfig.esm.json",
     "test": "vitest run --coverage",
@@ -98,5 +98,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "840910c56ec3f61416f031cc76771a5673af6757"
+  "peerDependencies": {
+    "nativewind": "^4.1.23",
+    "tailwindcss": "3.3.5"
+  }
 }

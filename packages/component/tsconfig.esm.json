@@ -3,7 +3,16 @@
   "compilerOptions": {
     "outDir": "./dist/esm",
     "rootDir": "./src",
-    "declarationDir": "./dist/types"
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": [
+        "*"
+      ]
+    },
+    "declarationDir": "./dist/types",
+    "lib": [
+      "dom"
+    ],
   },
   "include": [
     "src"
