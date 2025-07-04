@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { Button } from '../../ui/button';
 import { Text } from '../../ui/text';
-import { EllipsisVertical } from '~/lib/icons/EllipsisVertical';
+import { EllipsisVertical } from '../../../lib/icons/EllipsisVertical';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
+} from '../../ui/dropdown-menu';
 import { ThemeToggleMenu } from './ThemeToggleMenu';
 import {
   Dialog,
@@ -23,7 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '~/components/ui/dialog';
+} from '../../ui/dialog';
 import { Input } from '../../ui/input';
 
 const DEFAULT_ISSUER = 'http://localhost:3000';

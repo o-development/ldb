@@ -14,9 +14,9 @@ import {
   DialogTitle,
   DialogDescription,
   DialogClose,
-} from '~/components/ui/dialog';
+} from '../ui/dialog';
 import { TextInput, View } from 'react-native';
-import { Button } from '~/components/ui/button';
+import { Button } from '../ui/button';
 import { Text } from '../ui/text';
 
 type DialogOptions =

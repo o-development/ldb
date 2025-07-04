@@ -1,0 +1,77 @@
+- name: Deploy Node Git Server
+  hosts: web
+  become: yes
+
+  vars:
+    docker_image: "jaxoncreed/integration-pod:latest"
+
+  vars_files:
+    - secrets.yml
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - nginx
+          - certbot
+          - python3-certbot-nginx
+        update_cache: yes
+
+    - name: Enable Docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Log in to Docker Hub
+      docker_login:
+        registry_url: https://index.docker.io/v1/
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
+
+    - name: Pull Docker image
+      docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+
+    - name: Run container
+      docker_container:
+        name: server
+        image: "{{ docker_image }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "3000:3000"
+
+    - name: Set up NGINX config
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/server
+      notify:
+        - Reload nginx
+
+    - name: Enable site
+      file:
+        src: /etc/nginx/sites-available/server
+        dest: /etc/nginx/sites-enabled/server
+        state: link
+        force: true
+
+    - name: Remove default site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Obtain SSL cert
+      command: >
+        certbot --nginx -d {{ domain }} --non-interactive --agree-tos -m {{ email }}
+      args:
+        creates: "/etc/letsencrypt/live/{{ domain }}"
+
+  handlers:
+    - name: Reload nginx
+      service:
+        name: nginx
+        state: reloaded

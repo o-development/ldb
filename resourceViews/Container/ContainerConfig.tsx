@@ -1,5 +1,5 @@
-import { ResourceViewConfig } from '~/components/ResourceView';
-import { Folders } from '~/lib/icons/Folders';
+import { ResourceViewConfig } from '../../components/ResourceView';
+import { Folders } from '../../lib/icons/Folders';
 import { ContainerView } from './ContainerView';
 
 export const ContainerConfig: ResourceViewConfig = {

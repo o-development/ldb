@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDataBrowserConfig } from '../DataBrowser';
 import { useTargetResource } from '../TargetResourceProvider';
 import { ResourceViewConfig } from '../ResourceView';
-import { EyeOff } from '~/lib/icons/EyeOff';
+import { EyeOff } from '../../lib/icons/EyeOff';
 import { ErrorMessageResourceView } from './utilityResourceViews/ErrorMessageResourceView';
 
 export const [ValidViewProvider, useValidView] = createContainer(() => {

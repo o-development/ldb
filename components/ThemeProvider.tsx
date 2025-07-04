@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '~/global.css';
+import '../global.css';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   FunctionComponent,
@@ -16,9 +16,9 @@ import {
   DefaultTheme,
   Theme,
 } from '@react-navigation/native';
-import { NAV_THEME } from '~/lib/constants';
+import { NAV_THEME } from '../lib/constants';
 import { useColorScheme } from 'nativewind';
-import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { setAndroidNavigationBar } from '../lib/android-navigation-bar';
 
 const COLOR_SCHEME_KEY = 'colorScheme';
 

@@ -7,14 +7,14 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '~/components/ui/navigation-menu';
+} from '../../ui/navigation-menu';
 import { Text } from '../../ui/text';
 import { View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
-import { cn } from '~/lib/utils';
-import { ViewIcon } from '~/lib/icons/ViewIcon';
+import { cn } from '../../../lib/utils';
+import { ViewIcon } from '../../../lib/icons/ViewIcon';
 import { useValidView } from '../useValidView';
-import { ResourceViewConfig } from '~/components/ResourceView';
+import { ResourceViewConfig } from '../../../components/ResourceView';
 
 export const ViewMenu: FunctionComponent = () => {
   const insets = useSafeAreaInsets();

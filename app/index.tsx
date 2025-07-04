@@ -1,8 +1,8 @@
 import React from 'react';
-import { DataBrowser } from '~/components/DataBrowser';
-import { Text } from '~/components/ui/text';
-import { RawCodeConfig } from '~/resourceViews/RawCode/RawCodeConfig';
-import { ContainerConfig } from '~/resourceViews/Container/ContainerConfig';
+import { DataBrowser } from '../components/DataBrowser';
+import { Text } from '../components/ui/text';
+import { RawCodeConfig } from '../resourceViews/RawCode/RawCodeConfig';
+import { ContainerConfig } from '../resourceViews/Container/ContainerConfig';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 

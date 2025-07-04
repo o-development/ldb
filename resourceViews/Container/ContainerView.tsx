@@ -1,22 +1,22 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { View, FlatList, TouchableWithoutFeedback } from 'react-native';
-import { Text } from '~/components/ui/text';
-import { Button } from '~/components/ui/button';
+import { Text } from '../../components/ui/text';
+import { Button } from '../../components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '~/components/ui/dropdown-menu';
-import { useTargetResource } from '~/components/TargetResourceProvider';
-import { ErrorMessageResourceView } from '~/components/nav/utilityResourceViews/ErrorMessageResourceView';
-import { CircleX } from '~/lib/icons/CircleX';
-import { Folder } from '~/lib/icons/Folder';
-import { Code } from '~/lib/icons/Code';
-import { File } from '~/lib/icons/File';
-import { Trash } from '~/lib/icons/Trash';
-import { Separator } from '~/components/ui/separator';
-import { useDialog } from '~/components/nav/DialogProvider';
+} from '../../components/ui/dropdown-menu';
+import { useTargetResource } from '../../components/TargetResourceProvider';
+import { ErrorMessageResourceView } from '../../components/nav/utilityResourceViews/ErrorMessageResourceView';
+import { CircleX } from '../../lib/icons/CircleX';
+import { Folder } from '../../lib/icons/Folder';
+import { Code } from '../../lib/icons/Code';
+import { File } from '../../lib/icons/File';
+import { Trash } from '../../lib/icons/Trash';
+import { Separator } from '../../components/ui/separator';
+import { useDialog } from '../../components/nav/DialogProvider';
 import {
   SolidContainer,
   SolidContainerSlug,

@@ -7,7 +7,7 @@ import { AddressBox } from './AddressBox';
 import { AvatarMenu } from './AvatarMenu';
 import { SignInMenu } from './SignInMenu';
 import { ViewMenu } from './ViewMenu';
-import { Card } from '~/components/ui/card';
+import { Card } from '../../../components/ui/card';
 
 export const Header: FunctionComponent = () => {
   const { session } = useSolidAuth();

@@ -5,11 +5,11 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useTargetResource } from '~/components/TargetResourceProvider';
+import { useTargetResource } from '../../components/TargetResourceProvider';
 import { RawCodeEditor } from './RawCodeEditor';
 import { View } from 'react-native';
-import { Button } from '~/components/ui/button';
-import { Text } from '~/components/ui/text';
+import { Button } from '../../components/ui/button';
+import { Text } from '../../components/ui/text';
 import { Notifier } from 'react-native-notifier';
 
 export const RawCodeView: FunctionComponent = () => {

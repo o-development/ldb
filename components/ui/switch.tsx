@@ -7,7 +7,7 @@ import Animated, {
   useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { cn } from '~/lib/utils';
+import { cn } from '../../lib/utils';
 import { useThemeChange } from '../ThemeProvider';
 
 function SwitchWeb({

@@ -7,11 +7,11 @@ import React, {
 import { useTargetResource } from '../TargetResourceProvider';
 import { ResourceViewConfig } from '../ResourceView';
 import { ErrorMessageResourceView } from './utilityResourceViews/ErrorMessageResourceView';
-import { TextCursorInput } from '~/lib/icons/TextCursorInput';
-import { CircleSlash } from '~/lib/icons/CircleSlash';
-import { OctagonX } from '~/lib/icons/OctagonX';
-import { ShieldX } from '~/lib/icons/ShieldX';
-import { CircleX } from '~/lib/icons/CircleX';
+import { TextCursorInput } from '../../lib/icons/TextCursorInput';
+import { CircleSlash } from '../../lib/icons/CircleSlash';
+import { OctagonX } from '../../lib/icons/OctagonX';
+import { ShieldX } from '../../lib/icons/ShieldX';
+import { CircleX } from '../../lib/icons/CircleX';
 import { Header } from './header/Header';
 import { View } from 'react-native';
 import { useValidView, ValidViewProvider } from './useValidView';

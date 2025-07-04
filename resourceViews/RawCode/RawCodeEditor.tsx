@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useRef } from 'react';
-import { Text } from '~/components/ui/text';
 import Editor, { Monaco, OnMount } from '@monaco-editor/react';
-import { useThemeChange } from '~/components/ThemeProvider';
+import { useThemeChange } from '../../components/ThemeProvider';
 
 interface RawCodeEditorProps {
   value: string;

@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
 import { FunctionComponent, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Input } from '~/components/ui/input';
-import { ChevronRight } from '~/lib/icons/ChevronRight';
-import { ChevronsRight } from '~/lib/icons/ChevronsRight';
-import { TextCursorInput } from '~/lib/icons/TextCursorInput';
-import { RefreshCw } from '~/lib/icons/RefreshCw';
-import { ArrowRight } from '~/lib/icons/ArrowRight';
-import { Button } from '~/components/ui/button';
+import { Input } from '../../ui/input';
+import { ChevronRight } from '../../../lib/icons/ChevronRight';
+import { ChevronsRight } from '../../../lib/icons/ChevronsRight';
+import { TextCursorInput } from '../../../lib/icons/TextCursorInput';
+import { RefreshCw } from '../../../lib/icons/RefreshCw';
+import { ArrowRight } from '../../../lib/icons/ArrowRight';
+import { Button } from '../../../components/ui/button';
 import { Text } from '../../ui/text';
 import { useTargetResource } from '../../TargetResourceProvider';
 
