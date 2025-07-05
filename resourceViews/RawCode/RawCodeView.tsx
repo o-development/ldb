@@ -16,6 +16,7 @@ export const RawCodeView: FunctionComponent = () => {
   const { targetUri } = useTargetResource();
   const { fetch } = useSolidAuth();
   const [content, setContent] = useState<string>('');
+  const [contentType, setContentType] = useState<string>('');
 
   // Independently fetch the target resource, so we have the raw turtle
   const fetchContent = useCallback(async () => {
@@ -27,12 +28,16 @@ export const RawCodeView: FunctionComponent = () => {
       });
     }
     setContent(await response.text());
+    setContentType(response.headers.get('content-type') ?? '');
   }, [fetch, targetUri]);
 
   const submitChanges = useCallback(async () => {
     if (!targetUri) return;
     const response = await fetch(targetUri, {
       method: 'put',
+      headers: {
+        'content-type': contentType,
+      },
       body: content,
     });
     if (response.status !== 205) {
@@ -44,7 +49,7 @@ export const RawCodeView: FunctionComponent = () => {
       title: `Document Saved`,
     });
     await fetchContent();
-  }, [content, fetch, fetchContent, targetUri]);
+  }, [content, contentType, fetch, fetchContent, targetUri]);
 
   useEffect(() => {
     fetchContent();

@@ -15,9 +15,10 @@ import {
   DialogDescription,
   DialogClose,
 } from '../ui/dialog';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 import { Button } from '../ui/button';
 import { Text } from '../ui/text';
+import { Input } from '../ui/input';
 
 type DialogOptions =
   | { type: 'confirm'; title: string; message?: string }
@@ -112,7 +113,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({
 
           {options?.type === 'prompt' && (
             <View className="my-2">
-              <TextInput
+              <Input
                 value={inputValue}
                 onChangeText={setInputValue}
                 placeholder="Enter text..."

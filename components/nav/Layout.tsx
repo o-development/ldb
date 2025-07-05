@@ -16,6 +16,7 @@ import { Header } from './header/Header';
 import { View } from 'react-native';
 import { useValidView, ValidViewProvider } from './useValidView';
 import { DialogProvider } from './DialogProvider';
+import { useSolidAuth } from '@ldo/solid-react';
 
 export const ValidViewContext = createContext<{
   validViews: ResourceViewConfig[];
@@ -25,6 +26,12 @@ export const ValidViewContext = createContext<{
 }>({});
 
 export const Layout: FunctionComponent = () => {
+  const { ranInitialAuthCheck } = useSolidAuth();
+
+  if (!ranInitialAuthCheck) {
+    return <></>;
+  }
+
   return (
     <DialogProvider>
       <ValidViewProvider>
