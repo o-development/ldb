@@ -1,9 +1,4 @@
-import {
-  useLdo,
-  useResource,
-  useSolidAuth,
-  useSubject,
-} from '@ldo/solid-react';
+import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React from 'react';
 import { FunctionComponent } from 'react';
 import { View } from 'react-native';
@@ -24,7 +19,6 @@ import { LogOut } from '../../../lib/icons/LogOut';
 import { useTargetResource } from '../../TargetResourceProvider';
 
 export const AvatarMenu: FunctionComponent = () => {
-  const { dataset } = useLdo();
   const { session, logout } = useSolidAuth();
   // TODO: Use WebId Resource to render a skeleton loader
   const webIdResource = useResource(session.webId);
@@ -32,11 +26,6 @@ export const AvatarMenu: FunctionComponent = () => {
   const { navigateTo } = useTargetResource();
 
   if (!session.webId) return <></>;
-
-  console.log(profile?.['@id']);
-  console.log(profile?.hasPhoto?.['@id']);
-  console.log(webIdResource?.isLoading());
-  console.log(dataset.toString());
 
   return (
     <DropdownMenu>
