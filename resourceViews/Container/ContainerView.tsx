@@ -8,7 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '../../components/ui/dropdown-menu';
-import { useTargetResource } from '../../components/TargetResourceProvider';
 import { ErrorMessageResourceView } from '../../components/nav/utilityResourceViews/ErrorMessageResourceView';
 import { CircleX } from '../../lib/icons/CircleX';
 import { Folder } from '../../lib/icons/Folder';
@@ -23,9 +22,10 @@ import {
   SolidLeaf,
 } from '@ldo/connected-solid';
 import { Notifier } from 'react-native-notifier';
+import { useViewContext } from 'components/nav/useViewContext';
 
 export const ContainerView: FunctionComponent = () => {
-  const { targetResource, navigateTo } = useTargetResource();
+  const { targetResource, navigateTo } = useViewContext();
   const { prompt } = useDialog();
 
   const onCreateContainer = useCallback(async () => {

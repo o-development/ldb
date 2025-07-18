@@ -11,7 +11,7 @@
     "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
     "build:standalone": "expo export -p web --output-dir dist-standalone && node scripts/adjust-standalone-paths.js",
     "build:server": "EXPO_PUBLIC_IS_SERVER_HOSTED=true expo export -p web --output-dir dist-server && node scripts/adjust-server-paths.js",
-    "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -c 'npm run build:server'",
+    "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -i 'data/**' -c 'npm run build:server'",
     "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
     "build:ldo": "ldo build --input .shapes --output .ldo",
     "build": "npm run build:standalone && npm run build:server"

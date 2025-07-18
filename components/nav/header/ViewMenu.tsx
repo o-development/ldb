@@ -13,7 +13,7 @@ import { View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '../../../lib/utils';
 import { ViewIcon } from '../../../lib/icons/ViewIcon';
-import { useValidView } from '../useValidView';
+import { useViewContext } from '../useViewContext';
 import { ResourceViewConfig } from '../../../components/ResourceView';
 
 export const ViewMenu: FunctionComponent = () => {
@@ -24,7 +24,7 @@ export const ViewMenu: FunctionComponent = () => {
     left: 12,
     right: 12,
   };
-  const { validViews } = useValidView();
+  const { validViews } = useViewContext();
 
   const [isOpen, setIsOpen] = React.useState<string>();
 
@@ -63,7 +63,7 @@ const ListItem = React.forwardRef<
   }
 >(({ className, viewConfig, ...props }, ref) => {
   // TODO: add navigationn to `href` on `NavigationMenuLink` onPress
-  const { curViewConfig, setCurViewConfig } = useValidView();
+  const { curViewConfig, setCurViewConfig } = useViewContext();
   const Icon = viewConfig.displayIcon;
   return (
     <View role="listitem">
