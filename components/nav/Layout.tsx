@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import { useViewContext, ViewContextProvider } from './useViewContext';
 import { DialogProvider } from './DialogProvider';
 import { useSolidAuth } from '@ldo/solid-react';
+import { SharingModalProvider } from 'components/sharing/SharingModal';
 
 export const ValidViewContext = createContext<{
   validViews: ResourceViewConfig[];
@@ -29,10 +30,12 @@ export const Layout: FunctionComponent = () => {
   return (
     <DialogProvider>
       <ViewContextProvider>
-        <Header />
-        <View className="flex-1 z-0">
-          <RenderView />
-        </View>
+        <SharingModalProvider>
+          <Header />
+          <View className="flex-1 z-0">
+            <RenderView />
+          </View>
+        </SharingModalProvider>
       </ViewContextProvider>
     </DialogProvider>
   );
