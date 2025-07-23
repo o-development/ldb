@@ -14,6 +14,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       fn: {
         "@id": "http://www.w3.org/2006/vcard/ns#fn",
@@ -107,6 +108,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       fn: {
         "@id": "http://www.w3.org/2006/vcard/ns#fn",

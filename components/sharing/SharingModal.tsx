@@ -26,7 +26,7 @@ import {
   SolidLeaf,
   WacRule,
 } from '@ldo/connected-solid';
-import { useViewContext } from 'components/nav/useViewContext';
+import { useViewContext } from '../useViewContext';
 import { LoadingBar } from '../common/LoadingBar';
 import { ScrollView } from 'react-native';
 import { WacRuleForm } from './WacRuleForm';
@@ -107,7 +107,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     ) {
       setIsLoading(true);
       const result = await targetResource.setWac(editedRules);
-      if (result.isError) toast;
+      // TODO throw error with toast
       setIsLoading(false);
     }
   }, [editedRules, targetResource]);

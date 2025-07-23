@@ -13,7 +13,7 @@ import { View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '../../../lib/utils';
 import { ViewIcon } from '../../../lib/icons/ViewIcon';
-import { useViewContext } from '../useViewContext';
+import { useViewContext } from '../../useViewContext';
 import { ResourceViewConfig } from '../../../components/ResourceView';
 
 export const ViewMenu: FunctionComponent = () => {

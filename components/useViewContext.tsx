@@ -1,23 +1,25 @@
 import createContainer from 'constate';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDataBrowserConfig } from '../DataBrowser';
-import { useTargetResource } from '../TargetResourceProvider';
-import { ResourceViewConfig } from '../ResourceView';
-import { EyeOff } from '../../lib/icons/EyeOff';
-import { OctagonX } from '../../lib/icons/OctagonX';
-import { CircleSlash } from '../../lib/icons/CircleSlash';
-import { TextCursorInput } from '../../lib/icons/TextCursorInput';
-import { ShieldX } from '../../lib/icons/ShieldX';
-import { CircleX } from '../../lib/icons/CircleX';
-import { Loader } from '../../lib/icons/Loader';
+import { useDataBrowserConfig } from './DataBrowser';
+import { useTargetResource } from './TargetResourceProvider';
+import { ResourceViewConfig } from './ResourceView';
+import { EyeOff } from '../lib/icons/EyeOff';
+import { OctagonX } from '../lib/icons/OctagonX';
+import { CircleSlash } from '../lib/icons/CircleSlash';
+import { TextCursorInput } from '../lib/icons/TextCursorInput';
+import { ShieldX } from '../lib/icons/ShieldX';
+import { CircleX } from '../lib/icons/CircleX';
+import { Loader } from '../lib/icons/Loader';
 import { ErrorMessageResourceView } from './utilityResourceViews/ErrorMessageResourceView';
 import { SolidContainer, SolidLeaf } from '@ldo/connected-solid';
 import { LucideIcon } from 'lucide-react-native';
+import { useLdo } from '@ldo/solid-react';
 
 export const [ViewContextProvider, useViewContext] = createContainer(() => {
   const { targetUri, targetResource, refresh, navigateTo } =
     useTargetResource();
   const { views } = useDataBrowserConfig();
+  const { dataset } = useLdo();
 
   /**
    * Calculate Valid Views
@@ -42,13 +44,16 @@ export const [ViewContextProvider, useViewContext] = createContainer(() => {
     const errorViews = getErrorViews(targetResource);
     if (errorViews) return errorViews;
 
+    console.log(dataset.toString());
+
     const potentialViews = views.filter((view) =>
-      view.canDisplay(targetUri!, targetResource!),
+      view.canDisplay(targetUri!, targetResource!, dataset),
     );
+
     return potentialViews.length > 0
       ? potentialViews
       : [constructErrorView(`No valid view for ${targetUri}`, OctagonX)];
-  }, [targetResource, targetUri, views]);
+  }, [targetResource, targetUri, views, dataset]);
 
   const [curViewConfig, setCurViewConfig] = useState<ResourceViewConfig>(
     validViews[0],

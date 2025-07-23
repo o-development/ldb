@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { Text } from '../../ui/text';
+import { Text } from '../ui/text';
 import { LucideIcon } from 'lucide-react-native';
-import { Card } from '../../ui/card';
+import { Card } from '../ui/card';
 import { View } from 'react-native';
 
 interface ErrorMessageResourceViewsProps {

@@ -10,7 +10,7 @@ import { View } from 'react-native';
 import { Button } from '../../components/ui/button';
 import { Text } from '../../components/ui/text';
 import { Notifier } from 'react-native-notifier';
-import { useViewContext } from '../../components/nav/useViewContext';
+import { useViewContext } from '../../components/useViewContext';
 import { LoadingBar } from 'components/common/LoadingBar';
 
 export const RawCodeView: FunctionComponent = () => {

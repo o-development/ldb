@@ -18,9 +18,9 @@
   },
   "dependencies": {
     "@inrupt/solid-client-authn-browser": "^3.0.0",
-    "@ldo/connected-solid": "^1.0.0-alpha.27",
+    "@ldo/connected-solid": "^1.0.0-alpha.29",
     "@ldo/ldo": "^1.0.0-alpha.27",
-    "@ldo/solid-react": "^1.0.0-alpha.27",
+    "@ldo/solid-react": "^1.0.0-alpha.29",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
-    "@ldo/cli": "^1.0.0-alpha.21",
+    "@ldo/cli": "^1.0.0-alpha.29",
     "@react-native-community/eslint-config": "^3.2.0",
     "@solid/community-server": "^7.1.7",
     "@types/jsonld": "^1.5.15",

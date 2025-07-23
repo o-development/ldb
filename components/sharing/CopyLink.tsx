@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { Text } from '../ui/text';
 import { Link } from '../../lib/icons/Link';
 import { FunctionComponent } from 'react';
-import { useViewContext } from 'components/nav/useViewContext';
+import { useViewContext } from '../useViewContext';
 
 export const CopyLink: FunctionComponent = () => {
   const { targetUri } = useViewContext();
