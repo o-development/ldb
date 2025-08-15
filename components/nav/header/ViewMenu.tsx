@@ -78,7 +78,7 @@ const ListItem = React.forwardRef<
         {...props}
       >
         <Icon size={20} />
-        <Text className="text-sm native:text-base font-medium text-foreground leading-none ml-2">
+        <Text className="ml-2" size="sm">
           {viewConfig.displayName}
         </Text>
       </NavigationMenuLink>

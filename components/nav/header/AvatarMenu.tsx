@@ -38,9 +38,11 @@ export const AvatarMenu: FunctionComponent = () => {
           <ProfileAvatar profile={profile} className="w-20 h-20" />
           <View className="ml-2">
             <Text>{profile?.fn || ''}</Text>
-            <Button size="sm" onPress={() => navigateTo(session.webId ?? '')}>
-              <Text>Edit your profile</Text>
-            </Button>
+            <Button
+              size="sm"
+              onPress={() => navigateTo(session.webId ?? '')}
+              text="Edit your profile"
+            />
           </View>
         </View>
         <DropdownMenuSeparator />

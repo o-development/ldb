@@ -31,11 +31,8 @@ export const Header: FunctionComponent = () => {
             variant="ghost"
             className="w-10"
             onPress={openSharingModal}
-          >
-            <Text>
-              <UserPlus />
-            </Text>
-          </Button>
+            iconLeft={<UserPlus />}
+          />
           <View className="mr-1" />
         </>
       )}

@@ -16,7 +16,7 @@ export const AgentPermissions: FunctionComponent<AgentPermissionsProps> = ({
 }) => {
   return (
     <>
-      <Text className="font-semibold">Individual Agents</Text>
+      <Text bold>Individual Agents</Text>
       <Input placeholder="Add Contact or WebId" />
       {Object.entries(value).map(([webId, accessModeList]) => (
         <AgentPermissionRow

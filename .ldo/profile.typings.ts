@@ -154,7 +154,7 @@ export interface EmailShape {
   /**
    * The type of email.
    */
-  type?:
+  type?: LdSet<
     | {
         "@id": "Dom";
       }
@@ -187,7 +187,8 @@ export interface EmailShape {
       }
     | {
         "@id": "X400";
-      };
+      }
+  >;
   /**
    * The value of an email as a mailto link (Example <mailto:jane@example.com>)
    */
@@ -205,7 +206,7 @@ export interface PhoneNumberShape {
   /**
    * They type of Phone Number
    */
-  type?:
+  type?: LdSet<
     | {
         "@id": "Dom";
       }
@@ -238,7 +239,8 @@ export interface PhoneNumberShape {
       }
     | {
         "@id": "X400";
-      };
+      }
+  >;
   /**
    * The value of a phone number as a tel link (Example <tel:555-555-5555>)
    */

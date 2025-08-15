@@ -14,6 +14,7 @@ import { Text } from '../ui/text';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { ChevronDown } from '../../lib/icons/ChevronDown';
+import { View } from 'react-native';
 
 interface AccessDropdownProps {
   value: AccessModeList;
@@ -53,13 +54,10 @@ export const AccessDropdown: FunctionComponent<AccessDropdownProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="flex-row w-[130px] justify-between"
-        >
+        <Button variant="outline" className=" w-[130px] justify-between gap-0">
           <Text>{accessDescription}</Text>
           <Text>
-            <ChevronDown size={14} className="ml-1" />
+            <ChevronDown size={14} />
           </Text>
         </Button>
       </DropdownMenuTrigger>

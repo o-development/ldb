@@ -27,11 +27,8 @@ export const AgentPermissionRow: FunctionComponent<AgentPermissionRowProps> = ({
           variant="ghost"
           onPress={() => onChange(undefined)}
           className="w-10"
-        >
-          <Text>
-            <Trash size={14} />
-          </Text>
-        </Button>
+          iconLeft={<Trash size={14} />}
+        />
         <AccessDropdown value={value} onChange={onChange} />
       </View>
     </View>

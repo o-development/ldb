@@ -20,7 +20,9 @@ export const AgentInformation: FunctionComponent<AgentInformationProps> = ({
       <ProfileAvatar profile={agentProfile} />
       <View className="flex-1">
         <Text>{agentProfile.fn ?? agentProfile.name ?? 'Unnamed Agent'}</Text>
-        <Text className="text-xs text-muted-foreground">{webId}</Text>
+        <Text size="xs" muted>
+          {webId}
+        </Text>
       </View>
     </View>
   );

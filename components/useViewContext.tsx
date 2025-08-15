@@ -44,8 +44,6 @@ export const [ViewContextProvider, useViewContext] = createContainer(() => {
     const errorViews = getErrorViews(targetResource);
     if (errorViews) return errorViews;
 
-    console.log(dataset.toString());
-
     const potentialViews = views.filter((view) =>
       view.canDisplay(targetUri!, targetResource!, dataset),
     );

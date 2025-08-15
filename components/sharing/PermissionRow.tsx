@@ -30,7 +30,7 @@ export const PermissionRow: FunctionComponent<PermissionRowProps> = ({
             </Text>
           </AvatarFallback>
         </Avatar>
-        <Text className="font-semibold">{displayName}</Text>
+        <Text bold>{displayName}</Text>
       </View>
       <AccessDropdown value={value} onChange={onChange} />
     </View>

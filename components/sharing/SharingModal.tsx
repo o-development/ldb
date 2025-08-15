@@ -51,7 +51,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   children,
 }) => {
   const { targetResource } = useViewContext();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [wacResult, setWacResult] = useState<
     | GetWacRuleError<SolidLeaf | SolidContainer>
     | GetWacRuleSuccess<SolidLeaf | SolidContainer>
@@ -136,9 +136,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
           <DialogFooter>
             <CopyLink />
             <DialogClose asChild>
-              <Button>
-                <Text>{didEdit ? 'Apply Changes' : 'Done'}</Text>
-              </Button>
+              <Button text={didEdit ? 'Apply Changes' : 'Done'} />
             </DialogClose>
           </DialogFooter>
         </DialogContent>

@@ -9,7 +9,6 @@ export const CopyLink: FunctionComponent = () => {
   const { targetUri } = useViewContext();
   const [message, setMessage] = useState('Copy Link');
   const onCopy = useCallback(async () => {
-    console.log(targetUri);
     await navigator.clipboard.writeText(targetUri ?? '');
     setMessage('Copied');
     await new Promise((res) => setTimeout(res, 2000));
@@ -17,11 +16,6 @@ export const CopyLink: FunctionComponent = () => {
   }, [targetUri]);
 
   return (
-    <Button variant="outline" className="flex-row" onPress={onCopy}>
-      <Text className="mr-1">
-        <Link size={20} />
-      </Text>
-      <Text>{message}</Text>
-    </Button>
+    <Button variant="outline" className="flex-row" onPress={onCopy} text={message} iconLeft={<Link />} />
   );
 };

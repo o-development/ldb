@@ -126,13 +126,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="ghost" onPress={handleCancel}>
-                <Text>Cancel</Text>
-              </Button>
+              <Button variant="ghost" onPress={handleCancel} text="Cancel" />
             </DialogClose>
-            <Button onPress={handleConfirm}>
-              <Text>Ok</Text>
-            </Button>
+            <Button onPress={handleConfirm} text="Ok" />
           </DialogFooter>
         </DialogContent>
       </Dialog>

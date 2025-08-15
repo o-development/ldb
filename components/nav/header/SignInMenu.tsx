@@ -53,24 +53,23 @@ export const SignInMenu: FunctionComponent = () => {
           className="hidden sm:block"
           onPress={() => signUp(DEFAULT_ISSUER)}
           variant="ghost"
-        >
-          <Text>Sign Up</Text>
-        </Button>
+          text="Sign Up"
+        />
         <Button
           key="logIn"
           className="hidden sm:block"
           onPress={() => login(DEFAULT_ISSUER)}
           variant="default"
-        >
-          <Text>Log In</Text>
-        </Button>
+          text="Log In"
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button key="setMemu" variant="ghost" className="w-10">
-              <Text>
-                <EllipsisVertical size={20} />
-              </Text>
-            </Button>
+            <Button
+              key="setMemu"
+              variant="ghost"
+              className="w-10"
+              iconLeft={<EllipsisVertical size={20} />}
+            />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64 native:w-72">
             <DropdownMenuGroup>
@@ -106,9 +105,7 @@ export const SignInMenu: FunctionComponent = () => {
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
-                      <Button onPress={onIdpSubmit}>
-                        <Text>OK</Text>
-                      </Button>
+                      <Button onPress={onIdpSubmit} text="OK" />
                     </DialogClose>
                   </DialogFooter>
                 </DialogContent>
