@@ -112,10 +112,20 @@ function Button({
             <CircleSnail size={20} color={loadColor} />
           </View>
         ) : iconLeft ? (
-          <Text className="text-sm">{iconLeft}</Text>
+          <Text>
+            {React.cloneElement(iconLeft, {
+              size: (iconLeft.props as any).size || 16,
+            } as any)}
+          </Text>
         ) : undefined}
         {text ? <Text>{text}</Text> : (children as React.ReactNode)}
-        {iconRight ? <Text className="text-sm">{iconRight}</Text> : undefined}
+        {iconRight ? (
+          <Text>
+            {React.cloneElement(iconRight, {
+              size: (iconRight.props as any).size || 16,
+            } as any)}
+          </Text>
+        ) : undefined}
       </Pressable>
     </TextClassContext.Provider>
   );

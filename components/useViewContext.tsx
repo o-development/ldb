@@ -32,7 +32,7 @@ export const [ViewContextProvider, useViewContext] = createContainer(() => {
           TextCursorInput,
         ),
       ];
-    } else if (targetResource.type === 'InvalidIdentifierResouce') {
+    } else if (targetResource.type === 'InvalidIdentifierResource') {
       return [
         constructErrorView(
           `${targetResource.uri} is an invalid URI.`,

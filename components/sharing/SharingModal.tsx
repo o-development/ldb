@@ -67,7 +67,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   useEffect(() => {
     if (
       targetResource &&
-      targetResource.type !== 'InvalidIdentifierResouce' &&
+      targetResource.type !== 'InvalidIdentifierResource' &&
       isOpen
     ) {
       setIsLoading(true);
@@ -102,15 +102,17 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
 
   const onApplyChanges = useCallback(async () => {
     if (
-      targetResource?.type === 'SolidContainer' ||
-      targetResource?.type === 'SolidLeaf'
+      didEdit &&
+      (targetResource?.type === 'SolidContainer' ||
+        targetResource?.type === 'SolidLeaf')
     ) {
       setIsLoading(true);
       const result = await targetResource.setWac(editedRules);
       // TODO throw error with toast
       setIsLoading(false);
     }
-  }, [editedRules, targetResource]);
+    setIsOpen(false);
+  }, [editedRules, targetResource, didEdit]);
 
   return (
     <sharingModalContext.Provider value={context}>
@@ -135,9 +137,10 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
           </ScrollView>
           <DialogFooter>
             <CopyLink />
-            <DialogClose asChild>
-              <Button text={didEdit ? 'Apply Changes' : 'Done'} />
-            </DialogClose>
+            <Button
+              text={didEdit ? 'Apply Changes' : 'Done'}
+              onPress={onApplyChanges}
+            />
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { WacRule } from '@ldo/connected-solid';
 import { FunctionComponent } from 'react';
 import { AgentPermissionRow } from './AgentPermissionRow';
 import { Text } from '../../ui/text';
-import { Input } from '../../ui/input';
+import { AgentInput } from './AgentInput';
 
 interface AgentPermissionsProps {
   value: WacRule['agent'];
@@ -14,10 +14,24 @@ export const AgentPermissions: FunctionComponent<AgentPermissionsProps> = ({
   value,
   onChange,
 }) => {
+  const addAgent = useCallback(
+    (webId: string) => {
+      onChange({
+        ...value,
+        [webId]: { read: false, write: false, append: false, control: false },
+      });
+    },
+    [value, onChange],
+  );
+
   return (
     <>
       <Text bold>Individual Agents</Text>
-      <Input placeholder="Add Contact or WebId" />
+      <AgentInput
+        onAddAgent={addAgent}
+        existingAgents={Object.keys(value)}
+        className="z-[999]"
+      />
       {Object.entries(value).map(([webId, accessModeList]) => (
         <AgentPermissionRow
           key={webId}
