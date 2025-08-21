@@ -1,4 +1,4 @@
-import { SolidProfileShapeShapeType } from '.ldo/profile.shapeTypes';
+import { SolidProfileShapeShapeType } from '../../.ldo/profile.shapeTypes';
 import { ResourceViewConfig } from '../../components/ResourceView';
 import { User } from '../../lib/icons/User';
 import { ProfileView } from './ProfileView';

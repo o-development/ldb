@@ -1,7 +1,7 @@
 import { Input } from '../../components/ui/input';
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { Plus } from '../../lib/icons/Plus';
-import { SolidProfileShape } from '.ldo/profile.typings';
+import { SolidProfileShape } from '../../.ldo/profile.typings';
 import { AgentInformation } from '../../components/sharing/agentPermissions/AgentInformation';
 import { View } from 'react-native';
 import { useChangeSetData } from '@ldo/react';

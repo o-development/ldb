@@ -1,5 +1,5 @@
 import React from 'react';
-import { SolidProfileShape } from '.ldo/profile.typings';
+import { SolidProfileShape } from '../../.ldo/profile.typings';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Text } from '../ui/text';
 import { User } from '../../lib/icons/User';

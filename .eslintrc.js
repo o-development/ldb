@@ -21,6 +21,8 @@ module.exports = {
               '~/lib/*',
               'resourceViews/*',
               '~/resourceViews/*',
+              '.ldo/*',
+              '~/ldo/*',
             ],
             message:
               'Absolute imports are not allowed. Please use relative imports instead.',

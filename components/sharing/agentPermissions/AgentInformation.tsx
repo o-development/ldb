@@ -1,4 +1,4 @@
-import { SolidProfileShapeShapeType } from '.ldo/profile.shapeTypes';
+import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
 import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React, { FunctionComponent, ReactNode } from 'react';
 import { View } from 'react-native';
