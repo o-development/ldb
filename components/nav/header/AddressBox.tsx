@@ -68,15 +68,14 @@ export const AddressBox: FunctionComponent = () => {
         variant="secondary"
         className="absolute left-0 w-10 h-10"
         onPress={() => setIsTextMode((val) => !val)}
-      >
-        <Text>
-          {isTextMode ? (
+        iconLeft={
+          isTextMode ? (
             <ChevronsRight size={20} />
           ) : (
             <TextCursorInput size={20} />
-          )}
-        </Text>
-      </Button>
+          )
+        }
+      />
       {(() => {
         const shouldRefresh = targetUri === textBoxValue || !isTextMode;
         return (
@@ -115,7 +114,9 @@ export const AddressBox: FunctionComponent = () => {
               )}
               <TouchableOpacity onPress={() => navigateTo(item.uri)}>
                 <View pointerEvents="auto">
-                  <Text className="mr-0.5 underline text-sm">{item.name}</Text>
+                  <Text className="mr-0.5 underline" size="sm">
+                    {item.name}
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>

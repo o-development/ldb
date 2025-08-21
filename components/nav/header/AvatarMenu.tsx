@@ -3,7 +3,6 @@ import React from 'react';
 import { FunctionComponent } from 'react';
 import { View } from 'react-native';
 import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
-import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Text } from '../../ui/text';
 import { Button } from '../../ui/button';
 import { ThemeToggleMenu } from './ThemeToggleMenu';
@@ -14,9 +13,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu';
-import { User } from '../../../lib/icons/User';
 import { LogOut } from '../../../lib/icons/LogOut';
 import { useTargetResource } from '../../TargetResourceProvider';
+import { ProfileAvatar } from '../../common/ProfileAvatar';
 
 export const AvatarMenu: FunctionComponent = () => {
   const { session, logout } = useSolidAuth();
@@ -31,34 +30,19 @@ export const AvatarMenu: FunctionComponent = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button key="setMemu" variant="ghost" className="w-10">
-          <Avatar alt={profile?.fn ? `${profile.fn}'s Avatar` : ''}>
-            <AvatarImage source={{ uri: profile?.hasPhoto?.['@id'] }} />
-            <AvatarFallback>
-              <Text>
-                <User />
-              </Text>
-            </AvatarFallback>
-          </Avatar>
+          <ProfileAvatar profile={profile} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 native:w-72 mr-2 mt-2">
         <View className="p-2 flex-row items-center">
-          <Avatar
-            alt={profile?.fn ? `${profile.fn}'s Avatar` : ''}
-            className="w-20 h-20"
-          >
-            <AvatarImage source={{ uri: profile?.hasPhoto?.['@id'] }} />
-            <AvatarFallback>
-              <Text>
-                <User />
-              </Text>
-            </AvatarFallback>
-          </Avatar>
+          <ProfileAvatar profile={profile} className="w-20 h-20" />
           <View className="ml-2">
             <Text>{profile?.fn || ''}</Text>
-            <Button size="sm" onPress={() => navigateTo(session.webId ?? '')}>
-              <Text>Edit your profile</Text>
-            </Button>
+            <Button
+              size="sm"
+              onPress={() => navigateTo(session.webId ?? '')}
+              text="Edit your profile"
+            />
           </View>
         </View>
         <DropdownMenuSeparator />

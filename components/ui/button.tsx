@@ -1,8 +1,11 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import { Pressable } from 'react-native';
-import { TextClassContext } from '../ui/text';
+import { Pressable, View } from 'react-native';
+import { Text, TextClassContext } from '../ui/text';
 import { cn } from '../../lib/utils';
+import { LucideIcon } from 'lucide-react-native';
+import { CircleSnail } from 'react-native-progress';
+import { useTheme } from '@react-navigation/native';
 
 const buttonVariants = cva(
   'group flex items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
@@ -60,9 +63,32 @@ const buttonTextVariants = cva(
 );
 
 type ButtonProps = React.ComponentProps<typeof Pressable> &
-  VariantProps<typeof buttonVariants>;
+  VariantProps<typeof buttonVariants> & {
+    iconLeft?: React.ReactElement;
+    iconRight?: React.ReactElement;
+    isLoading?: boolean;
+    text?: string;
+  };
 
-function Button({ ref, className, variant, size, ...props }: ButtonProps) {
+function Button({
+  ref,
+  className,
+  variant,
+  size,
+  children,
+  iconLeft,
+  iconRight,
+  isLoading,
+  text,
+  ...props
+}: ButtonProps) {
+  const theme = useTheme();
+
+  const loadColor =
+    !variant || variant === 'default'
+      ? theme.colors.background
+      : theme.colors.primary;
+
   return (
     <TextClassContext.Provider
       value={buttonTextVariants({
@@ -73,13 +99,34 @@ function Button({ ref, className, variant, size, ...props }: ButtonProps) {
     >
       <Pressable
         className={cn(
+          'justify-between flex-row gap-2 items-center',
           props.disabled && 'opacity-50 web:pointer-events-none',
           buttonVariants({ variant, size, className }),
         )}
         ref={ref}
         role="button"
         {...props}
-      />
+      >
+        {isLoading ? (
+          <View>
+            <CircleSnail size={20} color={loadColor} />
+          </View>
+        ) : iconLeft ? (
+          <Text>
+            {React.cloneElement(iconLeft, {
+              size: (iconLeft.props as any).size || 16,
+            } as any)}
+          </Text>
+        ) : undefined}
+        {text ? <Text>{text}</Text> : (children as React.ReactNode)}
+        {iconRight ? (
+          <Text>
+            {React.cloneElement(iconRight, {
+              size: (iconRight.props as any).size || 16,
+            } as any)}
+          </Text>
+        ) : undefined}
+      </Pressable>
     </TextClassContext.Provider>
   );
 }

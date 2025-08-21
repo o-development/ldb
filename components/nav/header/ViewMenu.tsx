@@ -13,7 +13,7 @@ import { View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '../../../lib/utils';
 import { ViewIcon } from '../../../lib/icons/ViewIcon';
-import { useViewContext } from '../useViewContext';
+import { useViewContext } from '../../useViewContext';
 import { ResourceViewConfig } from '../../../components/ResourceView';
 
 export const ViewMenu: FunctionComponent = () => {
@@ -78,7 +78,7 @@ const ListItem = React.forwardRef<
         {...props}
       >
         <Icon size={20} />
-        <Text className="text-sm native:text-base font-medium text-foreground leading-none ml-2">
+        <Text className="ml-2" size="sm">
           {viewConfig.displayName}
         </Text>
       </NavigationMenuLink>

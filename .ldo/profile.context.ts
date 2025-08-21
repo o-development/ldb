@@ -8,12 +8,14 @@ import { LdoJsonldContext } from "@ldo/ldo";
 export const profileContext: LdoJsonldContext = {
   type: {
     "@id": "@type",
+    "@isCollection": true,
   },
   Person: {
     "@id": "http://schema.org/Person",
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       fn: {
         "@id": "http://www.w3.org/2006/vcard/ns#fn",
@@ -107,6 +109,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       fn: {
         "@id": "http://www.w3.org/2006/vcard/ns#fn",
@@ -238,6 +241,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -250,6 +254,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -262,6 +267,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -274,6 +280,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -286,6 +293,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -298,6 +306,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -310,6 +319,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -322,6 +332,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -334,6 +345,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -346,6 +358,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",
@@ -358,6 +371,7 @@ export const profileContext: LdoJsonldContext = {
     "@context": {
       type: {
         "@id": "@type",
+        "@isCollection": true,
       },
       value: {
         "@id": "http://www.w3.org/2006/vcard/ns#value",

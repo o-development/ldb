@@ -8,12 +8,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '../../components/ui/dropdown-menu';
-import { ErrorMessageResourceView } from '../../components/nav/utilityResourceViews/ErrorMessageResourceView';
+import { ErrorMessageResourceView } from '../../components/utilityResourceViews/ErrorMessageResourceView';
 import { CircleX } from '../../lib/icons/CircleX';
 import { Folder } from '../../lib/icons/Folder';
 import { Code } from '../../lib/icons/Code';
 import { File } from '../../lib/icons/File';
 import { Trash } from '../../lib/icons/Trash';
+import { Plus } from '../../lib/icons/Plus';
 import { Separator } from '../../components/ui/separator';
 import { useDialog } from '../../components/nav/DialogProvider';
 import {
@@ -22,7 +23,7 @@ import {
   SolidLeaf,
 } from '@ldo/connected-solid';
 import { Notifier } from 'react-native-notifier';
-import { useViewContext } from 'components/nav/useViewContext';
+import { useViewContext } from '../../components/useViewContext';
 
 export const ContainerView: FunctionComponent = () => {
   const { targetResource, navigateTo } = useViewContext();
@@ -87,9 +88,7 @@ export const ContainerView: FunctionComponent = () => {
       <View className="max-w-[200px] flex-1 p-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button>
-              <Text>Create</Text>
-            </Button>
+            <Button text='Create' iconLeft={<Plus />} />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onPress={onCreateContainer}>
