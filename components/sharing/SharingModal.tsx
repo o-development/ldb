@@ -10,7 +10,6 @@ import React, {
 } from 'react';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
