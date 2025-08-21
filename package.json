@@ -1,7 +1,7 @@
 {
   "name": "linked-data-browser",
   "main": "index.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "dev:ios": "expo start -c --ios",
     "dev:web": "concurrently \"npm run solid-server\" \"expo start -c --web\"",
