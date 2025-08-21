@@ -11,7 +11,7 @@ import { View } from 'react-native';
 import { useViewContext, ViewContextProvider } from '../useViewContext';
 import { DialogProvider } from './DialogProvider';
 import { useSolidAuth } from '@ldo/solid-react';
-import { SharingModalProvider } from 'components/sharing/SharingModal';
+import { SharingModalProvider } from '../sharing/SharingModal';
 
 export const ValidViewContext = createContext<{
   validViews: ResourceViewConfig[];

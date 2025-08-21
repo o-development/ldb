@@ -11,7 +11,7 @@ import { Input } from './input';
 import { Card } from './card';
 import { ButtonProps } from './button';
 import { LoadingBar } from '../common/LoadingBar';
-import { cn } from 'lib/utils';
+import { cn } from '../../lib/utils';
 
 interface InputDropdownProps<T> extends TextInputProps {
   onChangeText: (text: string) => void;

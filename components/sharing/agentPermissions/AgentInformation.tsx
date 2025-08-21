@@ -2,7 +2,7 @@ import { SolidProfileShapeShapeType } from '.ldo/profile.shapeTypes';
 import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React, { FunctionComponent, ReactNode } from 'react';
 import { View } from 'react-native';
-import { ProfileAvatar } from 'components/common/ProfileAvatar';
+import { ProfileAvatar } from '../../common/ProfileAvatar';
 import { Text } from '../../ui/text';
 
 interface AgentInformationProps {

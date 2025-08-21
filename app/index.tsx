@@ -5,7 +5,7 @@ import { RawCodeConfig } from '../resourceViews/RawCode/RawCodeConfig';
 import { ContainerConfig } from '../resourceViews/Container/ContainerConfig';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
-import { ProfileConfig } from 'resourceViews/Profile/ProfileConfig';
+import { ProfileConfig } from '../resourceViews/Profile/ProfileConfig';
 
 export function Screen() {
   const mode = process.env.EXPO_PUBLIC_IS_SERVER_HOSTED

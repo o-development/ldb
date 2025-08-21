@@ -8,7 +8,6 @@ import { SignInMenu } from './SignInMenu';
 import { ViewMenu } from './ViewMenu';
 import { Card } from '../../ui/card';
 import { Button } from '../../ui/button';
-import { Text } from '../../ui/text';
 import { UserPlus } from '../../../lib/icons/UserPlus';
 import { useSharingModal } from '../../sharing/SharingModal';
 

@@ -4,7 +4,7 @@ import { Text } from '../ui/text';
 import { FunctionComponent } from 'react';
 import { AccessDropdown } from './AccessDropdown';
 import { View } from 'react-native';
-import { Avatar, AvatarFallback } from 'components/ui/avatar';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 import { LucideIcon } from 'lucide-react-native';
 
 interface PermissionRowProps {

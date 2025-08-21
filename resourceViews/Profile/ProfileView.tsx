@@ -4,7 +4,7 @@ import React, { FunctionComponent } from 'react';
 import { Input } from '../../components/ui/input';
 import { Separator } from '../../components/ui/separator';
 import { ProfileKnows } from './ProfileKnows';
-import { useViewContext } from 'components/useViewContext';
+import { useViewContext } from '../../components/useViewContext';
 import { SolidProfileShapeShapeType } from '.ldo/profile.shapeTypes';
 import { useChangeSubject, useResource } from '@ldo/solid-react';
 import { Button } from '../../components/ui/button';
