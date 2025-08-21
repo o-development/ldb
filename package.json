@@ -14,7 +14,8 @@
     "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -i 'data/**' -c 'npm run build:server'",
     "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
     "build:ldo": "ldo build --input .shapes --output .ldo",
-    "build": "npm run build:standalone && npm run build:server"
+    "build": "npm run build:standalone && npm run build:server",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@inrupt/solid-client-authn-browser": "^3.0.0",
