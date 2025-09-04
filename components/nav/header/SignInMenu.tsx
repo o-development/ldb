@@ -26,7 +26,7 @@ import {
 } from '../../ui/dialog';
 import { Input } from '../../ui/input';
 
-const DEFAULT_ISSUER = 'http://localhost:3000';
+const DEFAULT_ISSUER = window.location.origin;
 
 export const SignInMenu: FunctionComponent = () => {
   const [idpValue, setIdpValue] = useState('');

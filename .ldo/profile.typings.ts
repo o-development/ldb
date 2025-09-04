@@ -7,9 +7,9 @@ import { LdoJsonldContext, LdSet } from "@ldo/ldo";
  */
 
 /**
- * SolidProfileShape Type
+ * SolidProfile Type
  */
-export interface SolidProfileShape {
+export interface SolidProfile {
   "@id"?: string;
   "@context"?: LdoJsonldContext;
   /**
@@ -34,11 +34,11 @@ export interface SolidProfileShape {
   /**
    * The person's street address.
    */
-  hasAddress?: LdSet<AddressShape>;
+  hasAddress?: LdSet<Address>;
   /**
    * The person's email.
    */
-  hasEmail?: LdSet<EmailShape>;
+  hasEmail?: LdSet<Email>;
   /**
    * A link to the person's photo
    */
@@ -52,7 +52,7 @@ export interface SolidProfileShape {
   /**
    * Person's telephone number
    */
-  hasTelephone?: LdSet<PhoneNumberShape>;
+  hasTelephone?: LdSet<PhoneNumber>;
   /**
    * An alternative way to define a person's telephone number using a string
    */
@@ -68,11 +68,11 @@ export interface SolidProfileShape {
   /**
    * A list of app origins that are trusted by this user
    */
-  trustedApp?: LdSet<TrustedAppShape>;
+  trustedApp?: LdSet<TrustedApp>;
   /**
    * A list of RSA public keys that are associated with private keys the user holds.
    */
-  key?: LdSet<RSAPublicKeyShape>;
+  key?: LdSet<RSAPublicKey>;
   /**
    * The user's LDP inbox to which apps can post notifications
    */
@@ -118,9 +118,9 @@ export interface SolidProfileShape {
 }
 
 /**
- * AddressShape Type
+ * Address Type
  */
-export interface AddressShape {
+export interface Address {
   "@id"?: string;
   "@context"?: LdoJsonldContext;
   /**
@@ -146,9 +146,9 @@ export interface AddressShape {
 }
 
 /**
- * EmailShape Type
+ * Email Type
  */
-export interface EmailShape {
+export interface Email {
   "@id"?: string;
   "@context"?: LdoJsonldContext;
   /**
@@ -198,9 +198,9 @@ export interface EmailShape {
 }
 
 /**
- * PhoneNumberShape Type
+ * PhoneNumber Type
  */
-export interface PhoneNumberShape {
+export interface PhoneNumber {
   "@id"?: string;
   "@context"?: LdoJsonldContext;
   /**
@@ -250,9 +250,9 @@ export interface PhoneNumberShape {
 }
 
 /**
- * TrustedAppShape Type
+ * TrustedApp Type
  */
-export interface TrustedAppShape {
+export interface TrustedApp {
   "@id"?: string;
   "@context"?: LdoJsonldContext;
   /**
@@ -281,9 +281,9 @@ export interface TrustedAppShape {
 }
 
 /**
- * RSAPublicKeyShape Type
+ * RSAPublicKey Type
  */
-export interface RSAPublicKeyShape {
+export interface RSAPublicKey {
   "@id"?: string;
   "@context"?: LdoJsonldContext;
   /**

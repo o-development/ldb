@@ -1,4 +1,4 @@
-import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
+import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React, { FunctionComponent, ReactNode } from 'react';
 import { View } from 'react-native';
@@ -16,7 +16,7 @@ export const AgentInformation: FunctionComponent<AgentInformationProps> = ({
 }) => {
   const { session } = useSolidAuth();
   useResource(webId);
-  const agentProfile = useSubject(SolidProfileShapeShapeType, webId);
+  const agentProfile = useSubject(SolidProfileShapeType, webId);
 
   return (
     <View className="flex-row gap-4 flex-1 items-center">
@@ -31,7 +31,6 @@ export const AgentInformation: FunctionComponent<AgentInformationProps> = ({
           {webId}
         </Text>
       </View>
-      {accessoryRight && <View>{accessoryRight}</View>}
     </View>
   );
 };

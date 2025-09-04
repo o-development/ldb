@@ -1,18 +1,19 @@
 import { Input } from '../../components/ui/input';
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { Plus } from '../../lib/icons/Plus';
-import { SolidProfileShape } from '../../.ldo/profile.typings';
+import { SolidProfile } from '../../.ldo/profile.typings';
 import { AgentInformation } from '../../components/sharing/agentPermissions/AgentInformation';
 import { View } from 'react-native';
 import { useChangeSetData } from '@ldo/react';
 import { SolidLeaf } from '@ldo/connected-solid';
 import { Button } from '../../components/ui/button';
 import { Trash } from '../../lib/icons/Trash';
+import { ConnectedPlugin } from '@ldo/connected';
 
 export interface ProfileKnowsProps {
   resource: SolidLeaf;
-  profile: SolidProfileShape;
-  setProfile: useChangeSetData<SolidProfileShape, any>;
+  profile: SolidProfile;
+  setProfile: useChangeSetData<SolidProfile, ConnectedPlugin<any, any, any, any, any>[]>;
 }
 
 export const ProfileKnows: FunctionComponent<ProfileKnowsProps> = ({

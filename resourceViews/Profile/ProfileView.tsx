@@ -5,7 +5,7 @@ import { Input } from '../../components/ui/input';
 import { Separator } from '../../components/ui/separator';
 import { ProfileKnows } from './ProfileKnows';
 import { useViewContext } from '../../components/useViewContext';
-import { SolidProfileShapeShapeType } from '../../.ldo/profile.shapeTypes';
+import { SolidProfileShapeType } from '../../.ldo/profile.shapeTypes';
 import { useChangeSubject, useResource } from '@ldo/solid-react';
 import { Button } from '../../components/ui/button';
 import { SolidLeaf } from '@ldo/connected-solid';
@@ -15,7 +15,7 @@ export const ProfileView: FunctionComponent = () => {
 
   const profileResource = useResource(targetUri);
   const [profile, setProfile, commitProfile, transactionDataset] =
-    useChangeSubject(SolidProfileShapeShapeType, targetUri);
+    useChangeSubject(SolidProfileShapeType, targetUri);
 
   if (
     !targetUri ||

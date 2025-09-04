@@ -2,7 +2,7 @@ import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React from 'react';
 import { FunctionComponent } from 'react';
 import { View } from 'react-native';
-import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
+import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { Text } from '../../ui/text';
 import { Button } from '../../ui/button';
 import { ThemeToggleMenu } from './ThemeToggleMenu';
@@ -21,7 +21,7 @@ export const AvatarMenu: FunctionComponent = () => {
   const { session, logout } = useSolidAuth();
   // TODO: Use WebId Resource to render a skeleton loader
   const webIdResource = useResource(session.webId);
-  const profile = useSubject(SolidProfileShapeShapeType, session.webId);
+  const profile = useSubject(SolidProfileShapeType, session.webId);
   const { navigateTo } = useTargetResource();
 
   if (!session.webId) return <></>;

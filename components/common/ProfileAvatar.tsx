@@ -1,12 +1,12 @@
 import React from 'react';
-import { SolidProfileShape } from '../../.ldo/profile.typings';
+import { SolidProfile } from '../../.ldo/profile.typings';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Text } from '../ui/text';
 import { User } from '../../lib/icons/User';
 import { FunctionComponent } from 'react';
 
 interface ProfileAvatarProps {
-  profile?: SolidProfileShape;
+  profile?: SolidProfile;
   className?: string;
 }
 

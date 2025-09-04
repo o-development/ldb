@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FunctionComponent } from 'react';
 import { Pressable } from 'react-native';
 import { useLinkQuery, useSolidAuth } from '@ldo/solid-react';
-import { SolidProfileShapeShapeType } from '../../../.ldo/profile.shapeTypes';
+import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { AgentInformation } from './AgentInformation';
 import { InputDropdown } from '../../ui/input-dropdown';
 import { useContactFilter } from './useContactFilter';
@@ -46,7 +46,7 @@ export const AgentInput: FunctionComponent<AgentInputProps> = ({
 
   // Get current user's profile to access their "knows" list
   const currentUserProfile = useLinkQuery(
-    SolidProfileShapeShapeType,
+    SolidProfileShapeType,
     session.webId!,
     session.webId!,
     friendsLinkQuery,

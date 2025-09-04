@@ -1,4 +1,4 @@
-import { SolidProfileShapeShapeType } from '../../.ldo/profile.shapeTypes';
+import { SolidProfileShapeType } from '../../.ldo/profile.shapeTypes';
 import { ResourceViewConfig } from '../../components/ResourceView';
 import { User } from '../../lib/icons/User';
 import { ProfileView } from './ProfileView';
@@ -10,7 +10,7 @@ export const ProfileConfig: ResourceViewConfig = {
   view: ProfileView,
   canDisplay: (targetUri, targetResource, dataset) => {
     const profile = dataset
-      .usingType(SolidProfileShapeShapeType)
+      .usingType(SolidProfileShapeType)
       .fromSubject(targetUri);
 
     return !!profile?.type?.some?.(
