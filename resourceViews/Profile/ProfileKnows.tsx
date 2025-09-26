@@ -1,13 +1,13 @@
 import { Input } from '../../components/ui/input';
 import React, { FunctionComponent, useCallback, useState } from 'react';
-import { Plus } from '../../lib/icons/Plus';
+import { Plus } from 'lucide-react-native';
 import { SolidProfile } from '../../.ldo/profile.typings';
 import { AgentInformation } from '../../components/sharing/agentPermissions/AgentInformation';
 import { View } from 'react-native';
 import { useChangeSetData } from '@ldo/react';
 import { SolidLeaf } from '@ldo/connected-solid';
 import { Button } from '../../components/ui/button';
-import { Trash } from '../../lib/icons/Trash';
+import { Trash } from 'lucide-react-native';
 import { ConnectedPlugin } from '@ldo/connected';
 
 export interface ProfileKnowsProps {

@@ -7,11 +7,12 @@ import React, {
 import { ResourceViewConfig } from '../ResourceView';
 
 import { Header } from './header/Header';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useViewContext, ViewContextProvider } from '../useViewContext';
 import { DialogProvider } from './DialogProvider';
 import { useSolidAuth } from '@ldo/solid-react';
 import { SharingModalProvider } from '../sharing/SharingModal';
+import { useTheme } from '@react-navigation/native';
 
 export const ValidViewContext = createContext<{
   validViews: ResourceViewConfig[];
@@ -22,6 +23,7 @@ export const ValidViewContext = createContext<{
 
 export const Layout: FunctionComponent = () => {
   const { ranInitialAuthCheck } = useSolidAuth();
+  const { colors } = useTheme();
 
   if (!ranInitialAuthCheck) {
     return <></>;
@@ -31,9 +33,11 @@ export const Layout: FunctionComponent = () => {
     <DialogProvider>
       <ViewContextProvider>
         <SharingModalProvider>
-          <Header />
-          <View className="flex-1 z-0">
-            <RenderView />
+          <View
+            style={[styles.container, { backgroundColor: colors.background }]}
+          >
+            <Header />
+            <View style={styles.contentView}>{/* <RenderView /> */}</View>
           </View>
         </SharingModalProvider>
       </ViewContextProvider>
@@ -55,3 +59,13 @@ export const RenderView: FunctionComponent = () => {
   const CurView = curViewConfig.view;
   return <CurView />;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentView: {
+    flex: 1,
+    zIndex: 0,
+  },
+});

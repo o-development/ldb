@@ -12,7 +12,7 @@ import Animated, {
   useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { ChevronDown } from '../../lib/icons/ChevronDown';
+import { ChevronDown } from 'lucide-react-native';
 import { cn } from '../../lib/utils';
 import { TextClassContext } from '../../components/ui/text';
 

@@ -6,7 +6,7 @@ import { AgentInformation } from './AgentInformation';
 import { AccessDropdown } from '../AccessDropdown';
 import { View } from 'react-native';
 import { Button } from '../../ui/button';
-import { Trash } from '../../../lib/icons/Trash';
+import { Trash } from 'lucide-react-native';
 
 interface AgentPermissionRowProps {
   webId: string;

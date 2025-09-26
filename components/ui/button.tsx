@@ -1,157 +1,166 @@
 import * as React from 'react';
-import { Pressable, View, StyleSheet } from 'react-native';
-import { Text } from '../ui/text';
+import { Pressable, View, Platform, TextStyle } from 'react-native';
+import {
+  Text,
+  TextStyleProps,
+  TextStyleProvider,
+  useTextStyles,
+} from '../ui/text';
 import { CircleSnail } from 'react-native-progress';
 import { useTheme } from '@react-navigation/native';
+import { LucideIcon } from 'lucide-react-native';
+import { Icon } from './icon';
 
-// Base styles that don't depend on theme
-const baseButtonStyles = StyleSheet.create({
-  base: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+// Button variant types
+type ButtonVariant =
+  | 'default'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost'
+  | 'link';
+type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
+
+// Style generation functions
+const getButtonStyles = (
+  variant: ButtonVariant = 'default',
+  size: ButtonSize = 'default',
+  isPressed: boolean = false,
+  isHovered: boolean = false,
+  isDisabled: boolean = false,
+  theme: any,
+) => {
+  const baseStyles = {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
     borderRadius: 6,
-  },
+    opacity: isDisabled ? 0.5 : 1,
+  };
+
   // Size styles
-  sizeDefault: {
-    height: 40,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  sizeSm: {
-    height: 36,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-  },
-  sizeLg: {
-    height: 44,
-    borderRadius: 6,
-    paddingHorizontal: 32,
-  },
-  sizeIcon: {
-    height: 40,
-    width: 40,
-  },
-});
+  const sizeStyles = {
+    default: {
+      height: Platform.OS === 'web' ? 40 : 48,
+      paddingHorizontal: Platform.OS === 'web' ? 16 : 20,
+      paddingVertical: Platform.OS === 'web' ? 8 : 12,
+    },
+    sm: {
+      height: 36,
+      borderRadius: 6,
+      paddingHorizontal: 12,
+    },
+    lg: {
+      height: Platform.OS === 'web' ? 44 : 56,
+      borderRadius: 6,
+      paddingHorizontal: 32,
+    },
+    icon: {
+      height: 40,
+      width: 40,
+    },
+  };
 
-const baseTextStyles = StyleSheet.create({
-  base: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  // Size text styles
-  textSizeDefault: {
-    fontSize: 14,
-  },
-  textSizeSm: {
-    fontSize: 14,
-  },
-  textSizeLg: {
-    fontSize: 16,
-  },
-  textSizeIcon: {
-    fontSize: 14,
-  },
-});
-
-// Function to create theme-dependent styles
-const createButtonStyles = (theme: any) => ({
   // Variant styles
-  default: {
-    backgroundColor: theme.colors.primary,
-  },
-  destructive: {
-    backgroundColor: theme.colors.notification, // Using notification color for destructive
-  },
-  outline: {
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: 'transparent',
-  },
-  secondary: {
-    backgroundColor: theme.colors.card,
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-  link: {
-    backgroundColor: 'transparent',
-  },
-  // Hover styles
-  defaultHover: {
-    backgroundColor: theme.colors.primary,
-    opacity: 0.9,
-  },
-  destructiveHover: {
-    backgroundColor: theme.colors.notification,
-    opacity: 0.9,
-  },
-  outlineHover: {
-    backgroundColor: theme.colors.card,
-    borderColor: theme.colors.border,
-  },
-  secondaryHover: {
-    backgroundColor: theme.colors.card,
-    opacity: 0.8,
-  },
-  ghostHover: {
-    backgroundColor: theme.colors.card,
-  },
-  linkHover: {
-    backgroundColor: 'transparent',
-    textDecorationLine: 'underline',
-  },
-});
+  const variantStyles = {
+    default: {
+      backgroundColor: theme.colors.primary,
+      opacity: isPressed || isHovered ? 0.9 : 1,
+    },
+    destructive: {
+      backgroundColor: theme.colors.notification,
+      opacity: isPressed || isHovered ? 0.9 : 1,
+    },
+    outline: {
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      backgroundColor:
+        isPressed || isHovered ? theme.colors.border : theme.colors.background,
+    },
+    secondary: {
+      backgroundColor: theme.colors.border,
+      opacity: isPressed || isHovered ? 0.8 : 1,
+    },
+    ghost: {
+      backgroundColor:
+        isPressed || isHovered ? theme.colors.border : 'transparent',
+    },
+    link: {
+      backgroundColor: 'transparent',
+      textDecorationLine:
+        isPressed || isHovered ? ('underline' as const) : ('none' as const),
+    },
+  };
 
-const createTextStyles = (theme: any) => ({
-  base: {
+  return {
+    ...baseStyles,
+    ...sizeStyles[size],
+    ...variantStyles[variant],
+  };
+};
+
+const getButtonTextStyles = (
+  variant: ButtonVariant = 'default',
+  size: ButtonSize = 'default',
+  isPressed: boolean = false,
+  theme: any,
+) => {
+  const baseStyles = {
+    fontSize: Platform.OS === 'web' ? 14 : 16,
+    fontWeight: '500' as const,
     color: theme.colors.text,
-  },
-  // Variant text styles
-  textDefault: {
-    color: theme.colors.background, // Assuming primary buttons have light text
-  },
-  textDestructive: {
-    color: theme.colors.background, // Assuming destructive buttons have light text
-  },
-  textOutline: {
-    color: theme.colors.text,
-  },
-  textSecondary: {
-    color: theme.colors.text,
-  },
-  textGhost: {
-    color: theme.colors.text,
-  },
-  textLink: {
-    color: theme.colors.primary,
-  },
-  // Hover text styles
-  textOutlineHover: {
-    color: theme.colors.text,
-  },
-  textGhostHover: {
-    color: theme.colors.text,
-  },
-  textLinkHover: {
-    color: theme.colors.primary,
-    textDecorationLine: 'underline',
-  },
-});
+  };
+
+  // Size-specific text styles
+  const sizeStyles = {
+    default: {},
+    sm: {},
+    lg: {
+      fontSize: Platform.OS === 'web' ? 14 : 18,
+    },
+    icon: {},
+  };
+
+  // Variant-specific text styles
+  const variantStyles = {
+    default: {
+      color: theme.colors.background,
+    },
+    destructive: {
+      color: theme.colors.background,
+    },
+    outline: {
+      color: isPressed ? theme.colors.text : theme.colors.text,
+    },
+    secondary: {
+      color: theme.colors.text,
+    },
+    ghost: {
+      color: isPressed ? theme.colors.text : theme.colors.text,
+    },
+    link: {
+      color: theme.colors.primary,
+      textDecorationLine: isPressed
+        ? ('underline' as const)
+        : ('none' as const),
+    },
+  };
+
+  return {
+    ...baseStyles,
+    ...sizeStyles[size],
+    ...variantStyles[variant],
+  };
+};
 
 type ButtonProps = React.ComponentProps<typeof Pressable> & {
-  variant?:
-    | 'default'
-    | 'destructive'
-    | 'outline'
-    | 'secondary'
-    | 'ghost'
-    | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
-  iconLeft?: React.ReactElement;
-  iconRight?: React.ReactElement;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  iconLeft?: LucideIcon;
+  iconRight?: LucideIcon;
   isLoading?: boolean;
   text?: string;
+  textStyle?: TextStyle;
 };
 
 function Button({
@@ -163,135 +172,77 @@ function Button({
   iconRight,
   isLoading,
   text,
-  style,
+  textStyle,
+  disabled,
   ...props
 }: ButtonProps) {
   const theme = useTheme();
+
+  // Icon spacing styles
+  const iconLeftStyle = { marginRight: children ? 8 : 0 };
+  const iconRightStyle = { marginLeft: children ? 8 : 0 };
 
   const loadColor =
     !variant || variant === 'default'
       ? theme.colors.background
       : theme.colors.primary;
 
-  // Create theme-dependent styles
-  const buttonVariantStyles = createButtonStyles(theme);
-  const textVariantStyles = createTextStyles(theme);
-
-  // Helper functions to get style keys
-  const getVariantStyle = (variantName: string, hovered: boolean = false) => {
-    if (hovered) {
-      const hoverKey =
-        `${variantName}Hover` as keyof typeof buttonVariantStyles;
-      return (
-        buttonVariantStyles[hoverKey] ||
-        buttonVariantStyles[variantName as keyof typeof buttonVariantStyles]
-      );
-    }
-    return buttonVariantStyles[variantName as keyof typeof buttonVariantStyles];
-  };
-
-  const getSizeStyle = (sizeName: string) => {
-    const sizeKey =
-      `size${sizeName.charAt(0).toUpperCase() + sizeName.slice(1)}` as keyof typeof baseButtonStyles;
-    return baseButtonStyles[sizeKey];
-  };
-
-  const getTextVariantStyle = (
-    variantName: string,
-    hovered: boolean = false,
-  ) => {
-    if (hovered) {
-      const textHoverKey =
-        `text${variantName.charAt(0).toUpperCase() + variantName.slice(1)}Hover` as keyof typeof textVariantStyles;
-      return (
-        textVariantStyles[textHoverKey] ||
-        textVariantStyles[
-          `text${variantName.charAt(0).toUpperCase() + variantName.slice(1)}` as keyof typeof textVariantStyles
-        ]
-      );
-    }
-    const textVariantKey =
-      `text${variantName.charAt(0).toUpperCase() + variantName.slice(1)}` as keyof typeof textVariantStyles;
-    return textVariantStyles[textVariantKey];
-  };
-
-  const getTextSizeStyle = (sizeName: string) => {
-    const textSizeKey =
-      `textSize${sizeName.charAt(0).toUpperCase() + sizeName.slice(1)}` as keyof typeof baseTextStyles;
-    return baseTextStyles[textSizeKey];
-  };
-
   return (
-    <Pressable
-      style={({ hovered, pressed }) => {
-        const baseStyles = [
-          baseButtonStyles.base,
-          getVariantStyle(variant, hovered),
-          getSizeStyle(size),
-          props.disabled && { opacity: 0.5 },
-        ];
+    <Pressable ref={ref} role="button" disabled={disabled} {...props}>
+      {({ pressed, hovered }) => {
+        // Use Pressable's callback state for all styling
+        const buttonStyles = getButtonStyles(
+          variant,
+          size,
+          pressed,
+          hovered,
+          disabled ?? false,
+          theme,
+        );
 
-        console.log(StyleSheet.flatten([...baseStyles, style]));
+        const buttonTextStyles = getButtonTextStyles(
+          variant,
+          size,
+          pressed,
+          theme,
+        );
 
-        // Handle style prop - it could be a function or object
-        if (typeof style === 'function') {
-          return StyleSheet.flatten([
-            ...baseStyles,
-            style({ hovered, pressed }),
-          ]);
-        } else {
-          return StyleSheet.flatten([...baseStyles, style]);
-        }
-      }}
-      ref={ref}
-      role="button"
-      {...props}
-    >
-      {({ hovered }) => {
-        const textStyle = StyleSheet.flatten([
-          baseTextStyles.base,
-          textVariantStyles.base,
-          getTextVariantStyle(variant, hovered),
-          getTextSizeStyle(size),
-        ]);
+        // Merge textStyleProps to override default styles
+        const finalTextStyles = textStyle
+          ? { ...buttonTextStyles, ...textStyle }
+          : buttonTextStyles;
+
+        console.log(finalTextStyles);
 
         return (
-          <>
-            {isLoading ? (
-              <View>
-                <CircleSnail size={20} color={loadColor} />
-              </View>
-            ) : iconLeft ? (
-              <Text style={textStyle}>
-                {React.cloneElement(iconLeft, {
-                  size: (iconLeft.props as any).size || 16,
-                } as any)}
-              </Text>
-            ) : undefined}
-            {text ? (
-              <Text style={textStyle}>{text}</Text>
-            ) : (
-              (children as React.ReactNode)
-            )}
-            {iconRight ? (
-              <Text style={textStyle}>
-                {React.cloneElement(iconRight, {
-                  size: (iconRight.props as any).size || 16,
-                } as any)}
-              </Text>
-            ) : undefined}
-          </>
+          <TextStyleProvider style={finalTextStyles}>
+            <View style={buttonStyles}>
+              {isLoading ? (
+                <View>
+                  <CircleSnail size={20} color={loadColor} />
+                </View>
+              ) : iconLeft ? (
+                <View style={iconLeftStyle}>
+                  <Icon icon={iconLeft} />
+                </View>
+              ) : undefined}
+              {text ? (
+                <Text>{text}</Text>
+              ) : (
+                <Text>{children as React.ReactNode}</Text>
+              )}
+              {iconRight ? (
+                <View style={iconRightStyle}>
+                  <Icon icon={iconRight} />
+                </View>
+              ) : undefined}
+            </View>
+          </TextStyleProvider>
         );
       }}
     </Pressable>
   );
 }
 
-export {
-  Button,
-  baseButtonStyles,
-  baseTextStyles,
-  createButtonStyles,
-  createTextStyles,
-};
-export type { ButtonProps };
+export { Button };
+export type { ButtonProps, ButtonVariant, ButtonSize };

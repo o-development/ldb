@@ -8,7 +8,6 @@
     "dev:android": "expo start -c --android",
     "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:server:watch\"",
     "clean": "rm -rf .expo node_modules dist-standalone dist-server",
-    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
     "build:standalone": "expo export -p web --output-dir dist-standalone && node scripts/adjust-standalone-paths.js",
     "build:server": "EXPO_PUBLIC_IS_SERVER_HOSTED=true expo export -p web --output-dir dist-server && node scripts/adjust-server-paths.js",
     "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -i 'data/**' -c 'npm run build:server'",
@@ -72,7 +71,6 @@
     "expo-system-ui": "~5.0.7",
     "lodash": "^4.17.21",
     "lucide-react-native": "^0.511.0",
-    "nativewind": "^4.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
@@ -83,9 +81,7 @@
     "react-native-screens": "~4.10.0",
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
-    "tailwind-merge": "^2.2.1",
-    "tailwindcss": "3.3.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

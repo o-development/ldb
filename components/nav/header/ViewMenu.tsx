@@ -12,7 +12,7 @@ import { Text } from '../../ui/text';
 import { View } from 'react-native';
 import type { ViewRef } from '@rn-primitives/types';
 import { cn } from '../../../lib/utils';
-import { ViewIcon } from '../../../lib/icons/ViewIcon';
+import { ViewIcon } from 'lucide-react-native';
 import { useViewContext } from '../../useViewContext';
 import { ResourceViewConfig } from '../../../components/ResourceView';
 

@@ -6,7 +6,7 @@ import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { AgentInformation } from './AgentInformation';
 import { InputDropdown } from '../../ui/input-dropdown';
 import { useContactFilter } from './useContactFilter';
-import { Plus } from '../../../lib/icons/Plus';
+import { Plus } from 'lucide-react-native';
 
 interface AgentInputProps {
   onAddAgent: (webId: string) => void;

@@ -1,5 +1,5 @@
+import { Code } from 'lucide-react-native';
 import { ResourceViewConfig } from '../../components/ResourceView';
-import { Code } from '../../lib/icons/Code';
 import { RawCodeView } from './RawCodeView';
 
 export const RawCodeConfig: ResourceViewConfig = {

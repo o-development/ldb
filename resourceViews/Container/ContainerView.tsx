@@ -9,12 +9,12 @@ import {
   DropdownMenuItem,
 } from '../../components/ui/dropdown-menu';
 import { ErrorMessageResourceView } from '../../components/utilityResourceViews/ErrorMessageResourceView';
-import { CircleX } from '../../lib/icons/CircleX';
-import { Folder } from '../../lib/icons/Folder';
-import { Code } from '../../lib/icons/Code';
-import { File } from '../../lib/icons/File';
-import { Trash } from '../../lib/icons/Trash';
-import { Plus } from '../../lib/icons/Plus';
+import { CircleX } from 'lucide-react-native';
+import { Folder } from 'lucide-react-native';
+import { Code } from 'lucide-react-native';
+import { File } from 'lucide-react-native';
+import { Trash } from 'lucide-react-native';
+import { Plus } from 'lucide-react-native';
 import { Separator } from '../../components/ui/separator';
 import { useDialog } from '../../components/nav/DialogProvider';
 import {

@@ -13,7 +13,7 @@ import {
 import { Text } from '../ui/text';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
-import { ChevronDown } from '../../lib/icons/ChevronDown';
+import { ChevronDown } from 'lucide-react-native';
 import { View } from 'react-native';
 
 interface AccessDropdownProps {

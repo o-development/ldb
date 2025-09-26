@@ -5,8 +5,8 @@ import { AgentPermissions } from './agentPermissions/AgentPermissions';
 import { WacRule } from '@ldo/connected-solid';
 import { View } from 'react-native';
 import { PermissionRow } from './PermissionRow';
-import { Users } from '../../lib/icons/Users';
-import { Fingerprint } from '../../lib/icons/Fingerprint';
+import { Users } from 'lucide-react-native';
+import { Fingerprint } from 'lucide-react-native';
 
 interface WacRuleFormProps {
   value: WacRule;

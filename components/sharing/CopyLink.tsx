@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Button } from '../ui/button';
 import { Text } from '../ui/text';
-import { Link } from '../../lib/icons/Link';
+import { Link } from 'lucide-react-native';
 import { FunctionComponent } from 'react';
 import { useViewContext } from '../useViewContext';
 

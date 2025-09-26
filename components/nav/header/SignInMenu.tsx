@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { Button } from '../../ui/button';
 import { Text } from '../../ui/text';
-import { EllipsisVertical } from '../../../lib/icons/EllipsisVertical';
+import { EllipsisVertical } from 'lucide-react-native';
 import {
   DropdownMenu,
   DropdownMenuContent,

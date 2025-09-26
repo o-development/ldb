@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu';
-import { LogOut } from '../../../lib/icons/LogOut';
+import { LogOut } from 'lucide-react-native';
 import { useTargetResource } from '../../TargetResourceProvider';
 import { ProfileAvatar } from '../../common/ProfileAvatar';
 

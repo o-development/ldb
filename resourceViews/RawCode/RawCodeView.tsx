@@ -8,11 +8,10 @@ import React, {
 import { RawCodeEditor } from './RawCodeEditor';
 import { View } from 'react-native';
 import { Button } from '../../components/ui/button';
-import { Text } from '../../components/ui/text';
 import { Notifier } from 'react-native-notifier';
 import { useViewContext } from '../../components/useViewContext';
 import { LoadingBar } from '../../components/common/LoadingBar';
-import { Save } from "../../lib/icons/Save";
+import { Save } from 'lucide-react-native';
 
 export const RawCodeView: FunctionComponent = () => {
   const { fetch } = useSolidAuth();
