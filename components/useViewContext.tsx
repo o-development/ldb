@@ -1,6 +1,6 @@
 import createContainer from 'constate';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDataBrowserConfig } from './DataBrowser';
+import { useDataBrowserConfig } from './DataBrowserContext';
 import { useTargetResource } from './TargetResourceProvider';
 import { ResourceViewConfig } from './ResourceView';
 import { EyeOff } from 'lucide-react-native';

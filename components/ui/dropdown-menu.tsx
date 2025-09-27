@@ -326,9 +326,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8, // px-2
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
     borderRadius: 2, // rounded-sm
-    ...(Platform.OS === 'web' && {
-      outline: 'none', // web:outline-none
-    }),
   },
   subTriggerInset: {
     paddingLeft: 32, // pl-8
@@ -380,9 +377,6 @@ const styles = StyleSheet.create({
     borderRadius: 2, // rounded-sm
     paddingHorizontal: 8, // px-2
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
-    ...(Platform.OS === 'web' && {
-      outline: 'none', // web:outline-none
-    }),
   },
   itemInset: {
     paddingLeft: 32, // pl-8
@@ -400,9 +394,6 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
     paddingLeft: 32, // pl-8
     paddingRight: 8, // pr-2
-    ...(Platform.OS === 'web' && {
-      outline: 'none', // web:outline-none
-    }),
   },
   checkboxItemDisabled: {
     opacity: 0.5, // opacity-50
@@ -428,9 +419,6 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
     paddingLeft: 32, // pl-8
     paddingRight: 8, // pr-2
-    ...(Platform.OS === 'web' && {
-      outline: 'none', // web:outline-none
-    }),
   },
   radioItemDisabled: {
     opacity: 0.5, // opacity-50

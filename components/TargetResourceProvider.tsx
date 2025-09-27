@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { SolidLeaf, SolidContainer } from '@ldo/connected-solid';
 import { InvalidIdentifierResource } from '@ldo/connected';
-import { useDataBrowserConfig } from './DataBrowser';
+import { useDataBrowserConfig } from './DataBrowserContext';
 import { useResource } from '@ldo/solid-react';
 import { Platform } from 'react-native';
 

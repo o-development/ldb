@@ -25,7 +25,7 @@ import {
   DialogTrigger,
 } from '../../ui/dialog';
 import { Input } from '../../ui/input';
-import { useDataBrowserConfig } from '../../DataBrowser';
+import { useDataBrowserConfig } from '../../DataBrowserContext';
 
 export const SignInMenu: FunctionComponent = () => {
   const [idpValue, setIdpValue] = useState('');
