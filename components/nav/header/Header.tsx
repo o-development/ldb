@@ -27,8 +27,8 @@ export const Header: FunctionComponent = () => {
           iconLeft={<UserPlus />}
         />
       )}
-      <ViewMenu />
-      {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />} */}
+      <ViewMenu /> */}
+      {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />}
     </Card>
   );
 };
