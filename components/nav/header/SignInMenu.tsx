@@ -25,14 +25,14 @@ import {
   DialogTrigger,
 } from '../../ui/dialog';
 import { Input } from '../../ui/input';
-
-const DEFAULT_ISSUER = window.location.origin;
+import { useDataBrowserConfig } from '../../DataBrowser';
 
 export const SignInMenu: FunctionComponent = () => {
   const [idpValue, setIdpValue] = useState('');
   const [, setIdpError] = useState<string | undefined>();
   const { login, signUp } = useSolidAuth();
   const { width } = useWindowDimensions();
+  const { defaultIssuer } = useDataBrowserConfig();
 
   // Tailwind sm: breakpoint is 640px
   const isSmallScreen = width < 640;
@@ -55,7 +55,7 @@ export const SignInMenu: FunctionComponent = () => {
         {!isSmallScreen && (
           <Button
             key="signUp"
-            onPress={() => signUp(DEFAULT_ISSUER)}
+            onPress={() => signUp(defaultIssuer)}
             variant="ghost"
             text="Sign Up"
           />
@@ -63,7 +63,7 @@ export const SignInMenu: FunctionComponent = () => {
         {!isSmallScreen && (
           <Button
             key="logIn"
-            onPress={() => login(DEFAULT_ISSUER)}
+            onPress={() => login(defaultIssuer)}
             variant="default"
             text="Log In"
           />
@@ -83,7 +83,7 @@ export const SignInMenu: FunctionComponent = () => {
               {isSmallScreen && (
                 <DropdownMenuItem
                   style={styles.menuItemFlex}
-                  onPress={() => signUp(DEFAULT_ISSUER)}
+                  onPress={() => signUp(defaultIssuer)}
                 >
                   <Text>Sign Up</Text>
                 </DropdownMenuItem>
@@ -91,7 +91,7 @@ export const SignInMenu: FunctionComponent = () => {
               {isSmallScreen && (
                 <DropdownMenuItem
                   style={styles.menuItemFlex}
-                  onPress={() => login(DEFAULT_ISSUER)}
+                  onPress={() => login(defaultIssuer)}
                 >
                   <Text>Log In</Text>
                 </DropdownMenuItem>
@@ -108,7 +108,7 @@ export const SignInMenu: FunctionComponent = () => {
                     <DialogDescription>
                       <Input
                         value={idpValue}
-                        placeholder={DEFAULT_ISSUER}
+                        placeholder={defaultIssuer}
                         onChangeText={(newText) => setIdpValue(newText)}
                         onSubmitEditing={onIdpSubmit}
                       />

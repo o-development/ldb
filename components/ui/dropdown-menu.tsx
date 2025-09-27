@@ -51,12 +51,15 @@ function DropdownMenuSubTrigger({
       ])}
     >
       <DropdownMenuPrimitive.SubTrigger
-        style={[
-          styles.subTrigger,
-          open && { backgroundColor: theme.colors.border },
-          inset && styles.subTriggerInset,
-          style,
-        ]}
+        style={({ pressed, hovered }) =>
+          StyleSheet.flatten([
+            styles.subTrigger,
+            open && { backgroundColor: theme.colors.border },
+            (pressed || hovered) && { backgroundColor: theme.colors.border },
+            inset && styles.subTriggerInset,
+            style,
+          ])
+        }
         {...props}
       >
         {children}
@@ -149,12 +152,15 @@ function DropdownMenuItem({
   return (
     <TextStyleProvider style={{ color: theme.colors.text }}>
       <DropdownMenuPrimitive.Item
-        style={StyleSheet.flatten([
-          styles.item,
-          inset && styles.itemInset,
-          props.disabled && styles.itemDisabled,
-          style,
-        ])}
+        style={({ pressed, hovered }) => {
+          return StyleSheet.flatten([
+            styles.item,
+            inset && styles.itemInset,
+            props.disabled && styles.itemDisabled,
+            (pressed || hovered) && { backgroundColor: theme.colors.border },
+            style,
+          ]);
+        }}
         {...props}
       />
     </TextStyleProvider>
@@ -174,11 +180,14 @@ function DropdownMenuCheckboxItem({
   const theme = useTheme();
   return (
     <DropdownMenuPrimitive.CheckboxItem
-      style={StyleSheet.flatten([
-        styles.checkboxItem,
-        props.disabled && styles.checkboxItemDisabled,
-        style,
-      ])}
+      style={({ pressed, hovered }) =>
+        StyleSheet.flatten([
+          styles.checkboxItem,
+          props.disabled && styles.checkboxItemDisabled,
+          (pressed || hovered) && { backgroundColor: theme.colors.border },
+          style,
+        ])
+      }
       checked={checked}
       {...props}
     >
@@ -204,11 +213,14 @@ function DropdownMenuRadioItem({
   const theme = useTheme();
   return (
     <DropdownMenuPrimitive.RadioItem
-      style={StyleSheet.flatten([
-        styles.radioItem,
-        props.disabled && styles.radioItemDisabled,
-        style,
-      ])}
+      style={({ pressed, hovered }) =>
+        StyleSheet.flatten([
+          styles.radioItem,
+          props.disabled && styles.radioItemDisabled,
+          (pressed || hovered) && { backgroundColor: theme.colors.border },
+          style,
+        ])
+      }
       {...props}
     >
       <View style={styles.radioIndicator}>
@@ -314,6 +326,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8, // px-2
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
     borderRadius: 2, // rounded-sm
+    ...(Platform.OS === 'web' && {
+      outline: 'none', // web:outline-none
+    }),
   },
   subTriggerInset: {
     paddingLeft: 32, // pl-8
@@ -365,6 +380,9 @@ const styles = StyleSheet.create({
     borderRadius: 2, // rounded-sm
     paddingHorizontal: 8, // px-2
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
+    ...(Platform.OS === 'web' && {
+      outline: 'none', // web:outline-none
+    }),
   },
   itemInset: {
     paddingLeft: 32, // pl-8
@@ -382,6 +400,9 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
     paddingLeft: 32, // pl-8
     paddingRight: 8, // pr-2
+    ...(Platform.OS === 'web' && {
+      outline: 'none', // web:outline-none
+    }),
   },
   checkboxItemDisabled: {
     opacity: 0.5, // opacity-50
@@ -407,6 +428,9 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'web' ? 6 : 8, // py-1.5 native:py-2
     paddingLeft: 32, // pl-8
     paddingRight: 8, // pr-2
+    ...(Platform.OS === 'web' && {
+      outline: 'none', // web:outline-none
+    }),
   },
   radioItemDisabled: {
     opacity: 0.5, // opacity-50

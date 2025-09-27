@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { Pressable, View, Platform, TextStyle } from 'react-native';
-import {
-  Text,
-  TextStyleProps,
-  TextStyleProvider,
-  useTextStyles,
-} from '../ui/text';
+import { Text, TextStyleProvider } from '../ui/text';
 import { CircleSnail } from 'react-native-progress';
 import { useTheme } from '@react-navigation/native';
 import { LucideIcon } from 'lucide-react-native';

@@ -9,7 +9,7 @@ import { NotifierWrapper } from 'react-native-notifier';
 import { Platform } from 'react-native';
 import { ThemeProvider } from './ThemeProvider';
 
-export interface DataBrowserConfig {
+export interface DataBrowserConfigProps {
   views: ResourceViewConfig[];
   mode: 'standalone-app' | 'server-ui';
   defaultIssuer?: string;
@@ -18,14 +18,22 @@ export interface DataBrowserConfig {
   renderLogo?: () => ReactNode;
 }
 
-// @ts-ignore This will be filled in once the component mounts
-export const DataBrowserConfigContext = createContext<DataBrowserConfig>({});
+export interface DataBrowserConfig extends DataBrowserConfigProps {
+  defaultIssuer: string;
+}
+
+export const DataBrowserConfigContext = createContext<DataBrowserConfig>(
+  // @ts-ignore This will be filled in once the component mounts
+  {},
+);
 
 export function useDataBrowserConfig() {
   return useContext(DataBrowserConfigContext);
 }
 
-export const DataBrowser: FunctionComponent<DataBrowserConfig> = (props) => {
+export const DataBrowser: FunctionComponent<DataBrowserConfigProps> = (
+  props,
+) => {
   const providerProps = useMemo<DataBrowserConfig>(() => {
     return {
       origin:

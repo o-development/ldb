@@ -12,6 +12,8 @@ export function Screen() {
     ? 'server-ui'
     : 'standalone-app';
 
+  const defaultIssuer = process.env.EXPO_PUBLIC_DEFAULT_ISSUER;
+
   return (
     <SafeAreaProvider>
       <StatusBar />
@@ -20,6 +22,7 @@ export function Screen() {
         mode={mode}
         renderHomepage={() => <Text>Hopepage</Text>}
         renderLogo={() => <Text>Logo</Text>}
+        defaultIssuer={defaultIssuer}
       />
     </SafeAreaProvider>
   );
