@@ -2,6 +2,7 @@ import * as DropdownMenuPrimitive from '@rn-primitives/dropdown-menu';
 import * as React from 'react';
 import {
   Platform,
+  Pressable,
   type StyleProp,
   StyleSheet,
   Text,
@@ -50,24 +51,25 @@ function DropdownMenuSubTrigger({
         { color: theme.colors.text },
       ])}
     >
-      <DropdownMenuPrimitive.SubTrigger
-        style={({ pressed, hovered }) =>
-          StyleSheet.flatten([
-            styles.subTrigger,
-            open && { backgroundColor: theme.colors.border },
-            (pressed || hovered) && { backgroundColor: theme.colors.border },
-            inset && styles.subTriggerInset,
-            style,
-          ])
-        }
-        {...props}
-      >
-        {children}
-        <Icon
-          size={18}
-          color={theme.colors.text}
-          style={styles.subTriggerIcon}
-        />
+      <DropdownMenuPrimitive.SubTrigger asChild {...props}>
+        <Pressable
+          style={({ pressed, hovered }) =>
+            StyleSheet.flatten([
+              styles.subTrigger,
+              open && { backgroundColor: theme.colors.border },
+              (pressed || hovered) && { backgroundColor: theme.colors.border },
+              inset && styles.subTriggerInset,
+              style,
+            ])
+          }
+        >
+          {children}
+          <Icon
+            size={18}
+            color={theme.colors.text}
+            style={styles.subTriggerIcon}
+          />
+        </Pressable>
       </DropdownMenuPrimitive.SubTrigger>
     </TextStyleProvider>
   );
@@ -142,6 +144,7 @@ function DropdownMenuContent({
 function DropdownMenuItem({
   style,
   inset,
+  children,
   ...props
 }: DropdownMenuPrimitive.ItemProps & {
   ref?: React.RefObject<DropdownMenuPrimitive.ItemRef>;
@@ -151,18 +154,18 @@ function DropdownMenuItem({
   const theme = useTheme();
   return (
     <TextStyleProvider style={{ color: theme.colors.text }}>
-      <DropdownMenuPrimitive.Item
-        style={({ pressed, hovered }) => {
-          return StyleSheet.flatten([
+      <DropdownMenuPrimitive.Item asChild {...props}>
+        <Pressable style={({ pressed, hovered }) => StyleSheet.flatten([
             styles.item,
             inset && styles.itemInset,
             props.disabled && styles.itemDisabled,
             (pressed || hovered) && { backgroundColor: theme.colors.border },
             style,
-          ]);
-        }}
-        {...props}
-      />
+          ])
+        }>
+          {children}
+        </Pressable>
+      </DropdownMenuPrimitive.Item>
     </TextStyleProvider>
   );
 }
@@ -179,24 +182,24 @@ function DropdownMenuCheckboxItem({
 }) {
   const theme = useTheme();
   return (
-    <DropdownMenuPrimitive.CheckboxItem
-      style={({ pressed, hovered }) =>
-        StyleSheet.flatten([
-          styles.checkboxItem,
-          props.disabled && styles.checkboxItemDisabled,
-          (pressed || hovered) && { backgroundColor: theme.colors.border },
-          style,
-        ])
-      }
-      checked={checked}
-      {...props}
-    >
-      <View style={styles.checkboxIndicator}>
-        <DropdownMenuPrimitive.ItemIndicator>
-          <Check size={14} strokeWidth={3} color={theme.colors.text} />
-        </DropdownMenuPrimitive.ItemIndicator>
-      </View>
-      {children}
+    <DropdownMenuPrimitive.CheckboxItem asChild checked={checked} {...props}>
+      <Pressable
+        style={({ pressed, hovered }) =>
+          StyleSheet.flatten([
+            styles.checkboxItem,
+            props.disabled && styles.checkboxItemDisabled,
+            (pressed || hovered) && { backgroundColor: theme.colors.border },
+            style,
+          ])
+        }
+      >
+        <View style={styles.checkboxIndicator}>
+          <DropdownMenuPrimitive.ItemIndicator>
+            <Check size={14} strokeWidth={3} color={theme.colors.text} />
+          </DropdownMenuPrimitive.ItemIndicator>
+        </View>
+        {children}
+      </Pressable>
     </DropdownMenuPrimitive.CheckboxItem>
   );
 }
@@ -212,25 +215,26 @@ function DropdownMenuRadioItem({
 }) {
   const theme = useTheme();
   return (
-    <DropdownMenuPrimitive.RadioItem
-      style={({ pressed, hovered }) =>
-        StyleSheet.flatten([
-          styles.radioItem,
-          props.disabled && styles.radioItemDisabled,
-          (pressed || hovered) && { backgroundColor: theme.colors.border },
-          style,
-        ])
-      }
-      {...props}
-    >
-      <View style={styles.radioIndicator}>
-        <DropdownMenuPrimitive.ItemIndicator>
-          <View
-            style={[styles.radioDot, { backgroundColor: theme.colors.text }]}
-          />
-        </DropdownMenuPrimitive.ItemIndicator>
-      </View>
-      {children}
+    <DropdownMenuPrimitive.RadioItem asChild {...props}>
+      <Pressable
+        style={({ pressed, hovered }) =>
+          StyleSheet.flatten([
+            styles.radioItem,
+            props.disabled && styles.radioItemDisabled,
+            (pressed || hovered) && { backgroundColor: theme.colors.border },
+            style,
+          ])
+        }
+      >
+        <View style={styles.radioIndicator}>
+          <DropdownMenuPrimitive.ItemIndicator>
+            <View
+              style={[styles.radioDot, { backgroundColor: theme.colors.text }]}
+            />
+          </DropdownMenuPrimitive.ItemIndicator>
+        </View>
+        {children}
+      </Pressable>
     </DropdownMenuPrimitive.RadioItem>
   );
 }
