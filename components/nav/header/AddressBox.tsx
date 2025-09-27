@@ -74,6 +74,25 @@ export const AddressBox: FunctionComponent = () => {
         iconLeft={isTextMode ? ChevronsRight : TextCursorInput}
         textStyle={styles.buttonText}
       />
+      <View style={styles.breadcrumbContainer} pointerEvents="none">
+        {!isTextMode &&
+          breadcrumbInfo.map((item, index) => (
+            <View style={styles.breadcrumbItem} key={item.uri}>
+              <TouchableOpacity onPress={() => navigateTo(item.uri)}>
+                <View pointerEvents="auto">
+                  <Text style={styles.breadcrumbText} size="sm">
+                    {item.name}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              {index !== breadcrumbInfo.length - 1 ? (
+                <Icon icon={ChevronRight} style={styles.chevron} />
+              ) : (
+                <View style={styles.spacer} />
+              )}
+            </View>
+          ))}
+      </View>
       {(() => {
         const shouldRefresh = targetUri === textBoxValue || !isTextMode;
         return (
@@ -96,25 +115,6 @@ export const AddressBox: FunctionComponent = () => {
           />
         );
       })()}
-      <View style={styles.breadcrumbContainer} pointerEvents="none">
-        {!isTextMode &&
-          breadcrumbInfo.map((item, index) => (
-            <View style={styles.breadcrumbItem} key={item.uri}>
-              <TouchableOpacity onPress={() => navigateTo(item.uri)}>
-                <View pointerEvents="auto">
-                  <Text style={styles.breadcrumbText} size="sm">
-                    {item.name}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              {index !== breadcrumbInfo.length - 1 ? (
-                <Icon icon={ChevronRight} style={styles.chevron} />
-              ) : (
-                <View style={styles.spacer} />
-              )}
-            </View>
-          ))}
-      </View>
     </View>
   );
 };

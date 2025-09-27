@@ -1,11 +1,12 @@
-import React from 'react';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { MoonStar } from 'lucide-react-native';
 import { Sun } from 'lucide-react-native';
 import { Text } from '../../ui/text';
 import { Switch } from '../../ui/switch';
 import { DropdownMenuItem } from '../../ui/dropdown-menu';
 import { useThemeChange } from '../../ThemeProvider';
+import { Icon } from '../../ui/icon';
 
 export const ThemeToggleMenu: FunctionComponent = () => {
   const { colorScheme, setColorScheme } = useThemeChange();
@@ -15,20 +16,31 @@ export const ThemeToggleMenu: FunctionComponent = () => {
       onPress={() => {
         setColorScheme(colorScheme === 'light' ? 'dark' : 'light');
       }}
-      className="justify-between"
+      style={styles.dropdownMenuItem}
       closeOnPress={false}
     >
-      <Text className="flex flex-row gap-1 items-center">
-        {colorScheme === 'dark' ? <MoonStar /> : <Sun />} Dark Mode
-      </Text>
+      <View style={styles.textContainer}>
+        <Icon icon={colorScheme === 'dark' ? MoonStar : Sun} />
+        <Text>Dark Mode</Text>
+      </View>
 
       <Switch
         checked={colorScheme === 'dark'}
         onCheckedChange={(isDark) => {
           setColorScheme(isDark ? 'dark' : 'light');
         }}
-        nativeID="airplane-mode"
       />
     </DropdownMenuItem>
   );
 };
+
+const styles = StyleSheet.create({
+  dropdownMenuItem: {
+    justifyContent: 'space-between',
+  },
+  textContainer: {
+    flexDirection: 'row',
+    gap: 4,
+    alignItems: 'center',
+  },
+});

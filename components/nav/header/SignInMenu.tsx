@@ -82,7 +82,6 @@ export const SignInMenu: FunctionComponent = () => {
             <DropdownMenuGroup>
               {isSmallScreen && (
                 <DropdownMenuItem
-                  style={styles.menuItemFlex}
                   onPress={() => signUp(defaultIssuer)}
                 >
                   <Text>Sign Up</Text>
@@ -90,7 +89,6 @@ export const SignInMenu: FunctionComponent = () => {
               )}
               {isSmallScreen && (
                 <DropdownMenuItem
-                  style={styles.menuItemFlex}
                   onPress={() => login(defaultIssuer)}
                 >
                   <Text>Log In</Text>
@@ -142,9 +140,6 @@ const styles = StyleSheet.create({
   },
   dropdownContent: {
     width: 256,
-  },
-  menuItemFlex: {
-    flex: 1,
   },
   dialogContent: {
     width: 400,
