@@ -212,8 +212,6 @@ function Button({
           ? { ...buttonTextStyles, ...textStyle }
           : buttonTextStyles;
 
-        console.log(finalTextStyles);
-
         return (
           <TextStyleProvider style={finalTextStyles}>
             <View style={buttonStyles}>

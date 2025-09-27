@@ -37,7 +37,6 @@ function Input({
         // Platform specific adjustments
         ...(Platform.OS === 'web' && {
           width: '100%',
-          outline: 'none',
         }),
         ...(Platform.OS !== 'web' && {
           height: 48, // native:h-12

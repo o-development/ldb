@@ -42,9 +42,6 @@ const TextStyleProvider: FunctionComponent<TextStyleProviderProps> = ({
     bold,
   };
 
-  console.log('TextStyleProvider');
-  console.log(contextValue);
-
   return (
     <TextStyleContext.Provider value={contextValue}>
       {children}
