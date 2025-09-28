@@ -1,7 +1,7 @@
 import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React from 'react';
 import { FunctionComponent } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { Text } from '../../ui/text';
 import { Button } from '../../ui/button';
@@ -16,6 +16,7 @@ import {
 import { LogOut } from 'lucide-react-native';
 import { useTargetResource } from '../../TargetResourceProvider';
 import { ProfileAvatar } from '../../common/ProfileAvatar';
+import { Icon } from '../../ui/icon';
 
 export const AvatarMenu: FunctionComponent = () => {
   const { session, logout } = useSolidAuth();
@@ -29,14 +30,14 @@ export const AvatarMenu: FunctionComponent = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button key="setMemu" variant="ghost" className="w-10">
+        <Button key="setMemu" variant="ghost" style={styles.button}>
           <ProfileAvatar profile={profile} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-64 native:w-72 mr-2 mt-2">
-        <View className="p-2 flex-row items-center">
-          <ProfileAvatar profile={profile} className="w-20 h-20" />
-          <View className="ml-2">
+      <DropdownMenuContent style={styles.dropdownContent}>
+        <View style={styles.profileContainer}>
+          <ProfileAvatar profile={profile} style={styles.profileAvatar} />
+          <View style={styles.profileInfo}>
             <Text>{profile?.fn || ''}</Text>
             <Button
               size="sm"
@@ -49,11 +50,42 @@ export const AvatarMenu: FunctionComponent = () => {
         <ThemeToggleMenu />
         <DropdownMenuSeparator />
         <DropdownMenuItem onPress={logout}>
-          <Text className="flex flex-row gap-1 items-center">
-            <LogOut /> Log Out
-          </Text>
+          <View style={styles.logoutText}>
+            <Icon icon={LogOut} />
+            <Text>Log Out</Text>
+          </View>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    width: 40,
+  },
+  dropdownContent: {
+    width: 256,
+    marginRight: 8,
+    marginTop: 8,
+  },
+  profileContainer: {
+    padding: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  profileInfo: {
+    marginLeft: 8,
+    gap: 8,
+  },
+  logoutText: {
+    flexDirection: 'row',
+    gap: 4,
+    alignItems: 'center',
+  },
+});

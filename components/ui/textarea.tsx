@@ -1,24 +1,27 @@
 import * as React from 'react';
-import { TextInput, type TextInputProps } from 'react-native';
-import { cn } from '../../lib/utils';
+import { TextInput, type TextInputProps, StyleSheet } from 'react-native';
 
 function Textarea({
-  className,
+  style,
   multiline = true,
   numberOfLines = 4,
-  placeholderClassName,
+  placeholderTextColor,
   ...props
 }: TextInputProps & {
   ref?: React.RefObject<TextInput>;
 }) {
+  const textareaStyle = StyleSheet.flatten([
+    styles.textarea,
+    props.editable === false && styles.textareaDisabled,
+    style,
+  ]);
+
   return (
     <TextInput
-      className={cn(
-        'web:flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base lg:text-sm native:text-lg native:leading-[1.25] text-foreground web:ring-offset-background placeholder:text-muted-foreground web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
-        props.editable === false && 'opacity-50 web:cursor-not-allowed',
-        className,
-      )}
-      placeholderClassName={cn('text-muted-foreground', placeholderClassName)}
+      style={textareaStyle}
+      placeholderTextColor={
+        placeholderTextColor || 'hsl(var(--muted-foreground))'
+      }
       multiline={multiline}
       numberOfLines={numberOfLines}
       textAlignVertical="top"
@@ -26,5 +29,26 @@ function Textarea({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  textarea: {
+    minHeight: 80,
+    width: '100%',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'hsl(var(--input))',
+    backgroundColor: 'hsl(var(--background))',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 16,
+    color: 'hsl(var(--foreground))',
+  },
+  textareaDisabled: {
+    opacity: 0.5,
+  },
+  placeholder: {
+    color: 'hsl(var(--muted-foreground))',
+  },
+});
 
 export { Textarea };

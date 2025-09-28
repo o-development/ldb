@@ -5,7 +5,6 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Check } from 'lucide-react-native';
 import { ChevronDown } from 'lucide-react-native';
 import { ChevronUp } from 'lucide-react-native';
-import { cn } from '../../lib/utils';
 
 type Option = SelectPrimitive.Option;
 
@@ -17,29 +16,23 @@ const SelectValue = SelectPrimitive.Value;
 
 function SelectTrigger({
   ref,
-  className,
+  style,
   children,
   ...props
 }: SelectPrimitive.TriggerProps & {
   ref?: React.RefObject<SelectPrimitive.TriggerRef>;
   children?: React.ReactNode;
 }) {
+  const triggerStyle = StyleSheet.flatten([
+    styles.trigger,
+    props.disabled && styles.triggerDisabled,
+    style,
+  ]);
+
   return (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        'flex flex-row h-10 native:h-12 items-center text-sm justify-between rounded-md border border-input bg-background px-3 py-2 web:ring-offset-background text-muted-foreground web:focus:outline-none web:focus:ring-2 web:focus:ring-ring web:focus:ring-offset-2 [&>span]:line-clamp-1',
-        props.disabled && 'web:cursor-not-allowed opacity-50',
-        className,
-      )}
-      {...props}
-    >
+    <SelectPrimitive.Trigger ref={ref} style={triggerStyle} {...props}>
       {children}
-      <ChevronDown
-        size={16}
-        aria-hidden={true}
-        className="text-foreground opacity-50"
-      />
+      <ChevronDown size={16} aria-hidden={true} style={styles.chevron} />
     </SelectPrimitive.Trigger>
   );
 }
@@ -48,7 +41,7 @@ function SelectTrigger({
  * Platform: WEB ONLY
  */
 function SelectScrollUpButton({
-  className,
+  style,
   ...props
 }: SelectPrimitive.ScrollUpButtonProps) {
   if (Platform.OS !== 'web') {
@@ -56,13 +49,10 @@ function SelectScrollUpButton({
   }
   return (
     <SelectPrimitive.ScrollUpButton
-      className={cn(
-        'flex web:cursor-default items-center justify-center py-1',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.scrollButton, style])}
       {...props}
     >
-      <ChevronUp size={14} className="text-foreground" />
+      <ChevronUp size={14} style={styles.chevron} />
     </SelectPrimitive.ScrollUpButton>
   );
 }
@@ -71,7 +61,7 @@ function SelectScrollUpButton({
  * Platform: WEB ONLY
  */
 function SelectScrollDownButton({
-  className,
+  style,
   ...props
 }: SelectPrimitive.ScrollDownButtonProps) {
   if (Platform.OS !== 'web') {
@@ -79,26 +69,23 @@ function SelectScrollDownButton({
   }
   return (
     <SelectPrimitive.ScrollDownButton
-      className={cn(
-        'flex web:cursor-default items-center justify-center py-1',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.scrollButton, style])}
       {...props}
     >
-      <ChevronDown size={14} className="text-foreground" />
+      <ChevronDown size={14} style={styles.chevron} />
     </SelectPrimitive.ScrollDownButton>
   );
 }
 
 function SelectContent({
-  className,
+  style,
   children,
   position = 'popper',
   portalHost,
   ...props
 }: SelectPrimitive.ContentProps & {
   ref?: React.RefObject<SelectPrimitive.ContentRef>;
-  className?: string;
+  style?: any;
   portalHost?: string;
 }) {
   const { open } = SelectPrimitive.useRootContext();
@@ -108,27 +95,26 @@ function SelectContent({
       <SelectPrimitive.Overlay
         style={Platform.OS !== 'web' ? StyleSheet.absoluteFill : undefined}
       >
-        <Animated.View className="z-50" entering={FadeIn} exiting={FadeOut}>
+        <Animated.View
+          style={{ zIndex: 50 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
           <SelectPrimitive.Content
-            className={cn(
-              'relative z-50 max-h-96 min-w-[8rem] rounded-md border border-border bg-popover shadow-md shadow-foreground/10 py-2 px-1 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-              position === 'popper' &&
-                'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
-              open
-                ? 'web:zoom-in-95 web:animate-in web:fade-in-0'
-                : 'web:zoom-out-95 web:animate-out web:fade-out-0',
-              className,
-            )}
+            style={StyleSheet.flatten([styles.content, style])}
             position={position}
             {...props}
           >
             <SelectScrollUpButton />
             <SelectPrimitive.Viewport
-              className={cn(
-                'p-1',
-                position === 'popper' &&
-                  'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]',
-              )}
+              style={StyleSheet.flatten([
+                styles.viewport,
+                position === 'popper' && {
+                  height: 'var(--radix-select-trigger-height)',
+                  width: '100%',
+                  minWidth: 'var(--radix-select-trigger-width)',
+                },
+              ])}
             >
               {children}
             </SelectPrimitive.Viewport>
@@ -141,64 +127,150 @@ function SelectContent({
 }
 
 function SelectLabel({
-  className,
+  style,
   ...props
 }: SelectPrimitive.LabelProps & {
   ref?: React.RefObject<SelectPrimitive.LabelRef>;
 }) {
   return (
     <SelectPrimitive.Label
-      className={cn(
-        'py-1.5 native:pb-2 pl-8 native:pl-10 pr-2 text-popover-foreground text-sm native:text-base font-semibold',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.label, style])}
       {...props}
     />
   );
 }
 
 function SelectItem({
-  className,
+  style,
   ...props
 }: SelectPrimitive.ItemProps & {
   ref?: React.RefObject<SelectPrimitive.ItemRef>;
 }) {
+  const itemStyle = StyleSheet.flatten([
+    styles.item,
+    props.disabled && styles.itemDisabled,
+    style,
+  ]);
+
   return (
-    <SelectPrimitive.Item
-      className={cn(
-        'relative web:group flex flex-row w-full web:cursor-default web:select-none items-center rounded-sm py-1.5 native:py-2 pl-8 native:pl-10 pr-2 web:hover:bg-accent/50 active:bg-accent web:outline-none web:focus:bg-accent',
-        props.disabled && 'web:pointer-events-none opacity-50',
-        className,
-      )}
-      {...props}
-    >
-      <View className="absolute left-2 native:left-3.5 flex h-3.5 native:pt-px w-3.5 items-center justify-center">
+    <SelectPrimitive.Item style={itemStyle} {...props}>
+      <View style={styles.itemIndicator}>
         <SelectPrimitive.ItemIndicator>
           <Check
             size={16}
             strokeWidth={3}
-            className="text-popover-foreground"
+            color="hsl(var(--popover-foreground))"
           />
         </SelectPrimitive.ItemIndicator>
       </View>
-      <SelectPrimitive.ItemText className="text-sm native:text-lg text-popover-foreground native:text-base web:group-focus:text-accent-foreground" />
+      <SelectPrimitive.ItemText style={styles.itemText} />
     </SelectPrimitive.Item>
   );
 }
 
 function SelectSeparator({
-  className,
+  style,
   ...props
 }: SelectPrimitive.SeparatorProps & {
   ref?: React.RefObject<SelectPrimitive.SeparatorRef>;
 }) {
   return (
     <SelectPrimitive.Separator
-      className={cn('-mx-1 my-1 h-px bg-muted', className)}
+      style={StyleSheet.flatten([styles.separator, style])}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  trigger: {
+    flexDirection: 'row',
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'hsl(var(--input))',
+    backgroundColor: 'hsl(var(--background))',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 14,
+    color: 'hsl(var(--muted-foreground))',
+  },
+  triggerDisabled: {
+    opacity: 0.5,
+  },
+  chevron: {
+    color: 'hsl(var(--foreground))',
+    opacity: 0.5,
+  },
+  scrollButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+  },
+  content: {
+    position: 'relative',
+    zIndex: 50,
+    maxHeight: 384,
+    minWidth: 128,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'hsl(var(--border))',
+    backgroundColor: 'hsl(var(--popover))',
+    shadowColor: 'hsl(var(--foreground))',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  viewport: {
+    padding: 4,
+  },
+  label: {
+    paddingVertical: 6,
+    paddingLeft: 32,
+    paddingRight: 8,
+    color: 'hsl(var(--popover-foreground))',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  item: {
+    position: 'relative',
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    borderRadius: 2,
+    paddingVertical: 6,
+    paddingLeft: 32,
+    paddingRight: 8,
+  },
+  itemDisabled: {
+    opacity: 0.5,
+  },
+  itemIndicator: {
+    position: 'absolute',
+    left: 8,
+    flexDirection: 'row',
+    height: 14,
+    width: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  itemText: {
+    fontSize: 14,
+    color: 'hsl(var(--popover-foreground))',
+  },
+  separator: {
+    marginHorizontal: -4,
+    marginVertical: 4,
+    height: 1,
+    backgroundColor: 'hsl(var(--muted))',
+  },
+});
 
 export {
   Select,

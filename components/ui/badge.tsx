@@ -1,59 +1,74 @@
 import React from 'react';
 import * as Slot from '@rn-primitives/slot';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { View, ViewProps } from 'react-native';
-import { cn } from '../../lib/utils';
-import { TextClassContext } from '../ui/text';
+import { View, ViewProps, StyleSheet } from 'react-native';
+import { TextStyleContext } from '../ui/text';
 
-const badgeVariants = cva(
-  'web:inline-flex items-center rounded-full border border-border px-2.5 py-0.5 web:transition-colors web:focus:outline-none web:focus:ring-2 web:focus:ring-ring web:focus:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default:
-          'border-transparent bg-primary web:hover:opacity-80 active:opacity-80',
-        secondary:
-          'border-transparent bg-secondary web:hover:opacity-80 active:opacity-80',
-        destructive:
-          'border-transparent bg-destructive web:hover:opacity-80 active:opacity-80',
-        outline: 'text-foreground',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  },
-);
-
-const badgeTextVariants = cva('text-xs font-semibold ', {
-  variants: {
-    variant: {
-      default: 'text-primary-foreground',
-      secondary: 'text-secondary-foreground',
-      destructive: 'text-destructive-foreground',
-      outline: 'text-foreground',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-});
+type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
 
 type BadgeProps = ViewProps & {
   asChild?: boolean;
-} & VariantProps<typeof badgeVariants>;
+  variant?: BadgeVariant;
+};
 
-function Badge({ className, variant, asChild, ...props }: BadgeProps) {
+function Badge({ style, variant = 'default', asChild, ...props }: BadgeProps) {
   const Component = asChild ? Slot.View : View;
+
+  const badgeStyle = StyleSheet.flatten([styles.base, styles[variant], style]);
+
+  const textStyle = StyleSheet.flatten([textStyles.base, textStyles[variant]]);
+
   return (
-    <TextClassContext.Provider value={badgeTextVariants({ variant })}>
-      <Component
-        className={cn(badgeVariants({ variant }), className)}
-        {...props}
-      />
-    </TextClassContext.Provider>
+    <TextStyleContext.Provider value={{ style: textStyle }}>
+      <Component style={badgeStyle} {...props} />
+    </TextStyleContext.Provider>
   );
 }
 
-export { Badge, badgeTextVariants, badgeVariants };
-export type { BadgeProps };
+const styles = StyleSheet.create({
+  base: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+  default: {
+    borderColor: 'transparent',
+    backgroundColor: 'hsl(var(--primary))',
+  },
+  secondary: {
+    borderColor: 'transparent',
+    backgroundColor: 'hsl(var(--secondary))',
+  },
+  destructive: {
+    borderColor: 'transparent',
+    backgroundColor: 'hsl(var(--destructive))',
+  },
+  outline: {
+    borderColor: 'hsl(var(--border))',
+    backgroundColor: 'transparent',
+  },
+});
+
+const textStyles = StyleSheet.create({
+  base: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  default: {
+    color: 'hsl(var(--primary-foreground))',
+  },
+  secondary: {
+    color: 'hsl(var(--secondary-foreground))',
+  },
+  destructive: {
+    color: 'hsl(var(--destructive-foreground))',
+  },
+  outline: {
+    color: 'hsl(var(--foreground))',
+  },
+});
+
+export { Badge };
+export type { BadgeProps, BadgeVariant };

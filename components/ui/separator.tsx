@@ -1,9 +1,9 @@
 import * as SeparatorPrimitive from '@rn-primitives/separator';
 import * as React from 'react';
-import { cn } from '../../lib/utils';
+import { StyleSheet } from 'react-native';
 
 function Separator({
-  className,
+  style,
   orientation = 'horizontal',
   decorative = true,
   ...props
@@ -14,14 +14,28 @@ function Separator({
     <SeparatorPrimitive.Root
       decorative={decorative}
       orientation={orientation}
-      className={cn(
-        'shrink-0 bg-border',
-        orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
-        className,
-      )}
+      style={StyleSheet.flatten([
+        orientation === 'horizontal' ? styles.horizontal : styles.vertical,
+        style,
+      ])}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  horizontal: {
+    flexShrink: 0,
+    backgroundColor: 'hsl(var(--border))',
+    height: 1,
+    width: '100%',
+  },
+  vertical: {
+    flexShrink: 0,
+    backgroundColor: 'hsl(var(--border))',
+    height: '100%',
+    width: 1,
+  },
+});
 
 export { Separator };

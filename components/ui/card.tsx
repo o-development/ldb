@@ -1,38 +1,27 @@
 import * as React from 'react';
-import { Text, TextProps, View, ViewProps } from 'react-native';
-import { TextClassContext } from '../ui/text';
-import { cn } from '../../lib/utils';
+import { Text, TextProps, View, ViewProps, StyleSheet } from 'react-native';
+import { TextStyleContext } from '../ui/text';
 
 function Card({
-  className,
+  style,
   ...props
 }: ViewProps & {
   ref?: React.RefObject<View>;
 }) {
-  return (
-    <View
-      className={cn('rounded-lg border border-border bg-card', className)}
-      {...props}
-    />
-  );
+  return <View style={StyleSheet.flatten([styles.card, style])} {...props} />;
 }
 
 function CardHeader({
-  className,
+  style,
   ...props
 }: ViewProps & {
   ref?: React.RefObject<View>;
 }) {
-  return (
-    <View
-      className={cn('flex flex-col space-y-1.5 p-6', className)}
-      {...props}
-    />
-  );
+  return <View style={StyleSheet.flatten([styles.header, style])} {...props} />;
 }
 
 function CardTitle({
-  className,
+  style,
   ...props
 }: TextProps & {
   ref?: React.RefObject<Text>;
@@ -41,55 +30,81 @@ function CardTitle({
     <Text
       role="heading"
       aria-level={3}
-      className={cn(
-        'text-2xl text-card-foreground font-semibold leading-none tracking-tight',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.title, style])}
       {...props}
     />
   );
 }
 
 function CardDescription({
-  className,
+  style,
   ...props
 }: TextProps & {
   ref?: React.RefObject<Text>;
 }) {
   return (
-    <Text
-      className={cn('text-sm text-muted-foreground', className)}
-      {...props}
-    />
+    <Text style={StyleSheet.flatten([styles.description, style])} {...props} />
   );
 }
 
 function CardContent({
-  className,
+  style,
   ...props
 }: ViewProps & {
   ref?: React.RefObject<View>;
 }) {
   return (
-    <TextClassContext.Provider value="text-card-foreground">
-      <View className={cn('p-6 pt-0', className)} {...props} />
-    </TextClassContext.Provider>
+    <TextStyleContext.Provider
+      value={{ style: { color: 'hsl(var(--card-foreground))' } }}
+    >
+      <View style={StyleSheet.flatten([styles.content, style])} {...props} />
+    </TextStyleContext.Provider>
   );
 }
 
 function CardFooter({
-  className,
+  style,
   ...props
 }: ViewProps & {
   ref?: React.RefObject<View>;
 }) {
-  return (
-    <View
-      className={cn('flex flex-row items-center p-6 pt-0', className)}
-      {...props}
-    />
-  );
+  return <View style={StyleSheet.flatten([styles.footer, style])} {...props} />;
 }
+
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: 8,
+    borderWidth: 1,
+    backgroundColor: 'hsl(var(--card))',
+    borderColor: 'hsl(var(--border))',
+  },
+  header: {
+    flexDirection: 'column',
+    gap: 6,
+    padding: 24,
+  },
+  title: {
+    fontSize: 24,
+    color: 'hsl(var(--card-foreground))',
+    fontWeight: '600',
+    lineHeight: 24,
+    letterSpacing: -0.025,
+  },
+  description: {
+    fontSize: 14,
+    color: 'hsl(var(--muted-foreground))',
+  },
+  content: {
+    padding: 24,
+    paddingTop: 0,
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 24,
+    paddingTop: 0,
+  },
+});
 
 export {
   Card,

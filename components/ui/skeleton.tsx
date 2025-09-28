@@ -6,14 +6,14 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { cn } from '../../lib/utils';
+import { StyleSheet } from 'react-native';
 
 const duration = 1000;
 
 function Skeleton({
-  className,
+  style,
   ...props
-}: Omit<React.ComponentPropsWithoutRef<typeof Animated.View>, 'style'>) {
+}: React.ComponentPropsWithoutRef<typeof Animated.View>) {
   const sv = useSharedValue(1);
 
   React.useEffect(() => {
@@ -24,17 +24,20 @@ function Skeleton({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const style = useAnimatedStyle(() => ({
+  const animatedStyle = useAnimatedStyle(() => ({
     opacity: sv.value,
+    ...styles.skeleton,
+    style,
   }));
 
-  return (
-    <Animated.View
-      style={style}
-      className={cn('rounded-md bg-secondary dark:bg-muted', className)}
-      {...props}
-    />
-  );
+  return <Animated.View style={animatedStyle} {...props} />;
 }
+
+const styles = StyleSheet.create({
+  skeleton: {
+    borderRadius: 6,
+    backgroundColor: 'hsl(var(--secondary))',
+  },
+});
 
 export { Skeleton };
