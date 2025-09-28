@@ -10,6 +10,47 @@ import { useTheme } from '@react-navigation/native';
 import { Text } from './text';
 import { Button, ButtonProps } from './button';
 
+// Global base styles for input component
+const inputBaseStyles = StyleSheet.create({
+  base: {
+    height: 40, // h-10 equivalent
+    borderRadius: 6, // rounded-md
+    borderWidth: 1,
+    paddingHorizontal: 12, // px-3
+    paddingVertical: 8, // py-2
+    fontSize: 16, // text-base
+    // Platform specific adjustments
+    ...(Platform.OS === 'web' && {
+      width: '100%',
+    }),
+    ...(Platform.OS !== 'web' && {
+      height: 48, // native:h-12
+      fontSize: 18, // native:text-lg
+      lineHeight: 22.5, // native:leading-[1.25]
+    }),
+  },
+  disabled: {
+    opacity: 0.5,
+    ...(Platform.OS === 'web' && {
+      cursor: 'not-allowed',
+    }),
+  },
+  withButton: {
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  container: {
+    flexDirection: 'row',
+  },
+  labelContainer: {
+    gap: 4, // gap-1
+  },
+  buttonRadius: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+});
+
 function Input({
   style,
   label,
@@ -22,51 +63,20 @@ function Input({
 }) {
   const theme = useTheme();
 
-  const createInputStyles = (themeColors: any) =>
-    StyleSheet.create({
-      base: {
-        height: 40, // h-10 equivalent
-        borderRadius: 6, // rounded-md
-        borderWidth: 1,
-        borderColor: themeColors.colors.border,
-        backgroundColor: themeColors.colors.background,
-        paddingHorizontal: 12, // px-3
-        paddingVertical: 8, // py-2
-        fontSize: 16, // text-base
-        color: themeColors.colors.text,
-        // Platform specific adjustments
-        ...(Platform.OS === 'web' && {
-          width: '100%',
-        }),
-        ...(Platform.OS !== 'web' && {
-          height: 48, // native:h-12
-          fontSize: 18, // native:text-lg
-          lineHeight: 22.5, // native:leading-[1.25]
-        }),
-      },
-      disabled: {
-        opacity: 0.5,
-        ...(Platform.OS === 'web' && {
-          cursor: 'not-allowed',
-        }),
-      },
-      withButton: {
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-      },
-      container: {
-        flexDirection: 'row',
-      },
-      labelContainer: {
-        gap: 4, // gap-1
-      },
-      buttonRadius: {
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-      },
-    });
-
-  const inputStyles = createInputStyles(theme);
+  // Apply theme colors to base styles
+  const inputStyles = {
+    base: {
+      ...inputBaseStyles.base,
+      borderColor: theme.colors.border,
+      backgroundColor: theme.colors.background,
+      color: theme.colors.text,
+    },
+    disabled: inputBaseStyles.disabled,
+    withButton: inputBaseStyles.withButton,
+    container: inputBaseStyles.container,
+    labelContainer: inputBaseStyles.labelContainer,
+    buttonRadius: inputBaseStyles.buttonRadius,
+  };
 
   const inputStyle = [
     inputStyles.base,
@@ -78,7 +88,7 @@ function Input({
   let textInput = (
     <TextInput
       style={inputStyle}
-      placeholderTextColor={theme.colors.border} // muted-foreground equivalent
+      placeholderTextColor={theme.colors.text.replace(')', ' / 0.6)')} // Higher contrast than border, with opacity
       {...props}
     />
   );
