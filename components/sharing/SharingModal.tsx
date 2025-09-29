@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { StyleSheet, TextStyle, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import {
   Dialog,
@@ -53,7 +53,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
 }) => {
   const { targetResource } = useViewContext();
   const { colors } = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [wacResult, setWacResult] = useState<
     | GetWacRuleError<SolidLeaf | SolidContainer>
     | GetWacRuleSuccess<SolidLeaf | SolidContainer>

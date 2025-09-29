@@ -70,16 +70,12 @@ interface UseTextStylesParams {
 
 // Helper function to add opacity to HSL colors
 function addOpacityToHSL(hslColor: string, opacity: number): string {
-  console.log('Original color:', hslColor);
   // Extract HSL values from string like "hsl(0 0% 98%)"
   const hslMatch = hslColor.match(
     /hsl\((\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%\)/,
   );
   if (hslMatch) {
     const [, h, s, l] = hslMatch;
-    // Try both HSLA and RGBA approaches
-    const hslaResult = `hsla(${h} ${s}% ${l}%, ${opacity})`;
-    console.log('HSLA result:', hslaResult);
 
     // Convert HSL to RGB for better React Native compatibility
     const hNum = parseFloat(h) / 360;
@@ -122,13 +118,10 @@ function addOpacityToHSL(hslColor: string, opacity: number): string {
     const bFinal = Math.round((b + m) * 255);
 
     const rgbaResult = `rgba(${rFinal}, ${gFinal}, ${bFinal}, ${opacity})`;
-    console.log('RGBA result:', rgbaResult);
 
     // Return RGBA for better React Native compatibility
     return rgbaResult;
   }
-  // Fallback: if it's not HSL format, return original color
-  console.log('No HSL match found, returning original');
   return hslColor;
 }
 

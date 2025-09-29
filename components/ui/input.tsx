@@ -44,8 +44,6 @@ export function Input({
     style,
   ];
 
-  console.log(inputStyle);
-
   let textInput = (
     <TextInput
       style={inputStyle}

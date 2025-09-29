@@ -1,88 +1,96 @@
 import React, { FunctionComponent } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '../../ui/navigation-menu';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../ui/dropdown-menu';
 import { Text } from '../../ui/text';
-import { View } from 'react-native';
-import type { ViewRef } from '@rn-primitives/types';
-import { cn } from '../../../lib/utils';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { ViewIcon } from 'lucide-react-native';
 import { useViewContext } from '../../useViewContext';
 import { ResourceViewConfig } from '../../../components/ResourceView';
+import { useTheme } from '@react-navigation/native';
+import { Icon } from '../../ui/icon';
+import { Button } from '../../ui/button';
 
 export const ViewMenu: FunctionComponent = () => {
-  const insets = useSafeAreaInsets();
-  const contentInsets = {
-    top: insets.top,
-    bottom: insets.bottom,
-    left: 12,
-    right: 12,
-  };
   const { validViews } = useViewContext();
-
-  const [isOpen, setIsOpen] = React.useState<string>();
+  const { width } = useWindowDimensions();
 
   return (
-    <NavigationMenu value={isOpen} onValueChange={setIsOpen}>
-      <NavigationMenuList>
-        <NavigationMenuItem value="views">
-          <NavigationMenuTrigger>
-            <Text>
-              <ViewIcon />
-            </Text>
-            <Text className="sm:block hidden">Views</Text>
-          </NavigationMenuTrigger>
-          <NavigationMenuContent insets={contentInsets}>
-            <View
-              role="list"
-              className="web:grid w-dvw gap-3 p-4 md:w-[500px] web:md:grid-cols-2 lg:w-[600px] "
-            >
-              {validViews.map((menuItem) => (
-                <ListItem key={menuItem.name} viewConfig={menuItem}>
-                  {menuItem.displayName}
-                </ListItem>
-              ))}
-            </View>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          iconLeft={ViewIcon}
+          text={width < 640 ? undefined : 'Views'}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        style={StyleSheet.flatten([styles.contentContainer])}
+      >
+        {validViews.map((menuItem) => (
+          <ListItem key={menuItem.name} viewConfig={menuItem}>
+            {menuItem.displayName}
+          </ListItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
-const ListItem = React.forwardRef<
-  ViewRef,
-  React.ComponentPropsWithoutRef<typeof View> & {
-    viewConfig: ResourceViewConfig;
-  }
->(({ className, viewConfig, ...props }, ref) => {
-  // TODO: add navigationn to `href` on `NavigationMenuLink` onPress
+const ListItem: React.FC<{
+  viewConfig: ResourceViewConfig;
+  children: React.ReactNode;
+}> = ({ viewConfig, children }) => {
   const { curViewConfig, setCurViewConfig } = useViewContext();
-  const Icon = viewConfig.displayIcon;
+  const { colors } = useTheme();
+  const DisplayIcon = viewConfig.displayIcon;
+
+  const isSelected = curViewConfig.name === viewConfig.name;
+
   return (
-    <View role="listitem">
-      <NavigationMenuLink
-        ref={ref}
-        className={cn(
-          'web:select-none flex-row items-center overflow-hidden rounded-md p-3 leading-none no-underline text-foreground web:outline-none web:transition-colors web:hover:bg-accent active:bg-accent web:hover:text-accent-foreground web:focus:bg-accent web:focus:text-accent-foreground cursor-pointer',
-          className,
-          curViewConfig.name === viewConfig.name ? 'bg-secondary' : '',
-        )}
-        onPress={() => setCurViewConfig(viewConfig)}
-        {...props}
-      >
-        <Icon size={20} />
-        <Text className="ml-2" size="sm">
-          {viewConfig.displayName}
-        </Text>
-      </NavigationMenuLink>
-    </View>
+    <DropdownMenuItem
+      style={StyleSheet.flatten([
+        styles.listItem,
+        isSelected && {
+          backgroundColor: colors.border,
+        },
+      ])}
+      onPress={() => setCurViewConfig(viewConfig)}
+    >
+      <Icon icon={DisplayIcon} />
+      <Text>{children}</Text>
+    </DropdownMenuItem>
   );
-});
+};
 ListItem.displayName = 'ListItem';
+
+const styles = StyleSheet.create({
+  triggerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  contentContainer: {
+    gap: 4,
+    padding: 4,
+    flexDirection: 'column' as const,
+    minWidth: 200,
+  },
+  listItem: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    overflow: 'hidden' as const,
+    borderRadius: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+  },
+  iconStyle: {
+    fontSize: 20,
+  },
+});
