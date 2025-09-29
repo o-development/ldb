@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Pressable, View, Platform, TextStyle } from 'react-native';
+import {
+  Pressable,
+  View,
+  Platform,
+  TextStyle,
+  StyleProp,
+  ViewStyle,
+  StyleSheet,
+} from 'react-native';
 import { Text, TextStyleProvider } from '../ui/text';
 import { CircleSnail } from 'react-native-progress';
 import { useTheme } from '@react-navigation/native';
@@ -18,6 +26,7 @@ type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
 // Style generation functions
 const getButtonStyles = (
+  style: StyleProp<ViewStyle>,
   variant: ButtonVariant = 'default',
   size: ButtonSize = 'default',
   isPressed: boolean = false,
@@ -31,6 +40,7 @@ const getButtonStyles = (
     justifyContent: 'center' as const,
     borderRadius: 6,
     opacity: isDisabled ? 0.5 : 1,
+    gap: 4,
   };
 
   // Size styles
@@ -87,11 +97,12 @@ const getButtonStyles = (
     },
   };
 
-  return {
-    ...baseStyles,
-    ...sizeStyles[size],
-    ...variantStyles[variant],
-  };
+  return StyleSheet.flatten([
+    baseStyles,
+    sizeStyles[size],
+    variantStyles[variant],
+    style,
+  ]);
 };
 
 const getButtonTextStyles = (
@@ -166,6 +177,7 @@ function Button({
   iconLeft,
   iconRight,
   isLoading,
+  style,
   text,
   textStyle,
   disabled,
@@ -183,18 +195,24 @@ function Button({
       : theme.colors.primary;
 
   return (
-    <Pressable ref={ref} role="button" disabled={disabled} {...props}>
-      {({ pressed, hovered }) => {
-        // Use Pressable's callback state for all styling
-        const buttonStyles = getButtonStyles(
+    <Pressable
+      ref={ref}
+      role="button"
+      disabled={disabled}
+      {...props}
+      style={({ pressed, hovered }) =>
+        getButtonStyles(
+          typeof style === 'function' ? style({ pressed, hovered }) : style,
           variant,
           size,
           pressed,
           hovered,
           disabled ?? false,
           theme,
-        );
-
+        )
+      }
+    >
+      {({ pressed }) => {
         const buttonTextStyles = getButtonTextStyles(
           variant,
           size,
@@ -209,27 +227,21 @@ function Button({
 
         return (
           <TextStyleProvider style={finalTextStyles}>
-            <View style={buttonStyles}>
-              {isLoading ? (
-                <View>
-                  <CircleSnail size={20} color={loadColor} />
-                </View>
-              ) : iconLeft ? (
-                <View style={iconLeftStyle}>
-                  <Icon icon={iconLeft} />
-                </View>
-              ) : undefined}
-              {text ? (
-                <Text>{text}</Text>
-              ) : (
-                <Text>{children as React.ReactNode}</Text>
-              )}
-              {iconRight ? (
-                <View style={iconRightStyle}>
-                  <Icon icon={iconRight} />
-                </View>
-              ) : undefined}
-            </View>
+            {isLoading ? (
+              <View>
+                <CircleSnail size={20} color={loadColor} />
+              </View>
+            ) : iconLeft ? (
+              <View style={iconLeftStyle}>
+                <Icon icon={iconLeft} />
+              </View>
+            ) : undefined}
+            {text ? <Text>{text}</Text> : (children as React.ReactNode)}
+            {iconRight ? (
+              <View style={iconRightStyle}>
+                <Icon icon={iconRight} />
+              </View>
+            ) : undefined}
           </TextStyleProvider>
         );
       }}

@@ -8,6 +8,8 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { StyleSheet, TextStyle, useWindowDimensions } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import {
   Dialog,
   DialogContent,
@@ -50,7 +52,8 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   children,
 }) => {
   const { targetResource } = useViewContext();
-  const [isOpen, setIsOpen] = useState(false);
+  const { colors } = useTheme();
+  const [isOpen, setIsOpen] = useState(true);
   const [wacResult, setWacResult] = useState<
     | GetWacRuleError<SolidLeaf | SolidContainer>
     | GetWacRuleSuccess<SolidLeaf | SolidContainer>
@@ -62,6 +65,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     authenticated: { read: false, write: false, append: false, control: false },
     agent: {},
   });
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     if (
@@ -116,17 +120,26 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   return (
     <sharingModalContext.Provider value={context}>
       <Dialog open={isOpen} onOpenChange={(value) => setIsOpen(value)}>
-        <DialogContent className="sm:w-[640px] w-[95vw] h-[95vh]">
+        <DialogContent
+          style={{
+            width: width > 640 ? 640 : width * 0.95,
+            height: height * 0.95,
+          }}
+        >
           <LoadingBar isLoading={isLoading} />
           <DialogHeader>
             <DialogTitle>Resource Sharing Preferences</DialogTitle>
           </DialogHeader>
-          <ScrollView className="flex-1 border-border border-b border-t pt-2 pb-2 ml-[-24px] mr-[-24px] pl-6 pr-6">
+          <ScrollView
+            style={[{ borderColor: colors.border }, styles.scrollView]}
+          >
             {(() => {
               if (!wacResult) return <></>;
               if (wacResult.isError) {
                 return (
-                  <Text className="color-red-800">{wacResult.message}</Text>
+                  <Text style={{ color: colors.notification }}>
+                    {wacResult.message}
+                  </Text>
                 );
               }
               return (
@@ -147,3 +160,17 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     </sharingModalContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    paddingTop: 8,
+    paddingBottom: 8,
+    marginLeft: -24,
+    marginRight: -24,
+    paddingLeft: 24,
+    paddingRight: 24,
+  },
+});

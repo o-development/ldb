@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import * as AvatarPrimitive from '@rn-primitives/avatar';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
@@ -36,9 +37,14 @@ function AvatarFallback({
 }: AvatarPrimitive.FallbackProps & {
   ref?: React.RefObject<AvatarPrimitive.FallbackRef>;
 }) {
+  const { colors } = useTheme();
   return (
     <AvatarPrimitive.Fallback
-      style={StyleSheet.flatten([styles.fallback, style])}
+      style={StyleSheet.flatten([
+        styles.fallback,
+        { backgroundColor: colors.border },
+        style,
+      ])}
       {...props}
     />
   );
@@ -66,7 +72,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: 'hsl(var(--muted))',
   },
 });
 

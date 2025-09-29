@@ -18,16 +18,16 @@ export const Header: FunctionComponent = () => {
   return (
     <Card style={styles.card}>
       <AddressBox />
-      {/* {session.isLoggedIn && (
+      {session.isLoggedIn && (
         <Button
           key="setMemu"
           variant="ghost"
           style={styles.shareButton}
           onPress={openSharingModal}
-          iconLeft={<UserPlus />}
+          iconLeft={UserPlus}
         />
       )}
-      <ViewMenu /> */}
+      {/*<ViewMenu /> */}
       {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />}
     </Card>
   );

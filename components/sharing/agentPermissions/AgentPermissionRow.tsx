@@ -1,6 +1,6 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { AccessModeList } from '@ldo/connected-solid';
-import { Text } from '../../ui/text';
 import { FunctionComponent } from 'react';
 import { AgentInformation } from './AgentInformation';
 import { AccessDropdown } from '../AccessDropdown';
@@ -20,17 +20,35 @@ export const AgentPermissionRow: FunctionComponent<AgentPermissionRowProps> = ({
   onChange,
 }) => {
   return (
-    <View className="flex-row justify-between align-center">
+    <View style={styles.container}>
       <AgentInformation webId={webId} />
-      <View className="flex-row">
+      <View style={styles.rightSection}>
         <Button
           variant="ghost"
           onPress={() => onChange(undefined)}
-          className="w-10"
-          iconLeft={<Trash size={14} />}
+          style={styles.deleteButton}
+          iconLeft={Trash}
+          textStyle={styles.deleteButtonText}
         />
         <AccessDropdown value={value} onChange={onChange} />
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rightSection: {
+    flexDirection: 'row',
+  },
+  deleteButton: {
+    width: 40,
+  },
+  deleteButtonText: {
+    fontSize: 14,
+  },
+});

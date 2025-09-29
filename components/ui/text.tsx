@@ -68,6 +68,70 @@ interface UseTextStylesParams {
   style?: TextStyle;
 }
 
+// Helper function to add opacity to HSL colors
+function addOpacityToHSL(hslColor: string, opacity: number): string {
+  console.log('Original color:', hslColor);
+  // Extract HSL values from string like "hsl(0 0% 98%)"
+  const hslMatch = hslColor.match(
+    /hsl\((\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%\)/,
+  );
+  if (hslMatch) {
+    const [, h, s, l] = hslMatch;
+    // Try both HSLA and RGBA approaches
+    const hslaResult = `hsla(${h} ${s}% ${l}%, ${opacity})`;
+    console.log('HSLA result:', hslaResult);
+
+    // Convert HSL to RGB for better React Native compatibility
+    const hNum = parseFloat(h) / 360;
+    const sNum = parseFloat(s) / 100;
+    const lNum = parseFloat(l) / 100;
+
+    const c = (1 - Math.abs(2 * lNum - 1)) * sNum;
+    const x = c * (1 - Math.abs(((hNum * 6) % 2) - 1));
+    const m = lNum - c / 2;
+
+    let r, g, b;
+    if (hNum < 1 / 6) {
+      r = c;
+      g = x;
+      b = 0;
+    } else if (hNum < 2 / 6) {
+      r = x;
+      g = c;
+      b = 0;
+    } else if (hNum < 3 / 6) {
+      r = 0;
+      g = c;
+      b = x;
+    } else if (hNum < 4 / 6) {
+      r = 0;
+      g = x;
+      b = c;
+    } else if (hNum < 5 / 6) {
+      r = x;
+      g = 0;
+      b = c;
+    } else {
+      r = c;
+      g = 0;
+      b = x;
+    }
+
+    const rFinal = Math.round((r + m) * 255);
+    const gFinal = Math.round((g + m) * 255);
+    const bFinal = Math.round((b + m) * 255);
+
+    const rgbaResult = `rgba(${rFinal}, ${gFinal}, ${bFinal}, ${opacity})`;
+    console.log('RGBA result:', rgbaResult);
+
+    // Return RGBA for better React Native compatibility
+    return rgbaResult;
+  }
+  // Fallback: if it's not HSL format, return original color
+  console.log('No HSL match found, returning original');
+  return hslColor;
+}
+
 function useTextStyles({
   variant,
   size,
@@ -128,7 +192,7 @@ function useTextStyles({
     { color: colors.text }, // Use theme color instead of hard-coded
     contextValue?.style, // Apply context style
     isBold && styles.bold,
-    isMuted && { color: colors.text + '80' }, // Use theme color with opacity for muted
+    isMuted && { color: addOpacityToHSL(colors.text, 0.5) }, // Use theme color with proper opacity for muted
     customFontSize ? { fontSize: customFontSize } : styles[textSize],
     contextValue?.style,
     style, // Individual style prop overrides everything

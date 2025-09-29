@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   type TextProps,
+  TextStyle,
   View,
   type ViewStyle,
 } from 'react-native';
@@ -16,6 +17,7 @@ import { ChevronRight } from 'lucide-react-native';
 import { ChevronUp } from 'lucide-react-native';
 import { useTheme } from '@react-navigation/native';
 import { TextStyleProvider } from '../../components/ui/text';
+import { Icon } from './icon';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -42,7 +44,7 @@ function DropdownMenuSubTrigger({
 }) {
   const theme = useTheme();
   const { open } = DropdownMenuPrimitive.useSubContext();
-  const Icon =
+  const SubIcon =
     Platform.OS === 'web' ? ChevronRight : open ? ChevronUp : ChevronDown;
   return (
     <TextStyleProvider
@@ -64,11 +66,7 @@ function DropdownMenuSubTrigger({
           }
         >
           {children}
-          <Icon
-            size={18}
-            color={theme.colors.text}
-            style={styles.subTriggerIcon}
-          />
+          <Icon icon={SubIcon} style={styles.subTriggerIcon} />
         </Pressable>
       </DropdownMenuPrimitive.SubTrigger>
     </TextStyleProvider>
@@ -155,14 +153,17 @@ function DropdownMenuItem({
   return (
     <TextStyleProvider style={{ color: theme.colors.text }}>
       <DropdownMenuPrimitive.Item asChild {...props}>
-        <Pressable style={({ pressed, hovered }) => StyleSheet.flatten([
-            styles.item,
-            inset && styles.itemInset,
-            props.disabled && styles.itemDisabled,
-            (pressed || hovered) && { backgroundColor: theme.colors.border },
-            style,
-          ])
-        }>
+        <Pressable
+          style={({ pressed, hovered }) =>
+            StyleSheet.flatten([
+              styles.item,
+              inset && styles.itemInset,
+              props.disabled && styles.itemDisabled,
+              (pressed || hovered) && { backgroundColor: theme.colors.border },
+              style,
+            ])
+          }
+        >
           {children}
         </Pressable>
       </DropdownMenuPrimitive.Item>
@@ -251,12 +252,12 @@ function DropdownMenuLabel({
   const theme = useTheme();
   return (
     <DropdownMenuPrimitive.Label
-      style={[
+      style={StyleSheet.flatten<TextStyle>([
         styles.label,
         { color: theme.colors.text },
         inset && styles.labelInset,
         style,
-      ]}
+      ])}
       {...props}
     />
   );
@@ -339,6 +340,7 @@ const styles = StyleSheet.create({
   },
   subTriggerIcon: {
     marginLeft: 'auto',
+    fontSize: 18,
     // Color applied at render time
   },
 
