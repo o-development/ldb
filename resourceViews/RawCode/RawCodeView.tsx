@@ -6,15 +6,17 @@ import React, {
   useState,
 } from 'react';
 import { RawCodeEditor } from './RawCodeEditor';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button } from '../../components/ui/button';
 import { Notifier } from 'react-native-notifier';
 import { useViewContext } from '../../components/useViewContext';
 import { LoadingBar } from '../../components/common/LoadingBar';
 import { Save } from 'lucide-react-native';
+import { useTheme } from '@react-navigation/native';
 
 export const RawCodeView: FunctionComponent = () => {
   const { fetch } = useSolidAuth();
+  const { colors } = useTheme();
   const [content, setContent] = useState<string>('');
   const [contentType, setContentType] = useState<string>('');
   const [didEdit, setDidEdit] = useState(false);
@@ -70,7 +72,7 @@ export const RawCodeView: FunctionComponent = () => {
   }, [fetchContent]);
 
   return (
-    <View className="flex-1 relative">
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <LoadingBar isLoading={isFetching || isSaving} />
       <RawCodeEditor
         value={content}
@@ -80,13 +82,26 @@ export const RawCodeView: FunctionComponent = () => {
         }}
       />
       <Button
-        className="absolute bottom-2 right-2 z-10"
+        style={styles.saveButton}
         onPress={submitChanges}
         text="Save Changes"
-        iconLeft={<Save />}
+        iconLeft={Save}
         isLoading={isSaving}
         disabled={!didEdit || isSaving}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  saveButton: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    zIndex: 10,
+  },
+});
