@@ -31,6 +31,7 @@ export const AgentInformation: FunctionComponent<AgentInformationProps> = ({
           {webId}
         </Text>
       </View>
+      {accessoryRight}
     </View>
   );
 };
