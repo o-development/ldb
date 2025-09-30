@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { FunctionComponent, useState } from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native';
 import { Input } from '../../ui/input';
 import { ChevronRight } from 'lucide-react-native';
 import { ChevronsRight } from 'lucide-react-native';
@@ -74,7 +74,12 @@ export const AddressBox: FunctionComponent = () => {
         iconLeft={isTextMode ? ChevronsRight : TextCursorInput}
         textStyle={styles.buttonText}
       />
-      <View style={styles.breadcrumbContainer} pointerEvents="none">
+      <ScrollView
+        style={styles.breadcrumbContainer}
+        contentContainerStyle={styles.breadcrumbContentContainer}
+        pointerEvents="none"
+        horizontal
+      >
         {!isTextMode &&
           breadcrumbInfo.map((item, index) => (
             <View style={styles.breadcrumbItem} key={item.uri}>
@@ -92,7 +97,7 @@ export const AddressBox: FunctionComponent = () => {
               )}
             </View>
           ))}
-      </View>
+      </ScrollView>
       {(() => {
         const shouldRefresh = targetUri === textBoxValue || !isTextMode;
         return (
@@ -149,10 +154,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
     marginLeft: 40,
     marginRight: 40,
+  },
+  breadcrumbContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   breadcrumbItem: {
     flexDirection: 'row',
