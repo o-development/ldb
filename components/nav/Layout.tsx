@@ -37,7 +37,9 @@ export const Layout: FunctionComponent = () => {
             style={[styles.container, { backgroundColor: colors.background }]}
           >
             <Header />
-            <View style={styles.contentView}>{/* <RenderView /> */}</View>
+            <View style={styles.contentView}>
+              <RenderView />
+            </View>
           </View>
         </SharingModalProvider>
       </ViewContextProvider>
