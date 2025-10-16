@@ -3,7 +3,7 @@
     "name": "linked-data-browser",
     "slug": "linked-data-browser",
     "version": "1.0.0",
-    "main": "app/index.tsx",
+    "main": "App.js",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",

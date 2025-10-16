@@ -1,7 +1,13 @@
 {
   "name": "linked-data-browser",
-  "main": "index.js",
   "version": "0.0.8-alpha.0",
+  "exports": {
+    ".": {
+      "types": "./dist-lib/index.d.ts",
+      "import": "./dist-lib/index.mjs",
+      "require": "./dist-lib/index.js"
+    }
+  },
   "scripts": {
     "dev:ios": "expo start -c --ios",
     "dev:web": "concurrently \"npm run solid-server\" \"expo start -c --web\"",
@@ -13,7 +19,7 @@
     "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -i 'data/**' -c 'npm run build:server'",
     "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
     "build:ldo": "ldo build --input .shapes --output .ldo",
-    "build:lib": "tsup index.js --format cjs,esm --dts --out-dir dist-lib --clean",
+    "build:lib": "tsup lib/index.js --format cjs,esm --dts --out-dir dist-lib --clean",
     "build": "npm run build:standalone && npm run build:server && npm run build:lib",
     "prepublishOnly": "npm run build"
   },

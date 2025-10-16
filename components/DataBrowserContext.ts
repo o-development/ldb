@@ -6,7 +6,6 @@ export interface DataBrowserConfigProps {
   mode: 'standalone-app' | 'server-ui';
   defaultIssuer?: string;
   origin?: string;
-  renderHomepage?: () => ReactNode;
   renderLogo?: () => ReactNode;
 }
 
