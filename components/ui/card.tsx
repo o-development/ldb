@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Text, TextProps, View, ViewProps, StyleSheet } from 'react-native';
-import { TextStyleContext } from '../ui/text';
+import { useTheme } from '@react-navigation/native';
+import { TextStyleProvider } from '../ui/text';
 
 function Card({
   style,
@@ -8,7 +9,17 @@ function Card({
 }: ViewProps & {
   ref?: React.RefObject<View>;
 }) {
-  return <View style={StyleSheet.flatten([styles.card, style])} {...props} />;
+  const { colors } = useTheme();
+  return (
+    <View
+      style={StyleSheet.flatten([
+        styles.card,
+        { backgroundColor: colors.background, borderColor: colors.border },
+        style,
+      ])}
+      {...props}
+    />
+  );
 }
 
 function CardHeader({
@@ -26,11 +37,12 @@ function CardTitle({
 }: TextProps & {
   ref?: React.RefObject<Text>;
 }) {
+  const { colors } = useTheme();
   return (
     <Text
       role="heading"
       aria-level={3}
-      style={StyleSheet.flatten([styles.title, style])}
+      style={StyleSheet.flatten([styles.title, { color: colors.text }, style])}
       {...props}
     />
   );
@@ -42,8 +54,16 @@ function CardDescription({
 }: TextProps & {
   ref?: React.RefObject<Text>;
 }) {
+  const { colors } = useTheme();
   return (
-    <Text style={StyleSheet.flatten([styles.description, style])} {...props} />
+    <Text
+      style={StyleSheet.flatten([
+        styles.description,
+        { color: colors.text },
+        style,
+      ])}
+      {...props}
+    />
   );
 }
 
@@ -53,12 +73,11 @@ function CardContent({
 }: ViewProps & {
   ref?: React.RefObject<View>;
 }) {
+  const { colors } = useTheme();
   return (
-    <TextStyleContext.Provider
-      value={{ style: { color: 'hsl(var(--card-foreground))' } }}
-    >
+    <TextStyleProvider style={{ color: colors.text }}>
       <View style={StyleSheet.flatten([styles.content, style])} {...props} />
-    </TextStyleContext.Provider>
+    </TextStyleProvider>
   );
 }
 
@@ -75,8 +94,6 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 8,
     borderWidth: 1,
-    backgroundColor: 'hsl(var(--card))',
-    borderColor: 'hsl(var(--border))',
   },
   header: {
     flexDirection: 'column',
@@ -85,14 +102,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    color: 'hsl(var(--card-foreground))',
     fontWeight: '600',
     lineHeight: 24,
     letterSpacing: -0.025,
   },
   description: {
     fontSize: 14,
-    color: 'hsl(var(--muted-foreground))',
   },
   content: {
     padding: 24,

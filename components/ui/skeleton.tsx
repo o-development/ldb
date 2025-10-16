@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 const duration = 1000;
 
@@ -14,6 +15,7 @@ function Skeleton({
   style,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Animated.View>) {
+  const { colors } = useTheme();
   const sv = useSharedValue(1);
 
   React.useEffect(() => {
@@ -27,6 +29,7 @@ function Skeleton({
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: sv.value,
     ...styles.skeleton,
+    backgroundColor: colors.border,
     style,
   }));
 
@@ -36,7 +39,6 @@ function Skeleton({
 const styles = StyleSheet.create({
   skeleton: {
     borderRadius: 6,
-    backgroundColor: 'hsl(var(--secondary))',
   },
 });
 

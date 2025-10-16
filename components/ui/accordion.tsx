@@ -1,6 +1,6 @@
 import * as AccordionPrimitive from '@rn-primitives/accordion';
 import * as React from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Platform, Pressable, View, StyleSheet } from 'react-native';
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -13,8 +13,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { ChevronDown } from 'lucide-react-native';
-import { cn } from '../../lib/utils';
-import { TextClassContext } from '../../components/ui/text';
+import { useTheme } from '@react-navigation/native';
+import { TextStyleProvider } from '../../components/ui/text';
 
 function Accordion({
   children,
@@ -37,19 +37,24 @@ function Accordion({
 }
 
 function AccordionItem({
-  className,
+  style,
   value,
   ...props
 }: AccordionPrimitive.ItemProps & {
   ref?: React.RefObject<AccordionPrimitive.ItemRef>;
 }) {
+  const { colors } = useTheme();
   return (
     <Animated.View
-      className={'overflow-hidden'}
+      style={[styles.itemContainer, { overflow: 'hidden' }]}
       layout={LinearTransition.duration(200)}
     >
       <AccordionPrimitive.Item
-        className={cn('border-b border-border', className)}
+        style={StyleSheet.flatten([
+          styles.item,
+          { borderBottomColor: colors.border },
+          style,
+        ])}
         value={value}
         {...props}
       />
@@ -60,13 +65,14 @@ function AccordionItem({
 const Trigger = Platform.OS === 'web' ? View : Pressable;
 
 function AccordionTrigger({
-  className,
+  style,
   children,
   ...props
 }: AccordionPrimitive.TriggerProps & {
   children?: React.ReactNode;
   ref?: React.RefObject<AccordionPrimitive.TriggerRef>;
 }) {
+  const { colors } = useTheme();
   const { isExpanded } = AccordionPrimitive.useItemContext();
 
   const progress = useDerivedValue(() =>
@@ -79,73 +85,111 @@ function AccordionTrigger({
     opacity: interpolate(progress.value, [0, 1], [1, 0.8], Extrapolation.CLAMP),
   }));
 
+  const textStyles = {
+    fontSize: Platform.OS === 'web' ? 16 : 18,
+    fontWeight: '500' as const,
+    color: colors.text,
+  };
+
   return (
-    <TextClassContext.Provider value="native:text-lg font-medium web:group-hover:underline">
-      <AccordionPrimitive.Header className="flex">
+    <TextStyleProvider style={textStyles}>
+      <AccordionPrimitive.Header style={styles.header}>
         <AccordionPrimitive.Trigger {...props} asChild>
           <Trigger
-            className={cn(
-              'flex flex-row web:flex-1 items-center justify-between py-4 web:transition-all group web:focus-visible:outline-none web:focus-visible:ring-1 web:focus-visible:ring-muted-foreground',
-              className,
-            )}
+            style={StyleSheet.flatten([
+              styles.trigger,
+              { flex: Platform.OS === 'web' ? 1 : undefined },
+              style,
+            ])}
           >
             {children}
             <Animated.View style={chevronStyle}>
-              <ChevronDown size={18} className={'text-foreground shrink-0'} />
+              <ChevronDown size={18} color={colors.text} />
             </Animated.View>
           </Trigger>
         </AccordionPrimitive.Trigger>
       </AccordionPrimitive.Header>
-    </TextClassContext.Provider>
+    </TextStyleProvider>
   );
 }
 
 function AccordionContent({
-  className,
+  style,
   children,
   ...props
 }: AccordionPrimitive.ContentProps & {
   ref?: React.RefObject<AccordionPrimitive.ContentRef>;
 }) {
-  const { isExpanded } = AccordionPrimitive.useItemContext();
+  const { colors } = useTheme();
+
+  const textStyles = {
+    fontSize: Platform.OS === 'web' ? 14 : 18,
+    color: colors.text,
+  };
+
   return (
-    <TextClassContext.Provider value="native:text-lg">
+    <TextStyleProvider style={textStyles}>
       <AccordionPrimitive.Content
-        className={cn(
-          'overflow-hidden text-sm web:transition-all',
-          isExpanded
-            ? 'web:animate-accordion-down'
-            : 'web:animate-accordion-up',
-        )}
+        style={StyleSheet.flatten([
+          styles.content,
+          { overflow: 'hidden' },
+          style,
+        ])}
         {...props}
       >
-        <InnerContent className={cn('pb-4', className)}>
-          {children}
-        </InnerContent>
+        <InnerContent style={styles.innerContent}>{children}</InnerContent>
       </AccordionPrimitive.Content>
-    </TextClassContext.Provider>
+    </TextStyleProvider>
   );
 }
 
 function InnerContent({
   children,
-  className,
+  style,
 }: {
   children: React.ReactNode;
-  className?: string;
+  style?: any;
 }) {
   if (Platform.OS === 'web') {
-    return <View className={cn('pb-4', className)}>{children}</View>;
+    return (
+      <View style={StyleSheet.flatten([styles.innerContent, style])}>
+        {children}
+      </View>
+    );
   }
   return (
     <Animated.View
       entering={FadeIn}
       exiting={FadeOutUp.duration(200)}
-      className={cn('pb-4', className)}
+      style={StyleSheet.flatten([styles.innerContent, style])}
     >
       {children}
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    overflow: 'hidden',
+  },
+  item: {
+    borderBottomWidth: 1,
+  },
+  header: {
+    flexDirection: 'row',
+  },
+  trigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+  },
+  content: {
+    overflow: 'hidden',
+  },
+  innerContent: {
+    paddingBottom: 16,
+  },
+});
 
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };

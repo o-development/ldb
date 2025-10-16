@@ -8,6 +8,7 @@ import Animated, {
   useDerivedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { useTheme } from '@react-navigation/native';
 
 function Progress({
   style,
@@ -18,11 +19,16 @@ function Progress({
   ref?: React.RefObject<ProgressPrimitive.RootRef>;
   indicatorStyle?: any;
 }) {
+  const { colors } = useTheme();
+
+  const progressStyles = StyleSheet.flatten([
+    styles.progress,
+    { backgroundColor: colors.border },
+    style,
+  ]);
+
   return (
-    <ProgressPrimitive.Root
-      style={StyleSheet.flatten([styles.progress, style])}
-      {...props}
-    >
+    <ProgressPrimitive.Root style={progressStyles} {...props}>
       <Indicator value={value} style={indicatorStyle} />
     </ProgressPrimitive.Root>
   );
@@ -35,6 +41,7 @@ function Indicator({
   value: number | undefined | null;
   style?: any;
 }) {
+  const { colors } = useTheme();
   const progress = useDerivedValue(() => value ?? 0);
 
   const indicator = useAnimatedStyle(() => {
@@ -51,7 +58,10 @@ function Indicator({
       <View
         style={StyleSheet.flatten([
           styles.indicatorWeb,
-          { transform: `translateX(-${100 - (value ?? 0)}%)` },
+          {
+            transform: `translateX(-${100 - (value ?? 0)}%)`,
+            backgroundColor: colors.primary,
+          },
           style,
         ])}
       >
@@ -63,7 +73,12 @@ function Indicator({
   return (
     <ProgressPrimitive.Indicator asChild>
       <Animated.View
-        style={StyleSheet.flatten([indicator, styles.indicator, style])}
+        style={StyleSheet.flatten([
+          indicator,
+          styles.indicator,
+          { backgroundColor: colors.primary },
+          style,
+        ])}
       />
     </ProgressPrimitive.Indicator>
   );
@@ -76,17 +91,14 @@ const styles = StyleSheet.create({
     width: '100%',
     overflow: 'hidden',
     borderRadius: 8,
-    backgroundColor: 'hsl(var(--secondary))',
   },
   indicator: {
     height: '100%',
-    backgroundColor: 'hsl(var(--primary))',
   },
   indicatorWeb: {
     height: '100%',
     width: '100%',
     flex: 1,
-    backgroundColor: 'hsl(var(--primary))',
   },
 });
 

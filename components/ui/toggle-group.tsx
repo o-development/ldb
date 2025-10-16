@@ -1,31 +1,29 @@
-import type { VariantProps } from 'class-variance-authority';
 import type { LucideIcon } from 'lucide-react-native';
 import * as React from 'react';
-import { toggleTextVariants, toggleVariants } from '../ui/toggle';
-import { TextClassContext } from '../ui/text';
+import { StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import { TextStyleProvider } from '../ui/text';
 import * as ToggleGroupPrimitive from '@rn-primitives/toggle-group';
-import { cn } from '../../lib/utils';
 
-const ToggleGroupContext = React.createContext<VariantProps<
-  typeof toggleVariants
-> | null>(null);
+const ToggleGroupContext = React.createContext<{
+  variant?: 'default' | 'outline';
+  size?: 'default' | 'sm' | 'lg';
+} | null>(null);
 
 function ToggleGroup({
-  className,
+  style,
   variant,
   size,
   children,
   ...props
-}: ToggleGroupPrimitive.RootProps &
-  VariantProps<typeof toggleVariants> & {
-    ref?: React.RefObject<ToggleGroupPrimitive.RootRef>;
-  }) {
+}: ToggleGroupPrimitive.RootProps & {
+  variant?: 'default' | 'outline';
+  size?: 'default' | 'sm' | 'lg';
+  ref?: React.RefObject<ToggleGroupPrimitive.RootRef>;
+}) {
   return (
     <ToggleGroupPrimitive.Root
-      className={cn(
-        'flex flex-row items-center justify-center gap-1',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.root, style])}
       {...props}
     >
       <ToggleGroupContext.Provider value={{ variant, size }}>
@@ -46,55 +44,114 @@ function useToggleGroupContext() {
 }
 
 function ToggleGroupItem({
-  className,
+  style,
   children,
   variant,
   size,
   ...props
-}: ToggleGroupPrimitive.ItemProps &
-  VariantProps<typeof toggleVariants> & {
-    ref?: React.RefObject<ToggleGroupPrimitive.ItemRef>;
-  }) {
+}: ToggleGroupPrimitive.ItemProps & {
+  variant?: 'default' | 'outline';
+  size?: 'default' | 'sm' | 'lg';
+  ref?: React.RefObject<ToggleGroupPrimitive.ItemRef>;
+}) {
+  const { colors } = useTheme();
   const context = useToggleGroupContext();
   const { value } = ToggleGroupPrimitive.useRootContext();
 
+  const isSelected = ToggleGroupPrimitive.utils.getIsSelected(
+    value,
+    props.value,
+  );
+  const finalVariant = context.variant || variant || 'default';
+  const finalSize = context.size || size || 'default';
+
+  const textStyles = {
+    color: isSelected ? colors.text : colors.text,
+  };
+
+  const getSizeStyles = () => {
+    switch (finalSize) {
+      case 'sm':
+        return styles.smItemSize;
+      case 'lg':
+        return styles.lgItemSize;
+      default:
+        return styles.defaultItemSize;
+    }
+  };
+
+  const getVariantStyles = () => {
+    switch (finalVariant) {
+      case 'outline':
+        return styles.outlineItem;
+      default:
+        return styles.defaultItem;
+    }
+  };
+
+  const itemStyles = StyleSheet.flatten([
+    styles.item,
+    getVariantStyles(),
+    getSizeStyles(),
+    {
+      backgroundColor: isSelected ? colors.border : 'transparent',
+      borderColor: finalVariant === 'outline' ? colors.border : 'transparent',
+      opacity: props.disabled ? 0.5 : 1,
+    },
+    style,
+  ]);
+
   return (
-    <TextClassContext.Provider
-      value={cn(
-        toggleTextVariants({ variant, size }),
-        ToggleGroupPrimitive.utils.getIsSelected(value, props.value)
-          ? 'text-accent-foreground'
-          : 'web:group-hover:text-muted-foreground',
-      )}
-    >
-      <ToggleGroupPrimitive.Item
-        className={cn(
-          toggleVariants({
-            variant: context.variant || variant,
-            size: context.size || size,
-          }),
-          props.disabled && 'web:pointer-events-none opacity-50',
-          ToggleGroupPrimitive.utils.getIsSelected(value, props.value) &&
-            'bg-accent',
-          className,
-        )}
-        {...props}
-      >
+    <TextStyleProvider style={textStyles}>
+      <ToggleGroupPrimitive.Item style={itemStyles} {...props}>
         {children}
       </ToggleGroupPrimitive.Item>
-    </TextClassContext.Provider>
+    </TextStyleProvider>
   );
 }
 
 function ToggleGroupIcon({
-  className,
   icon: Icon,
   ...props
 }: React.ComponentPropsWithoutRef<LucideIcon> & {
   icon: LucideIcon;
 }) {
-  const textClass = React.useContext(TextClassContext);
-  return <Icon className={cn(textClass, className)} {...props} />;
+  const { colors } = useTheme();
+
+  return <Icon color={colors.text} {...props} />;
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6,
+  },
+  defaultItem: {
+    backgroundColor: 'transparent',
+  },
+  outlineItem: {
+    borderWidth: 1,
+    backgroundColor: 'transparent',
+  },
+  defaultItemSize: {
+    height: 40,
+    paddingHorizontal: 12,
+  },
+  smItemSize: {
+    height: 36,
+    paddingHorizontal: 10,
+  },
+  lgItemSize: {
+    height: 44,
+    paddingHorizontal: 20,
+  },
+});
 
 export { ToggleGroup, ToggleGroupIcon, ToggleGroupItem };

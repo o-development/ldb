@@ -6,6 +6,7 @@ import { ContainerConfig } from '../resourceViews/Container/ContainerConfig';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 import { ProfileConfig } from '../resourceViews/Profile/ProfileConfig';
+import { registerRootComponent } from 'expo';
 
 export function Screen() {
   const mode = process.env.EXPO_PUBLIC_IS_SERVER_HOSTED
@@ -27,3 +28,12 @@ export function Screen() {
     </SafeAreaProvider>
   );
 }
+
+// https://docs.expo.dev/router/reference/troubleshooting/#expo_router_app_root-not-defined
+
+// Must be exported or Fast Refresh won't update the context
+export function App() {
+  return <Screen />;
+}
+
+registerRootComponent(App);

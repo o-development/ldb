@@ -7,7 +7,7 @@ import Animated, {
   useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useThemeChange } from '../ThemeProvider';
+import { useTheme } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   switchRoot: {
@@ -18,12 +18,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     borderColor: 'transparent',
-  },
-  switchRootChecked: {
-    backgroundColor: 'rgb(24, 24, 27)', // primary color
-  },
-  switchRootUnchecked: {
-    backgroundColor: 'rgb(228, 228, 231)', // input color
   },
   switchRootDisabled: {
     opacity: 0.5,
@@ -73,9 +67,13 @@ function SwitchWeb({
 }: SwitchPrimitives.RootProps & {
   ref?: React.RefObject<SwitchPrimitives.RootRef>;
 }) {
+  const { colors } = useTheme();
+
   const rootStyle = StyleSheet.flatten([
     styles.switchRoot,
-    props.checked ? styles.switchRootChecked : styles.switchRootUnchecked,
+    {
+      backgroundColor: props.checked ? colors.primary : colors.border,
+    },
     props.disabled && styles.switchRootDisabled,
   ]);
 
@@ -91,30 +89,19 @@ function SwitchWeb({
   );
 }
 
-const RGB_COLORS = {
-  light: {
-    primary: 'rgb(24, 24, 27)',
-    input: 'rgb(228, 228, 231)',
-  },
-  dark: {
-    primary: 'rgb(250, 250, 250)',
-    input: 'rgb(39, 39, 42)',
-  },
-} as const;
-
 function SwitchNative({
   ...props
 }: SwitchPrimitives.RootProps & {
   ref?: React.RefObject<SwitchPrimitives.RootRef>;
 }) {
-  const { colorScheme } = useThemeChange();
+  const { colors } = useTheme();
   const translateX = useDerivedValue(() => (props.checked ? 18 : 0));
   const animatedRootStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: interpolateColor(
         translateX.value,
         [0, 18],
-        [RGB_COLORS[colorScheme].input, RGB_COLORS[colorScheme].primary],
+        [colors.border, colors.primary],
       ),
     };
   });

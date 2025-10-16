@@ -2,15 +2,15 @@ import * as TooltipPrimitive from '@rn-primitives/tooltip';
 import * as React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { TextClassContext } from '../../components/ui/text';
-import { cn } from '../../lib/utils';
+import { useTheme } from '@react-navigation/native';
+import { TextStyleProvider } from '../../components/ui/text';
 
 const Tooltip = TooltipPrimitive.Root;
 
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
 function TooltipContent({
-  className,
+  style,
   sideOffset = 4,
   portalHost,
   ...props
@@ -18,6 +18,23 @@ function TooltipContent({
   ref?: React.RefObject<TooltipPrimitive.ContentRef>;
   portalHost?: string;
 }) {
+  const { colors } = useTheme();
+
+  const tooltipStyles = StyleSheet.flatten([
+    styles.content,
+    {
+      backgroundColor: colors.background,
+      borderColor: colors.border,
+      shadowColor: colors.text,
+    },
+    style,
+  ]);
+
+  const textStyles = {
+    fontSize: Platform.OS === 'web' ? 14 : 16,
+    color: colors.text,
+  };
+
   return (
     <TooltipPrimitive.Portal hostName={portalHost}>
       <TooltipPrimitive.Overlay
@@ -27,20 +44,32 @@ function TooltipContent({
           entering={Platform.select({ web: undefined, default: FadeIn })}
           exiting={Platform.select({ web: undefined, default: FadeOut })}
         >
-          <TextClassContext.Provider value="text-sm native:text-base text-popover-foreground">
+          <TextStyleProvider style={textStyles}>
             <TooltipPrimitive.Content
               sideOffset={sideOffset}
-              className={cn(
-                'z-50 overflow-hidden rounded-md border border-border bg-popover px-3 py-1.5 shadow-md shadow-foreground/5 web:animate-in web:fade-in-0 web:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-                className,
-              )}
+              style={tooltipStyles}
               {...props}
             />
-          </TextClassContext.Provider>
+          </TextStyleProvider>
         </Animated.View>
       </TooltipPrimitive.Overlay>
     </TooltipPrimitive.Portal>
   );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    zIndex: 50,
+    overflow: 'hidden',
+    borderRadius: 6,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+});
 
 export { Tooltip, TooltipContent, TooltipTrigger };

@@ -8,6 +8,7 @@ node_modules/
 dist/
 dist-server/
 dist-standalone/
+dist-lib/
 web-build/
 
 # Native

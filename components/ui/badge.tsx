@@ -1,7 +1,8 @@
 import React from 'react';
 import * as Slot from '@rn-primitives/slot';
 import { View, ViewProps, StyleSheet } from 'react-native';
-import { TextStyleContext } from '../ui/text';
+import { useTheme } from '@react-navigation/native';
+import { TextStyleProvider } from '../ui/text';
 
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
 
@@ -11,16 +12,56 @@ type BadgeProps = ViewProps & {
 };
 
 function Badge({ style, variant = 'default', asChild, ...props }: BadgeProps) {
+  const { colors } = useTheme();
   const Component = asChild ? Slot.View : View;
 
-  const badgeStyle = StyleSheet.flatten([styles.base, styles[variant], style]);
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'default':
+        return { backgroundColor: colors.primary, borderColor: 'transparent' };
+      case 'secondary':
+        return { backgroundColor: colors.border, borderColor: 'transparent' };
+      case 'destructive':
+        return {
+          backgroundColor: colors.notification,
+          borderColor: 'transparent',
+        };
+      case 'outline':
+        return { backgroundColor: 'transparent', borderColor: colors.border };
+      default:
+        return { backgroundColor: colors.primary, borderColor: 'transparent' };
+    }
+  };
 
-  const textStyle = StyleSheet.flatten([textStyles.base, textStyles[variant]]);
+  const getTextColor = () => {
+    switch (variant) {
+      case 'default':
+        return colors.background;
+      case 'secondary':
+        return colors.text;
+      case 'destructive':
+        return colors.background;
+      case 'outline':
+        return colors.text;
+      default:
+        return colors.background;
+    }
+  };
+
+  const badgeStyle = StyleSheet.flatten([
+    styles.base,
+    getVariantStyles(),
+    style,
+  ]);
+  const textStyle = StyleSheet.flatten([
+    textStyles.base,
+    { color: getTextColor() },
+  ]);
 
   return (
-    <TextStyleContext.Provider value={{ style: textStyle }}>
+    <TextStyleProvider style={textStyle}>
       <Component style={badgeStyle} {...props} />
-    </TextStyleContext.Provider>
+    </TextStyleProvider>
   );
 }
 
@@ -33,40 +74,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 2,
   },
-  default: {
-    borderColor: 'transparent',
-    backgroundColor: 'hsl(var(--primary))',
-  },
-  secondary: {
-    borderColor: 'transparent',
-    backgroundColor: 'hsl(var(--secondary))',
-  },
-  destructive: {
-    borderColor: 'transparent',
-    backgroundColor: 'hsl(var(--destructive))',
-  },
-  outline: {
-    borderColor: 'hsl(var(--border))',
-    backgroundColor: 'transparent',
-  },
 });
 
 const textStyles = StyleSheet.create({
   base: {
     fontSize: 12,
     fontWeight: '600',
-  },
-  default: {
-    color: 'hsl(var(--primary-foreground))',
-  },
-  secondary: {
-    color: 'hsl(var(--secondary-foreground))',
-  },
-  destructive: {
-    color: 'hsl(var(--destructive-foreground))',
-  },
-  outline: {
-    color: 'hsl(var(--foreground))',
   },
 });
 

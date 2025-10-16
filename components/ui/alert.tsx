@@ -22,12 +22,20 @@ function Alert({
   ...props
 }: AlertProps) {
   const { colors } = useTheme();
+
+  const getAlertStyles = () => {
+    const baseAlertStyles = {
+      backgroundColor: colors.background,
+      borderColor:
+        variant === 'destructive' ? colors.notification : colors.border,
+      shadowColor: colors.text,
+    };
+
+    return StyleSheet.flatten([styles.base, baseAlertStyles, style]);
+  };
+
   return (
-    <View
-      role="alert"
-      style={StyleSheet.flatten([styles.base, styles[variant], style])}
-      {...props}
-    >
+    <View role="alert" style={getAlertStyles()} {...props}>
       <View style={styles.icon}>
         <Icon
           size={iconSize}
@@ -40,28 +48,39 @@ function Alert({
 }
 
 function AlertTitle({ style, ...props }: React.ComponentProps<typeof Text>) {
-  return <Text style={StyleSheet.flatten([styles.title, style])} {...props} />;
+  const { colors } = useTheme();
+  return (
+    <Text
+      style={StyleSheet.flatten([styles.title, { color: colors.text }, style])}
+      {...props}
+    />
+  );
 }
 
 function AlertDescription({
   style,
   ...props
 }: React.ComponentProps<typeof Text>) {
+  const { colors } = useTheme();
   return (
-    <Text style={StyleSheet.flatten([styles.description, style])} {...props} />
+    <Text
+      style={StyleSheet.flatten([
+        styles.description,
+        { color: colors.text },
+        style,
+      ])}
+      {...props}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   base: {
     position: 'relative',
-    backgroundColor: 'hsl(var(--background))',
     width: '100%',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'hsl(var(--border))',
     padding: 16,
-    shadowColor: 'hsl(var(--foreground))',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -71,7 +90,7 @@ const styles = StyleSheet.create({
     // no additional styles
   },
   destructive: {
-    borderColor: 'hsl(var(--destructive))',
+    // border color will be applied dynamically
   },
   icon: {
     position: 'absolute',
@@ -86,13 +105,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     letterSpacing: -0.025,
-    color: 'hsl(var(--foreground))',
   },
   description: {
     paddingLeft: 28,
     fontSize: 14,
     lineHeight: 20,
-    color: 'hsl(var(--foreground))',
   },
 });
 
