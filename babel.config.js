@@ -2,14 +2,13 @@ module.exports = function (api) {
   api.cache(true);
   return {
     presets: [
-      ['babel-preset-expo', {
-        jsxImportSource: 'nativewind',
-        unstable_transformProfile: 'hermes-canary'
-      }],
-      'nativewind/babel'
+      [
+        'babel-preset-expo',
+        {
+          unstable_transformProfile: 'hermes-canary',
+        },
+      ],
     ],
-    plugins: [
-      '@babel/plugin-syntax-import-meta'
-    ]
+    plugins: ['@babel/plugin-syntax-import-meta'],
   };
 };

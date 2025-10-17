@@ -1,10 +1,10 @@
 import { useSolidAuth } from '@ldo/solid-react';
 import React, { FunctionComponent, useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { Button } from '../../ui/button';
 import { Text } from '../../ui/text';
-import { EllipsisVertical } from '../../../lib/icons/EllipsisVertical';
+import { EllipsisVertical } from 'lucide-react-native';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,13 +25,17 @@ import {
   DialogTrigger,
 } from '../../ui/dialog';
 import { Input } from '../../ui/input';
-
-const DEFAULT_ISSUER = window.location.origin;
+import { useDataBrowserConfig } from '../../DataBrowserContext';
 
 export const SignInMenu: FunctionComponent = () => {
   const [idpValue, setIdpValue] = useState('');
   const [, setIdpError] = useState<string | undefined>();
   const { login, signUp } = useSolidAuth();
+  const { width } = useWindowDimensions();
+  const { defaultIssuer } = useDataBrowserConfig();
+
+  // Tailwind sm: breakpoint is 640px
+  const isSmallScreen = width < 640;
   const onIdpSubmit = useCallback(async () => {
     setIdpError(undefined);
     try {
@@ -47,57 +51,62 @@ export const SignInMenu: FunctionComponent = () => {
 
   const renderButtonGroup = () => {
     return (
-      <View className="flex-row">
-        <Button
-          key="signUp"
-          className="hidden sm:block"
-          onPress={() => signUp(DEFAULT_ISSUER)}
-          variant="ghost"
-          text="Sign Up"
-        />
-        <Button
-          key="logIn"
-          className="hidden sm:block"
-          onPress={() => login(DEFAULT_ISSUER)}
-          variant="default"
-          text="Log In"
-        />
+      <View style={styles.buttonGroup}>
+        {!isSmallScreen && (
+          <Button
+            key="signUp"
+            onPress={() => signUp(defaultIssuer)}
+            variant="ghost"
+            text="Sign Up"
+          />
+        )}
+        {!isSmallScreen && (
+          <Button
+            key="logIn"
+            onPress={() => login(defaultIssuer)}
+            variant="default"
+            text="Log In"
+          />
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               key="setMemu"
               variant="ghost"
-              className="w-10"
-              iconLeft={<EllipsisVertical size={20} />}
+              style={styles.menuButton}
+              iconLeft={EllipsisVertical}
+              textStyle={styles.menuButtonText}
             />
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-64 native:w-72">
+          <DropdownMenuContent style={styles.dropdownContent}>
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                className="sm:hidden flex"
-                onPress={() => signUp(DEFAULT_ISSUER)}
-              >
-                <Text>Sign Up</Text>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="sm:hidden flex"
-                onPress={() => login(DEFAULT_ISSUER)}
-              >
-                <Text>Log In</Text>
-              </DropdownMenuItem>
+              {isSmallScreen && (
+                <DropdownMenuItem
+                  onPress={() => signUp(defaultIssuer)}
+                >
+                  <Text>Sign Up</Text>
+                </DropdownMenuItem>
+              )}
+              {isSmallScreen && (
+                <DropdownMenuItem
+                  onPress={() => login(defaultIssuer)}
+                >
+                  <Text>Log In</Text>
+                </DropdownMenuItem>
+              )}
               <Dialog>
                 <DialogTrigger asChild>
                   <DropdownMenuItem closeOnPress={false}>
                     <Text>Log in with Another Pod</Text>
                   </DropdownMenuItem>
                 </DialogTrigger>
-                <DialogContent className="w-[400px]">
+                <DialogContent style={styles.dialogContent}>
                   <DialogHeader>
                     <DialogTitle>Solid WebId or Identity Provider</DialogTitle>
                     <DialogDescription>
                       <Input
                         value={idpValue}
-                        placeholder={DEFAULT_ISSUER}
+                        placeholder={defaultIssuer}
                         onChangeText={(newText) => setIdpValue(newText)}
                         onSubmitEditing={onIdpSubmit}
                       />
@@ -121,3 +130,21 @@ export const SignInMenu: FunctionComponent = () => {
 
   return renderButtonGroup();
 };
+
+const styles = StyleSheet.create({
+  buttonGroup: {
+    flexDirection: 'row',
+  },
+  menuButton: {
+    width: 40,
+  },
+  dropdownContent: {
+    width: 256,
+  },
+  dialogContent: {
+    width: 400,
+  },
+  menuButtonText: {
+    fontSize: 20,
+  },
+});

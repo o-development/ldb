@@ -2,22 +2,19 @@ import React from 'react';
 import { SolidProfile } from '../../.ldo/profile.typings';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Text } from '../ui/text';
-import { User } from '../../lib/icons/User';
+import { User } from 'lucide-react-native';
 import { FunctionComponent } from 'react';
 
 interface ProfileAvatarProps {
   profile?: SolidProfile;
-  className?: string;
+  style?: any;
 }
 
 export const ProfileAvatar: FunctionComponent<ProfileAvatarProps> = ({
   profile,
-  className,
+  style,
 }) => (
-  <Avatar
-    alt={profile?.fn ? `${profile.fn}'s Avatar` : ''}
-    className={className}
-  >
+  <Avatar alt={profile?.fn ? `${profile.fn}'s Avatar` : ''} style={style}>
     <AvatarImage source={{ uri: profile?.hasPhoto?.['@id'] }} />
     <AvatarFallback>
       <Text>

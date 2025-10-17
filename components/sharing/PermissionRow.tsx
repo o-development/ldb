@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { AccessModeList } from '@ldo/connected-solid';
 import { Text } from '../ui/text';
 import { FunctionComponent } from 'react';
@@ -21,8 +22,8 @@ export const PermissionRow: FunctionComponent<PermissionRowProps> = ({
   onChange,
 }) => {
   return (
-    <View className="flex-row justify-between items-center">
-      <View className="flex-row gap-4 flex-1 items-center">
+    <View style={styles.container}>
+      <View style={styles.leftSection}>
         <Avatar alt={displayName}>
           <AvatarFallback>
             <Text>
@@ -36,3 +37,17 @@ export const PermissionRow: FunctionComponent<PermissionRowProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  leftSection: {
+    flexDirection: 'row',
+    gap: 16,
+    flex: 1,
+    alignItems: 'center',
+  },
+});

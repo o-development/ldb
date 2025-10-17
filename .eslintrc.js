@@ -8,6 +8,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'react/no-unstable-nested-components': 0,
+    'react-native/no-inline-styles': 0,
     '@typescript-eslint/no-unused-vars': 1,
     'no-restricted-imports': [
       'error',

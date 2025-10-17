@@ -2,15 +2,15 @@ import React from 'react';
 import * as PopoverPrimitive from '@rn-primitives/popover';
 import { Platform, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { cn } from '../../lib/utils';
-import { TextClassContext } from '../../components/ui/text';
+import { useTheme } from '@react-navigation/native';
+import { TextStyleProvider } from '../../components/ui/text';
 
 const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
 function PopoverContent({
-  className,
+  style,
   align = 'center',
   sideOffset = 4,
   portalHost,
@@ -19,27 +19,54 @@ function PopoverContent({
   ref?: React.RefObject<PopoverPrimitive.ContentRef>;
   portalHost?: string;
 }) {
+  const { colors } = useTheme();
+
+  const contentStyles = StyleSheet.flatten([
+    styles.content,
+    {
+      backgroundColor: colors.background,
+      borderColor: colors.border,
+      shadowColor: colors.text,
+    },
+    style,
+  ]);
+
+  const textStyles = {
+    color: colors.text,
+  };
+
   return (
     <PopoverPrimitive.Portal hostName={portalHost}>
       <PopoverPrimitive.Overlay
         style={Platform.OS !== 'web' ? StyleSheet.absoluteFill : undefined}
       >
         <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut}>
-          <TextClassContext.Provider value="text-popover-foreground">
+          <TextStyleProvider style={textStyles}>
             <PopoverPrimitive.Content
               align={align}
               sideOffset={sideOffset}
-              className={cn(
-                'z-50 w-72 rounded-md web:cursor-auto border border-border bg-popover p-4 shadow-md shadow-foreground/5 web:outline-none web:data-[side=bottom]:slide-in-from-top-2 web:data-[side=left]:slide-in-from-right-2 web:data-[side=right]:slide-in-from-left-2 web:data-[side=top]:slide-in-from-bottom-2 web:animate-in web:zoom-in-95 web:fade-in-0',
-                className,
-              )}
+              style={contentStyles}
               {...props}
             />
-          </TextClassContext.Provider>
+          </TextStyleProvider>
         </Animated.View>
       </PopoverPrimitive.Overlay>
     </PopoverPrimitive.Portal>
   );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    zIndex: 50,
+    width: 288,
+    borderRadius: 6,
+    borderWidth: 1,
+    padding: 16,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+});
 
 export { Popover, PopoverContent, PopoverTrigger };

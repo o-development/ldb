@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from '../../components/ui/text';
 import React, { FunctionComponent } from 'react';
 import { Input } from '../../components/ui/input';
@@ -26,8 +26,8 @@ export const ProfileView: FunctionComponent = () => {
     return <></>;
 
   return (
-    <ScrollView contentContainerClassName="flex-row justify-center p-4">
-      <View className="max-w-[600px] flex-1 padding gap-4">
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
         <Text variant="h1">Profile</Text>
         <Input
           placeholder="John Doe"
@@ -49,7 +49,7 @@ export const ProfileView: FunctionComponent = () => {
         <Button
           disabled={!transactionDataset.hasChanges()}
           text="Update Profile"
-          className="self-end"
+          style={styles.updateButton}
           onPress={commitProfile}
           isLoading={profileResource.isLoading()}
         />
@@ -57,3 +57,20 @@ export const ProfileView: FunctionComponent = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 16,
+  },
+  container: {
+    maxWidth: 600,
+    flex: 1,
+    padding: 16,
+    gap: 16,
+  },
+  updateButton: {
+    alignSelf: 'flex-end',
+  },
+});

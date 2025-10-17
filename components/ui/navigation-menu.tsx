@@ -1,21 +1,11 @@
 import * as NavigationMenuPrimitive from '@rn-primitives/navigation-menu';
-import { cva } from 'class-variance-authority';
 import * as React from 'react';
-import { Platform, View } from 'react-native';
-import Animated, {
-  Extrapolation,
-  FadeInLeft,
-  FadeOutLeft,
-  interpolate,
-  useAnimatedStyle,
-  useDerivedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import { ChevronDown } from '../../lib/icons/ChevronDown';
-import { cn } from '../../lib/utils';
+import { Platform, View, StyleSheet, Pressable } from 'react-native';
+import { ChevronDown } from 'lucide-react-native';
+import { useTheme } from '@react-navigation/native';
 
 function NavigationMenu({
-  className,
+  style,
   children,
   ...props
 }: NavigationMenuPrimitive.RootProps & {
@@ -23,10 +13,7 @@ function NavigationMenu({
 }) {
   return (
     <NavigationMenuPrimitive.Root
-      className={cn(
-        'relative z-10 flex flex-row max-w-max items-center justify-center',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.navigationMenu, style])}
       {...props}
     >
       {children}
@@ -36,17 +23,14 @@ function NavigationMenu({
 }
 
 function NavigationMenuList({
-  className,
+  style,
   ...props
 }: NavigationMenuPrimitive.ListProps & {
   ref?: React.RefObject<NavigationMenuPrimitive.ListRef>;
 }) {
   return (
     <NavigationMenuPrimitive.List
-      className={cn(
-        'web:group flex flex-1 flex-row web:list-none items-center justify-center gap-1',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.navigationMenuList, style])}
       {...props}
     />
   );
@@ -54,57 +38,45 @@ function NavigationMenuList({
 
 const NavigationMenuItem = NavigationMenuPrimitive.Item;
 
-const navigationMenuTriggerStyle = cva(
-  'web:group web:inline-flex flex-row h-10 native:h-12 native:px-3 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium web:transition-colors web:hover:bg-accent active:bg-accent web:hover:text-accent-foreground web:focus:bg-accent web:focus:text-accent-foreground web:focus:outline-none web:disabled:pointer-events-none disabled:opacity-50 web:data-[active]:bg-accent/50 web:data-[state=open]:bg-accent/50',
-);
-
 function NavigationMenuTrigger({
-  className,
+  style,
   children,
   ...props
 }: Omit<NavigationMenuPrimitive.TriggerProps, 'children'> & {
   children?: React.ReactNode;
   ref?: React.RefObject<NavigationMenuPrimitive.TriggerRef>;
 }) {
+  const { colors } = useTheme();
   const { value } = NavigationMenuPrimitive.useRootContext();
   const { value: itemValue } = NavigationMenuPrimitive.useItemContext();
 
-  const progress = useDerivedValue(() =>
-    value === itemValue
-      ? withTiming(1, { duration: 250 })
-      : withTiming(0, { duration: 200 }),
-  );
-  const chevronStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${progress.value * 180}deg` }],
-    opacity: interpolate(progress.value, [0, 1], [1, 0.8], Extrapolation.CLAMP),
-  }));
+  const isActive = value === itemValue;
 
   return (
-    <NavigationMenuPrimitive.Trigger
-      className={cn(
-        navigationMenuTriggerStyle(),
-        'web:group gap-1.5',
-        value === itemValue && 'bg-accent',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <Animated.View style={chevronStyle}>
-        <ChevronDown
-          size={12}
-          className={cn(
-            'relative text-foreground h-3 w-3 web:transition web:duration-200',
-          )}
-          aria-hidden={true}
-        />
-      </Animated.View>
+    <NavigationMenuPrimitive.Trigger asChild>
+      <Pressable
+        style={({ hovered }) => ({
+          ...styles.trigger,
+          backgroundColor: isActive
+            ? colors.card
+            : hovered
+              ? colors.border
+              : colors.background,
+          ...(style as any),
+        })}
+        {...props}
+      >
+        {children}
+        <View style={styles.chevronContainer}>
+          <ChevronDown size={12} color={colors.text} aria-hidden={true} />
+        </View>
+      </Pressable>
     </NavigationMenuPrimitive.Trigger>
   );
 }
 
 function NavigationMenuContent({
-  className,
+  style,
   children,
   portalHost,
   ...props
@@ -112,26 +84,22 @@ function NavigationMenuContent({
   portalHost?: string;
   ref?: React.RefObject<NavigationMenuPrimitive.ContentRef>;
 }) {
-  const { value } = NavigationMenuPrimitive.useRootContext();
-  const { value: itemValue } = NavigationMenuPrimitive.useItemContext();
+  const { colors } = useTheme();
+
   return (
     <NavigationMenuPrimitive.Portal hostName={portalHost}>
       <NavigationMenuPrimitive.Content
-        className={cn(
-          'w-full native:border native:border-border native:rounded-lg native:shadow-lg native:bg-popover native:text-popover-foreground native:overflow-hidden',
-          value === itemValue
-            ? 'web:animate-in web:fade-in web:slide-in-from-right-20'
-            : 'web:animate-out web:fade-out web:slide-out-to-left-20',
-          className,
-        )}
+        style={StyleSheet.flatten([
+          styles.content,
+          {
+            backgroundColor: colors.background,
+            borderColor: colors.border,
+          },
+          style,
+        ])}
         {...props}
       >
-        <Animated.View
-          entering={Platform.OS !== 'web' ? FadeInLeft : undefined}
-          exiting={Platform.OS !== 'web' ? FadeOutLeft : undefined}
-        >
-          {children}
-        </Animated.View>
+        <View>{children}</View>
       </NavigationMenuPrimitive.Content>
     </NavigationMenuPrimitive.Portal>
   );
@@ -140,18 +108,24 @@ function NavigationMenuContent({
 const NavigationMenuLink = NavigationMenuPrimitive.Link;
 
 function NavigationMenuViewport({
-  className,
+  style,
   ...props
 }: NavigationMenuPrimitive.ViewportProps & {
   ref?: React.RefObject<NavigationMenuPrimitive.ViewportRef>;
 }) {
+  const { colors } = useTheme();
+
   return (
-    <View className={cn('fixed right-0 top-12 mr-2 ml-2 flex justify-center')}>
+    <View style={styles.viewportContainer}>
       <View
-        className={cn(
-          'web:origin-top-center relative mt-1.5 web:h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg web:animate-in web:zoom-in-90',
-          className,
-        )}
+        style={StyleSheet.flatten([
+          styles.viewport,
+          {
+            backgroundColor: colors.background,
+            borderColor: colors.border,
+          },
+          style,
+        ])}
         {...props}
       >
         <NavigationMenuPrimitive.Viewport />
@@ -162,27 +136,25 @@ function NavigationMenuViewport({
 
 function NavigationMenuIndicator({
   ref,
-  className,
+  style,
   ...props
 }: NavigationMenuPrimitive.IndicatorProps & {
   ref?: React.RefObject<NavigationMenuPrimitive.IndicatorRef>;
 }) {
-  const { value } = NavigationMenuPrimitive.useRootContext();
-  const { value: itemValue } = NavigationMenuPrimitive.useItemContext();
+  const { colors } = useTheme();
 
   return (
     <NavigationMenuPrimitive.Indicator
       ref={ref}
-      className={cn(
-        'top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden',
-        value === itemValue
-          ? 'web:animate-in web:fade-in'
-          : 'web:animate-out web:fade-out',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.indicator, style])}
       {...props}
     >
-      <View className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md shadow-foreground/5" />
+      <View
+        style={StyleSheet.flatten([
+          styles.indicatorArrow,
+          { backgroundColor: colors.border },
+        ])}
+      />
     </NavigationMenuPrimitive.Indicator>
   );
 }
@@ -195,6 +167,101 @@ export {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
   NavigationMenuViewport,
 };
+
+const styles = StyleSheet.create({
+  navigationMenu: {
+    position: 'relative',
+    zIndex: 10,
+    flexDirection: 'row',
+    maxWidth: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navigationMenuList: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    ...(Platform.OS === 'web' && {
+      listStyle: 'none',
+    }),
+  },
+  trigger: {
+    flexDirection: 'row',
+    height: Platform.OS === 'web' ? 40 : 48,
+    paddingHorizontal: Platform.OS === 'web' ? 16 : 12,
+    paddingVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6,
+    minWidth: 'auto',
+    gap: 6,
+  },
+  chevronContainer: {
+    // Container for chevron icon
+  },
+  content: {
+    width: '100%',
+    ...(Platform.OS !== 'web' && {
+      borderWidth: 1,
+      borderRadius: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+      overflow: 'hidden',
+    }),
+  },
+  viewportContainer: {
+    ...(Platform.OS === 'web' && {
+      position: 'fixed',
+      right: 0,
+      top: 48, // top-12 equivalent
+      marginHorizontal: 8,
+      flex: 1,
+      justifyContent: 'center',
+    }),
+  },
+  viewport: {
+    ...(Platform.OS === 'web' && {
+      position: 'relative',
+      marginTop: 6,
+      width: '100%',
+      overflow: 'hidden',
+      borderRadius: 6,
+      borderWidth: 1,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    }),
+  },
+  indicator: {
+    position: 'absolute',
+    top: '100%',
+    zIndex: 1,
+    flex: 1,
+    height: 6,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  indicatorArrow: {
+    position: 'relative',
+    top: '60%',
+    height: 8,
+    width: 8,
+    transform: [{ rotate: '45deg' }],
+    borderTopLeftRadius: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+});

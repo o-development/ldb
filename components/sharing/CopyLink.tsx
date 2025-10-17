@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { Button } from '../ui/button';
-import { Text } from '../ui/text';
-import { Link } from '../../lib/icons/Link';
+import { Link } from 'lucide-react-native';
 import { FunctionComponent } from 'react';
 import { useViewContext } from '../useViewContext';
 
@@ -16,6 +16,18 @@ export const CopyLink: FunctionComponent = () => {
   }, [targetUri]);
 
   return (
-    <Button variant="outline" className="flex-row" onPress={onCopy} text={message} iconLeft={<Link />} />
+    <Button
+      variant="outline"
+      style={styles.button}
+      onPress={onCopy}
+      text={message}
+      iconLeft={Link}
+    />
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    flexDirection: 'row',
+  },
+});

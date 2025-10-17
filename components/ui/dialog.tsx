@@ -1,9 +1,15 @@
 import * as DialogPrimitive from '@rn-primitives/dialog';
 import * as React from 'react';
-import { Platform, StyleSheet, View, type ViewProps } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  View,
+  type ViewProps,
+  type ViewStyle,
+} from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { X } from '../../lib/icons/X';
-import { cn } from '../../lib/utils';
+import { X } from 'lucide-react-native';
+import { useTheme } from '@react-navigation/native';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -14,41 +20,32 @@ const DialogPortal = DialogPrimitive.Portal;
 const DialogClose = DialogPrimitive.Close;
 
 function DialogOverlayWeb({
-  className,
+  style,
   ...props
 }: DialogPrimitive.OverlayProps & {
   ref?: React.RefObject<DialogPrimitive.OverlayRef>;
+  style?: ViewStyle;
 }) {
-  const { open } = DialogPrimitive.useRootContext();
   return (
     <DialogPrimitive.Overlay
-      className={cn(
-        'bg-black/80 flex justify-center items-center p-2 absolute top-0 right-0 bottom-0 left-0',
-        open
-          ? 'web:animate-in web:fade-in-0'
-          : 'web:animate-out web:fade-out-0',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.overlay, style])}
       {...props}
     />
   );
 }
 
 function DialogOverlayNative({
-  className,
+  style,
   children,
   ...props
 }: DialogPrimitive.OverlayProps & {
   ref?: React.RefObject<DialogPrimitive.OverlayRef>;
   children?: React.ReactNode;
+  style?: ViewStyle;
 }) {
   return (
     <DialogPrimitive.Overlay
-      style={StyleSheet.absoluteFill}
-      className={cn(
-        'flex bg-black/80 justify-center items-center p-2',
-        className,
-      )}
+      style={[StyleSheet.absoluteFill, styles.overlayNative, style]}
       {...props}
     >
       <Animated.View
@@ -67,42 +64,30 @@ const DialogOverlay = Platform.select({
 });
 
 function DialogContent({
-  className,
+  style,
   children,
   portalHost,
   ...props
 }: DialogPrimitive.ContentProps & {
   ref?: React.RefObject<DialogPrimitive.ContentRef>;
-  className?: string;
+  style?: ViewStyle;
   portalHost?: string;
 }) {
-  const { open } = DialogPrimitive.useRootContext();
+  const { colors } = useTheme();
   return (
     <DialogPortal hostName={portalHost}>
       <DialogOverlay>
         <DialogPrimitive.Content
-          className={cn(
-            'max-w-lg gap-4 border border-border web:cursor-default bg-background p-6 shadow-lg web:duration-200 rounded-lg overflow-hidden',
-            open
-              ? 'web:animate-in web:fade-in-0 web:zoom-in-95'
-              : 'web:animate-out web:fade-out-0 web:zoom-out-95',
-            className,
-          )}
+          style={StyleSheet.flatten([
+            styles.content,
+            { borderColor: colors.border, backgroundColor: colors.background },
+            style,
+          ])}
           {...props}
         >
           {children}
-          <DialogPrimitive.Close
-            className={
-              'absolute right-4 top-4 p-0.5 web:group rounded-sm opacity-70 web:ring-offset-background web:transition-opacity web:hover:opacity-100 web:focus:outline-none web:focus:ring-2 web:focus:ring-ring web:focus:ring-offset-2 web:disabled:pointer-events-none'
-            }
-          >
-            <X
-              size={Platform.OS === 'web' ? 16 : 18}
-              className={cn(
-                'text-muted-foreground',
-                open && 'text-accent-foreground',
-              )}
-            />
+          <DialogPrimitive.Close style={styles.closeButton}>
+            <X size={Platform.OS === 'web' ? 16 : 18} color={colors.text} />
           </DialogPrimitive.Close>
         </DialogPrimitive.Content>
       </DialogOverlay>
@@ -110,59 +95,52 @@ function DialogContent({
   );
 }
 
-function DialogHeader({ className, ...props }: ViewProps) {
-  return (
-    <View
-      className={cn(
-        'flex flex-col gap-1.5 text-center sm:text-left',
-        className,
-      )}
-      {...props}
-    />
-  );
+function DialogHeader({ style, ...props }: ViewProps) {
+  return <View style={StyleSheet.flatten([styles.header, style])} {...props} />;
 }
 
-function DialogFooter({ className, ...props }: ViewProps) {
+function DialogFooter({ style, ...props }: ViewProps) {
   return (
     <View
-      className={cn(
-        'flex flex-col-reverse sm:flex-row sm:justify-end gap-2',
-        className,
-      )}
+      style={StyleSheet.flatten([
+        styles.footer,
+        Platform.OS === 'web' && styles.footerRow,
+        style,
+      ])}
       {...props}
     />
   );
 }
 
 function DialogTitle({
-  className,
+  style,
   ...props
 }: DialogPrimitive.TitleProps & {
   ref?: React.RefObject<DialogPrimitive.TitleRef>;
 }) {
+  const { colors } = useTheme();
   return (
     <DialogPrimitive.Title
-      className={cn(
-        'text-lg native:text-xl text-foreground font-semibold leading-none tracking-tight',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.title, { color: colors.text }, style])}
       {...props}
     />
   );
 }
 
 function DialogDescription({
-  className,
+  style,
   ...props
 }: DialogPrimitive.DescriptionProps & {
   ref?: React.RefObject<DialogPrimitive.DescriptionRef>;
 }) {
+  const { colors } = useTheme();
   return (
     <DialogPrimitive.Description
-      className={cn(
-        'text-sm native:text-base text-muted-foreground',
-        className,
-      )}
+      style={StyleSheet.flatten([
+        styles.description,
+        { color: colors.text },
+        style,
+      ])}
       {...props}
     />
   );
@@ -180,3 +158,76 @@ export {
   DialogTitle,
   DialogTrigger,
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+  overlayNative: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+  },
+  content: {
+    maxWidth: 512, // max-w-lg
+    gap: 16, // gap-4
+    borderWidth: 1,
+    padding: 24, // p-6
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 25,
+    elevation: 10,
+    borderRadius: 8, // rounded-lg
+    overflow: 'hidden',
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 16, // right-4
+    top: 16, // top-4
+    padding: 2, // p-0.5
+    borderRadius: 4, // rounded-sm
+    opacity: 0.7,
+  },
+  closeButtonFocused: {
+    opacity: 1,
+  },
+  header: {
+    flexDirection: 'column',
+    gap: 6, // gap-1.5
+    textAlign: 'center',
+    borderBottomWidth: 1,
+  },
+  footer: {
+    flexDirection: 'column-reverse',
+    gap: 8, // gap-2
+  },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  title: {
+    fontSize: Platform.OS === 'web' ? 18 : 20, // text-lg native:text-xl
+    fontWeight: '600', // font-semibold
+    lineHeight: Platform.OS === 'web' ? 20 : 22, // leading-none
+    letterSpacing: -0.025, // tracking-tight
+  },
+  description: {
+    fontSize: Platform.OS === 'web' ? 14 : 16, // text-sm native:text-base
+    opacity: 0.7,
+  },
+});

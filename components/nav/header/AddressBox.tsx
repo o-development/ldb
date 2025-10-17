@@ -1,20 +1,23 @@
 import React, { useEffect, useMemo } from 'react';
 import { FunctionComponent, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native';
 import { Input } from '../../ui/input';
-import { ChevronRight } from '../../../lib/icons/ChevronRight';
-import { ChevronsRight } from '../../../lib/icons/ChevronsRight';
-import { TextCursorInput } from '../../../lib/icons/TextCursorInput';
-import { RefreshCw } from '../../../lib/icons/RefreshCw';
-import { ArrowRight } from '../../../lib/icons/ArrowRight';
+import { ChevronRight } from 'lucide-react-native';
+import { ChevronsRight } from 'lucide-react-native';
+import { TextCursorInput } from 'lucide-react-native';
+import { RefreshCw } from 'lucide-react-native';
+import { ArrowRight } from 'lucide-react-native';
 import { Button } from '../../../components/ui/button';
 import { Text } from '../../ui/text';
 import { useTargetResource } from '../../TargetResourceProvider';
+import { useTheme } from '@react-navigation/native';
+import { Icon } from '../../../components/ui/icon';
 
 export const AddressBox: FunctionComponent = () => {
   const [isTextMode, setIsTextMode] = useState(false);
   const { targetUri, refresh, navigateTo, targetResource } =
     useTargetResource();
+  const { colors } = useTheme();
 
   const [textBoxValue, setTextBoxValue] = useState(targetUri ?? '');
   useEffect(() => {
@@ -51,9 +54,9 @@ export const AddressBox: FunctionComponent = () => {
   }, [targetUri]);
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       <Input
-        className="flex-1 bg-secondary web:py-2.5 border-none pl-10 pr-10 h-[40px] text-sm web:focus-visible:ring-0 web:focus-visible:ring-transparent web:focus-visible:ring-offset-0 web:focus:outline-none web:outline-none"
+        style={[styles.input, { backgroundColor: colors.border }]}
         onFocus={() => setIsTextMode(true)}
         onBlur={() => setTimeout(() => setIsTextMode(false), 100)}
         onChangeText={setTextBoxValue}
@@ -66,22 +69,41 @@ export const AddressBox: FunctionComponent = () => {
       />
       <Button
         variant="secondary"
-        className="absolute left-0 w-10 h-10"
+        style={styles.leftButton}
         onPress={() => setIsTextMode((val) => !val)}
-        iconLeft={
-          isTextMode ? (
-            <ChevronsRight size={20} />
-          ) : (
-            <TextCursorInput size={20} />
-          )
-        }
+        iconLeft={isTextMode ? ChevronsRight : TextCursorInput}
+        textStyle={styles.buttonText}
       />
+      <ScrollView
+        style={styles.breadcrumbContainer}
+        contentContainerStyle={styles.breadcrumbContentContainer}
+        pointerEvents="none"
+        horizontal
+      >
+        {!isTextMode &&
+          breadcrumbInfo.map((item, index) => (
+            <View style={styles.breadcrumbItem} key={item.uri}>
+              <TouchableOpacity onPress={() => navigateTo(item.uri)}>
+                <View pointerEvents="auto">
+                  <Text style={styles.breadcrumbText} size="sm">
+                    {item.name}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              {index !== breadcrumbInfo.length - 1 ? (
+                <Icon icon={ChevronRight} style={styles.chevron} />
+              ) : (
+                <View style={styles.spacer} />
+              )}
+            </View>
+          ))}
+      </ScrollView>
       {(() => {
         const shouldRefresh = targetUri === textBoxValue || !isTextMode;
         return (
           <Button
             variant="secondary"
-            className="absolute right-0 w-10 h-10"
+            style={styles.rightButton}
             onPressIn={() => {
               if (shouldRefresh) {
                 refresh();
@@ -89,39 +111,73 @@ export const AddressBox: FunctionComponent = () => {
                 navigateTo(textBoxValue);
               }
             }}
-          >
-            <Text className={targetResource?.isLoading() ? 'animate-spin' : ''}>
-              {shouldRefresh || targetResource?.isLoading() ? (
-                <RefreshCw size={20} />
-              ) : (
-                <ArrowRight size={20} />
-              )}
-            </Text>
-          </Button>
+            iconLeft={
+              shouldRefresh || targetResource?.isLoading()
+                ? RefreshCw
+                : ArrowRight
+            }
+            textStyle={styles.buttonText}
+          />
         );
       })()}
-      <View
-        className="absolute top-0 left-0 right-0 bottom-0 flex-row-reverse items-center ml-10 mr-10 overflow-x-auto scrollbar-hide [direction:rtl]"
-        pointerEvents="none"
-      >
-        {!isTextMode &&
-          breadcrumbInfo.map((item, index) => (
-            <View className="flex-row" key={item.uri}>
-              {index !== breadcrumbInfo.length - 1 ? (
-                <ChevronRight className="w-4 h-4 mr-0.5 mt-0.5 text-gray-500" />
-              ) : (
-                <View className="w-2" />
-              )}
-              <TouchableOpacity onPress={() => navigateTo(item.uri)}>
-                <View pointerEvents="auto">
-                  <Text className="mr-0.5 underline" size="sm">
-                    {item.name}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))}
-      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: 40,
+  },
+  input: {
+    flex: 1,
+    borderWidth: 0,
+    paddingHorizontal: 40,
+    height: 40,
+    fontSize: 14,
+  },
+  leftButton: {
+    position: 'absolute',
+    left: 0,
+    width: 40,
+    height: 40,
+  },
+  rightButton: {
+    position: 'absolute',
+    right: 0,
+    width: 40,
+    height: 40,
+  },
+  breadcrumbContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    marginLeft: 40,
+    marginRight: 40,
+  },
+  breadcrumbContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  breadcrumbItem: {
+    flexDirection: 'row',
+  },
+  chevron: {
+    width: 16,
+    height: 16,
+    marginRight: 2,
+    color: 'hsl(var(--muted-foreground))',
+  },
+  spacer: {
+    width: 8,
+  },
+  breadcrumbText: {
+    marginRight: 2,
+    textDecorationLine: 'underline',
+  },
+  buttonText: {
+    fontSize: 20,
+  },
+});

@@ -1,38 +1,37 @@
 import * as TablePrimitive from '@rn-primitives/table';
 import * as React from 'react';
-import { cn } from '../../lib/utils';
-import { TextClassContext } from '../ui/text';
+import { StyleSheet } from 'react-native';
+import { TextStyleContext } from '../ui/text';
 
 function Table({
-  className,
+  style,
   ...props
 }: TablePrimitive.RootProps & {
   ref?: React.RefObject<TablePrimitive.RootRef>;
 }) {
   return (
     <TablePrimitive.Root
-      className={cn('w-full caption-bottom text-sm', className)}
+      style={StyleSheet.flatten([styles.table, style])}
       {...props}
     />
   );
 }
 
 function TableHeader({
-  className,
+  style,
   ...props
 }: TablePrimitive.HeaderProps & {
   ref?: React.RefObject<TablePrimitive.HeaderRef>;
 }) {
   return (
     <TablePrimitive.Header
-      className={cn('border-border [&_tr]:border-b', className)}
+      style={StyleSheet.flatten([styles.header, style])}
       {...props}
     />
   );
 }
 
 function TableBody({
-  className,
   style,
   ...props
 }: TablePrimitive.BodyProps & {
@@ -40,86 +39,109 @@ function TableBody({
 }) {
   return (
     <TablePrimitive.Body
-      className={cn(
-        'flex-1 border-border [&_tr:last-child]:border-0',
-        className,
-      )}
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={[{ minHeight: 2 }, style]}
+      style={StyleSheet.flatten([styles.body, { minHeight: 2 }, style])}
       {...props}
     />
   );
 }
 
 function TableFooter({
-  className,
+  style,
   ...props
 }: TablePrimitive.FooterProps & {
   ref?: React.RefObject<TablePrimitive.FooterRef>;
 }) {
   return (
     <TablePrimitive.Footer
-      className={cn(
-        'bg-muted/50 font-medium [&>tr]:last:border-b-0',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.footer, style])}
       {...props}
     />
   );
 }
 
 function TableRow({
-  className,
+  style,
   ...props
 }: TablePrimitive.RowProps & {
   ref?: React.RefObject<TablePrimitive.RowRef>;
 }) {
   return (
     <TablePrimitive.Row
-      className={cn(
-        'flex-row border-border border-b web:transition-colors web:hover:bg-muted/50 web:data-[state=selected]:bg-muted',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.row, style])}
       {...props}
     />
   );
 }
 
 function TableHead({
-  className,
+  style,
   ...props
 }: TablePrimitive.HeadProps & {
   ref?: React.RefObject<TablePrimitive.HeadRef>;
 }) {
   return (
-    <TextClassContext.Provider value="text-muted-foreground">
+    <TextStyleContext.Provider
+      value={{ style: { color: 'hsl(var(--muted-foreground))' } }}
+    >
       <TablePrimitive.Head
-        className={cn(
-          'h-12 px-4 text-left justify-center font-medium [&:has([role=checkbox])]:pr-0',
-          className,
-        )}
+        style={StyleSheet.flatten([styles.head, style])}
         {...props}
       />
-    </TextClassContext.Provider>
+    </TextStyleContext.Provider>
   );
 }
 
 function TableCell({
-  className,
+  style,
   ...props
 }: TablePrimitive.CellProps & {
   ref?: React.RefObject<TablePrimitive.CellRef>;
 }) {
   return (
     <TablePrimitive.Cell
-      className={cn(
-        'p-4 align-middle [&:has([role=checkbox])]:pr-0',
-        className,
-      )}
+      style={StyleSheet.flatten([styles.cell, style])}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  table: {
+    width: '100%',
+    fontSize: 14,
+  },
+  header: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'hsl(var(--border))',
+  },
+  body: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: 'hsl(var(--border))',
+  },
+  footer: {
+    backgroundColor: 'hsl(var(--muted) / 0.5)',
+    fontWeight: '500',
+  },
+  row: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: 'hsl(var(--border))',
+  },
+  head: {
+    height: 48,
+    paddingHorizontal: 16,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    fontWeight: '500',
+    color: 'hsl(var(--muted-foreground))',
+  },
+  cell: {
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export {
   Table,

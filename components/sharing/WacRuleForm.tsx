@@ -1,12 +1,13 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Separator } from '../ui/separator';
 import { FunctionComponent } from 'react';
 import { AgentPermissions } from './agentPermissions/AgentPermissions';
 import { WacRule } from '@ldo/connected-solid';
 import { View } from 'react-native';
 import { PermissionRow } from './PermissionRow';
-import { Users } from '../../lib/icons/Users';
-import { Fingerprint } from '../../lib/icons/Fingerprint';
+import { Users } from 'lucide-react-native';
+import { Fingerprint } from 'lucide-react-native';
 
 interface WacRuleFormProps {
   value: WacRule;
@@ -18,7 +19,7 @@ export const WacRuleForm: FunctionComponent<WacRuleFormProps> = ({
   onChange,
 }) => {
   return (
-    <View className="gap-4 mt-2 mb-2">
+    <View style={styles.container}>
       <PermissionRow
         displayName="Public Access"
         Icon={Users}
@@ -42,3 +43,11 @@ export const WacRuleForm: FunctionComponent<WacRuleFormProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    gap: 16,
+    marginTop: 8,
+    marginBottom: 8,
+  },
+});

@@ -1,40 +1,49 @@
 import React, { PropsWithChildren } from 'react';
 import * as RadioGroupPrimitive from '@rn-primitives/radio-group';
-import { View } from 'react-native';
-import { cn } from '../../lib/utils';
+import { View, StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import { Label } from './label';
 
 function RadioGroup({
-  className,
+  style,
   ...props
 }: RadioGroupPrimitive.RootProps & {
   ref?: React.RefObject<RadioGroupPrimitive.RootRef>;
 }) {
   return (
     <RadioGroupPrimitive.Root
-      className={cn('web:grid gap-2', className)}
+      style={StyleSheet.flatten([styles.root, style])}
       {...props}
     />
   );
 }
 
 function RadioGroupItem({
-  className,
+  style,
   ...props
 }: RadioGroupPrimitive.ItemProps & {
   ref?: React.RefObject<RadioGroupPrimitive.ItemRef>;
 }) {
+  const { colors } = useTheme();
+
+  const itemStyles = StyleSheet.flatten([
+    styles.item,
+    {
+      borderColor: colors.primary,
+      opacity: props.disabled ? 0.5 : 1,
+    },
+    style,
+  ]);
+
+  const indicatorStyles = StyleSheet.flatten([
+    styles.indicator,
+    { backgroundColor: colors.primary },
+  ]);
+
   return (
-    <RadioGroupPrimitive.Item
-      className={cn(
-        'aspect-square h-4 w-4 native:h-5 native:w-5 rounded-full justify-center items-center border border-primary text-primary web:ring-offset-background web:focus:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
-        props.disabled && 'web:cursor-not-allowed opacity-50',
-        className,
-      )}
-      {...props}
-    >
-      <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <View className="aspect-square h-[9px] w-[9px] native:h-[10] native:w-[10] bg-primary rounded-full" />
+    <RadioGroupPrimitive.Item style={itemStyles} {...props}>
+      <RadioGroupPrimitive.Indicator style={styles.indicatorContainer}>
+        <View style={indicatorStyles} />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   );
@@ -47,13 +56,48 @@ function RadioGroupItemWithLabel({
   value: string;
 }>) {
   return (
-    <View className={'flex-row gap-2 items-center'}>
+    <View style={styles.itemWithLabel}>
       <RadioGroupItem aria-labelledby={`label-for-${value}`} value={value} />
-      <Label nativeID={`label-for-${value}`} className="flex flex-row gap-1">
+      <Label nativeID={`label-for-${value}`} style={styles.label}>
         {children}
       </Label>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    gap: 8,
+  },
+  item: {
+    aspectRatio: 1,
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  indicatorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  indicator: {
+    aspectRatio: 1,
+    height: 9,
+    width: 9,
+    borderRadius: 4.5,
+  },
+  itemWithLabel: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+  },
+  label: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+});
 
 export { RadioGroup, RadioGroupItem, RadioGroupItemWithLabel };

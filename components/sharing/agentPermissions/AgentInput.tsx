@@ -1,4 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import { FunctionComponent } from 'react';
 import { Pressable } from 'react-native';
 import { useLinkQuery, useSolidAuth } from '@ldo/solid-react';
@@ -6,7 +8,7 @@ import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { AgentInformation } from './AgentInformation';
 import { InputDropdown } from '../../ui/input-dropdown';
 import { useContactFilter } from './useContactFilter';
-import { Plus } from '../../../lib/icons/Plus';
+import { Plus } from 'lucide-react-native';
 
 interface AgentInputProps {
   onAddAgent: (webId: string) => void;
@@ -19,9 +21,14 @@ const ContactDropdownItem: FunctionComponent<{
   webId: string;
   onSelect: (webId: string) => void;
 }> = ({ webId, onSelect }) => {
+  const { colors } = useTheme();
   return (
     <Pressable
-      className="p-2 border-b border-border last:border-b-0 hover:bg-accent active:bg-accent cursor-pointer"
+      style={({ hovered }) => [
+        styles.dropdownItem,
+        { borderBottomColor: colors.border },
+        hovered && { backgroundColor: colors.border },
+      ]}
       onPress={() => onSelect(webId)}
     >
       <AgentInformation webId={webId} />
@@ -115,12 +122,20 @@ export const AgentInput: FunctionComponent<AgentInputProps> = ({
       renderItem={renderContactItem}
       filterItems={filterContacts}
       buttonRight={{
-        iconRight: <Plus />,
+        iconRight: Plus,
         onPress: handleInputSubmit,
         variant: 'secondary',
       }}
       onItemSelect={handleContactSelect}
-      className={className}
+      style={className ? { zIndex: 999 } : undefined}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  dropdownItem: {
+    padding: 8,
+    borderBottomWidth: 1,
+    // hover and active states handled by Pressable
+  },
+});

@@ -17,7 +17,6 @@ import {
   Theme,
 } from '@react-navigation/native';
 import { NAV_THEME } from '../lib/constants';
-import { useColorScheme } from 'nativewind';
 import { setAndroidNavigationBar } from '../lib/android-navigation-bar';
 
 const COLOR_SCHEME_KEY = 'colorScheme';
@@ -57,14 +56,14 @@ const usePlatformSpecificSetup = Platform.select({
 export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const [colorScheme, setColorScheme] = useState<ColorSchemeName>();
   const [loadingColorScheme, setLoadingColorScheme] = useState(true);
 
   usePlatformSpecificSetup();
 
   useEffect(() => {
     const lookupCurColorScheme = async () => {
-      setColorScheme(Appearance.getColorScheme() ?? 'system');
+      setColorScheme(Appearance.getColorScheme() ?? 'light');
       const storedColorSchemeName: ColorSchemeName =
         ((await AsyncStorage.getItem(COLOR_SCHEME_KEY)) as ColorSchemeName) ||
         Appearance.getColorScheme();
@@ -74,7 +73,6 @@ export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
       setLoadingColorScheme(false);
     };
     lookupCurColorScheme();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const context = useMemo(

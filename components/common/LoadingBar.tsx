@@ -2,6 +2,7 @@ import React from 'react';
 import { useTheme } from '@react-navigation/native';
 import { FunctionComponent } from 'react';
 import { Bar } from 'react-native-progress';
+import { StyleSheet } from 'react-native';
 
 interface LoadingBarProps {
   isLoading: boolean;
@@ -21,7 +22,16 @@ export const LoadingBar: FunctionComponent<LoadingBarProps> = ({
       borderWidth={0}
       borderRadius={0}
       width={null}
-      className="absolute top-0 left-0 right-0"
+      style={styles.bar}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  bar: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+});

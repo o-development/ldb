@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback } from 'react';
-import { View, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, FlatList, StyleSheet, Pressable } from 'react-native';
 import { Text } from '../../components/ui/text';
 import { Button } from '../../components/ui/button';
 import {
@@ -9,12 +9,12 @@ import {
   DropdownMenuItem,
 } from '../../components/ui/dropdown-menu';
 import { ErrorMessageResourceView } from '../../components/utilityResourceViews/ErrorMessageResourceView';
-import { CircleX } from '../../lib/icons/CircleX';
-import { Folder } from '../../lib/icons/Folder';
-import { Code } from '../../lib/icons/Code';
-import { File } from '../../lib/icons/File';
-import { Trash } from '../../lib/icons/Trash';
-import { Plus } from '../../lib/icons/Plus';
+import { CircleX } from 'lucide-react-native';
+import { Folder } from 'lucide-react-native';
+import { Code } from 'lucide-react-native';
+import { File } from 'lucide-react-native';
+import { Trash } from 'lucide-react-native';
+import { Plus } from 'lucide-react-native';
 import { Separator } from '../../components/ui/separator';
 import { useDialog } from '../../components/nav/DialogProvider';
 import {
@@ -24,10 +24,13 @@ import {
 } from '@ldo/connected-solid';
 import { Notifier } from 'react-native-notifier';
 import { useViewContext } from '../../components/useViewContext';
+import { useTheme } from '@react-navigation/native';
+import { Icon } from '../../components/ui/icon';
 
 export const ContainerView: FunctionComponent = () => {
   const { targetResource, navigateTo } = useViewContext();
   const { prompt } = useDialog();
+  const { colors } = useTheme();
 
   const onCreateContainer = useCallback(async () => {
     if (targetResource?.type !== 'SolidContainer') return;
@@ -83,12 +86,12 @@ export const ContainerView: FunctionComponent = () => {
   }
 
   return (
-    <View className="flex-1 flex-row">
+    <View style={styles.mainContainer}>
       {/* Left Panel */}
-      <View className="max-w-[200px] flex-1 p-4">
+      <View style={styles.leftPanel}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button text='Create' iconLeft={<Plus />} />
+            <Button text="Create" iconLeft={Plus} />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onPress={onCreateContainer}>
@@ -105,12 +108,12 @@ export const ContainerView: FunctionComponent = () => {
       </View>
 
       {/* Right Panel */}
-      <View className="flex-[3] py-4 pr-4">
+      <View style={styles.rightPanel}>
         <FlatList
           data={targetResource.children()}
           keyExtractor={(item) => item.uri}
           renderItem={({ item, index }) => {
-            const Icon =
+            const TypeIcon =
               item.type === 'SolidContainer'
                 ? Folder
                 : item.uri.endsWith('.ttl')
@@ -119,23 +122,25 @@ export const ContainerView: FunctionComponent = () => {
             return (
               <>
                 {index === 0 && <Separator />}
-                <TouchableWithoutFeedback onPress={() => navigateTo(item.uri)}>
-                  <View className="flex flex-row p-4 hover:bg-secondary rounded-sm cursor-pointer justify-between">
-                    <Text className="flex flex-row gap-3">
-                      <Icon />
-                      {item.uri.replace(targetResource.uri, '')}
-                    </Text>
+                <Pressable
+                  onPress={() => navigateTo(item.uri)}
+                  style={({ hovered }) => ({
+                    backgroundColor: hovered ? colors.border : undefined,
+                  })}
+                >
+                  <View style={styles.listItem}>
+                    <View style={styles.listItemText}>
+                      <Icon icon={TypeIcon} />
+                      <Text>{item.uri.replace(targetResource.uri, '')}</Text>
+                    </View>
                     <Button
                       variant="ghost"
-                      className="h-6 p-0"
+                      style={styles.deleteButton}
                       onPress={() => onDelete(item)}
-                    >
-                      <Text>
-                        <Trash size={20} />
-                      </Text>
-                    </Button>
+                      iconLeft={Trash}
+                    />
                   </View>
-                </TouchableWithoutFeedback>
+                </Pressable>
                 <Separator />
               </>
             );
@@ -145,3 +150,36 @@ export const ContainerView: FunctionComponent = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  leftPanel: {
+    maxWidth: 200,
+    flex: 1,
+    padding: 16,
+  },
+  rightPanel: {
+    flex: 3,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingRight: 16,
+  },
+  listItem: {
+    flexDirection: 'row',
+    padding: 16,
+    borderRadius: 4,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  listItemText: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  deleteButton: {
+    height: 24,
+    padding: 0,
+  },
+});

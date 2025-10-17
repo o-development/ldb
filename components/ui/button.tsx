@@ -1,88 +1,193 @@
-import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import { Pressable, View } from 'react-native';
-import { Text, TextClassContext } from '../ui/text';
-import { cn } from '../../lib/utils';
-import { LucideIcon } from 'lucide-react-native';
+import {
+  Pressable,
+  View,
+  Platform,
+  TextStyle,
+  StyleProp,
+  ViewStyle,
+  StyleSheet,
+} from 'react-native';
+import { Text, TextStyleProvider } from '../ui/text';
 import { CircleSnail } from 'react-native-progress';
 import { useTheme } from '@react-navigation/native';
+import { LucideIcon } from 'lucide-react-native';
+import { Icon } from './icon';
 
-const buttonVariants = cva(
-  'group flex items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default: 'bg-primary web:hover:opacity-90 active:opacity-90',
-        destructive: 'bg-destructive web:hover:opacity-90 active:opacity-90',
-        outline:
-          'border border-input bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
-        secondary: 'bg-secondary web:hover:opacity-80 active:opacity-80',
-        ghost:
-          'web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
-        link: 'web:underline-offset-4 web:hover:underline web:focus:underline',
-      },
-      size: {
-        default: 'h-10 px-4 py-2 native:h-12 native:px-5 native:py-3',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8 native:h-14',
-        icon: 'h-10 w-10',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  },
-);
+// Button variant types
+type ButtonVariant =
+  | 'default'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost'
+  | 'link';
+type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
-const buttonTextVariants = cva(
-  'web:whitespace-nowrap text-sm native:text-base font-medium text-foreground web:transition-colors',
-  {
-    variants: {
-      variant: {
-        default: 'text-primary-foreground',
-        destructive: 'text-destructive-foreground',
-        outline: 'group-active:text-accent-foreground',
-        secondary:
-          'text-secondary-foreground group-active:text-secondary-foreground',
-        ghost: 'group-active:text-accent-foreground',
-        link: 'text-primary group-active:underline',
-      },
-      size: {
-        default: '',
-        sm: '',
-        lg: 'native:text-lg',
-        icon: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  },
-);
-
-type ButtonProps = React.ComponentProps<typeof Pressable> &
-  VariantProps<typeof buttonVariants> & {
-    iconLeft?: React.ReactElement;
-    iconRight?: React.ReactElement;
-    isLoading?: boolean;
-    text?: string;
+// Style generation functions
+const getButtonStyles = (
+  style: StyleProp<ViewStyle>,
+  variant: ButtonVariant = 'default',
+  size: ButtonSize = 'default',
+  isPressed: boolean = false,
+  isHovered: boolean = false,
+  isDisabled: boolean = false,
+  theme: any,
+) => {
+  const baseStyles = {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    borderRadius: 6,
+    opacity: isDisabled ? 0.5 : 1,
+    gap: 4,
   };
+
+  // Size styles
+  const sizeStyles = {
+    default: {
+      height: Platform.OS === 'web' ? 40 : 48,
+      paddingHorizontal: Platform.OS === 'web' ? 16 : 20,
+      paddingVertical: Platform.OS === 'web' ? 8 : 12,
+    },
+    sm: {
+      height: 36,
+      borderRadius: 6,
+      paddingHorizontal: 12,
+    },
+    lg: {
+      height: Platform.OS === 'web' ? 44 : 56,
+      borderRadius: 6,
+      paddingHorizontal: 32,
+    },
+    icon: {
+      height: 40,
+      width: 40,
+    },
+  };
+
+  // Variant styles
+  const variantStyles = {
+    default: {
+      backgroundColor: theme.colors.primary,
+      opacity: isPressed || isHovered ? 0.9 : 1,
+    },
+    destructive: {
+      backgroundColor: theme.colors.notification,
+      opacity: isPressed || isHovered ? 0.9 : 1,
+    },
+    outline: {
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      backgroundColor:
+        isPressed || isHovered ? theme.colors.border : theme.colors.background,
+    },
+    secondary: {
+      backgroundColor: theme.colors.border,
+      opacity: isPressed || isHovered ? 0.8 : 1,
+    },
+    ghost: {
+      backgroundColor:
+        isPressed || isHovered ? theme.colors.border : 'transparent',
+    },
+    link: {
+      backgroundColor: 'transparent',
+      textDecorationLine:
+        isPressed || isHovered ? ('underline' as const) : ('none' as const),
+    },
+  };
+
+  return StyleSheet.flatten([
+    baseStyles,
+    sizeStyles[size],
+    variantStyles[variant],
+    style,
+  ]);
+};
+
+const getButtonTextStyles = (
+  variant: ButtonVariant = 'default',
+  size: ButtonSize = 'default',
+  isPressed: boolean = false,
+  theme: any,
+) => {
+  const baseStyles = {
+    fontSize: Platform.OS === 'web' ? 14 : 16,
+    fontWeight: '500' as const,
+    color: theme.colors.text,
+  };
+
+  // Size-specific text styles
+  const sizeStyles = {
+    default: {},
+    sm: {},
+    lg: {
+      fontSize: Platform.OS === 'web' ? 14 : 18,
+    },
+    icon: {},
+  };
+
+  // Variant-specific text styles
+  const variantStyles = {
+    default: {
+      color: theme.colors.background,
+    },
+    destructive: {
+      color: theme.colors.background,
+    },
+    outline: {
+      color: isPressed ? theme.colors.text : theme.colors.text,
+    },
+    secondary: {
+      color: theme.colors.text,
+    },
+    ghost: {
+      color: isPressed ? theme.colors.text : theme.colors.text,
+    },
+    link: {
+      color: theme.colors.primary,
+      textDecorationLine: isPressed
+        ? ('underline' as const)
+        : ('none' as const),
+    },
+  };
+
+  return {
+    ...baseStyles,
+    ...sizeStyles[size],
+    ...variantStyles[variant],
+  };
+};
+
+type ButtonProps = React.ComponentProps<typeof Pressable> & {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  iconLeft?: LucideIcon;
+  iconRight?: LucideIcon;
+  isLoading?: boolean;
+  text?: string;
+  textStyle?: TextStyle;
+};
 
 function Button({
   ref,
-  className,
-  variant,
-  size,
+  variant = 'default',
+  size = 'default',
   children,
   iconLeft,
   iconRight,
   isLoading,
+  style,
   text,
+  textStyle,
+  disabled,
   ...props
 }: ButtonProps) {
   const theme = useTheme();
+
+  // Icon spacing styles
+  const iconLeftStyle = { marginRight: children ? 8 : 0 };
+  const iconRightStyle = { marginLeft: children ? 8 : 0 };
 
   const loadColor =
     !variant || variant === 'default'
@@ -90,46 +195,59 @@ function Button({
       : theme.colors.primary;
 
   return (
-    <TextClassContext.Provider
-      value={buttonTextVariants({
-        variant,
-        size,
-        className: 'web:pointer-events-none',
-      })}
+    <Pressable
+      ref={ref}
+      role="button"
+      disabled={disabled}
+      {...props}
+      style={({ pressed, hovered }) =>
+        getButtonStyles(
+          typeof style === 'function' ? style({ pressed, hovered }) : style,
+          variant,
+          size,
+          pressed,
+          hovered,
+          disabled ?? false,
+          theme,
+        )
+      }
     >
-      <Pressable
-        className={cn(
-          'justify-between flex-row gap-2 items-center',
-          props.disabled && 'opacity-50 web:pointer-events-none',
-          buttonVariants({ variant, size, className }),
-        )}
-        ref={ref}
-        role="button"
-        {...props}
-      >
-        {isLoading ? (
-          <View>
-            <CircleSnail size={20} color={loadColor} />
-          </View>
-        ) : iconLeft ? (
-          <Text>
-            {React.cloneElement(iconLeft, {
-              size: (iconLeft.props as any).size || 16,
-            } as any)}
-          </Text>
-        ) : undefined}
-        {text ? <Text>{text}</Text> : (children as React.ReactNode)}
-        {iconRight ? (
-          <Text>
-            {React.cloneElement(iconRight, {
-              size: (iconRight.props as any).size || 16,
-            } as any)}
-          </Text>
-        ) : undefined}
-      </Pressable>
-    </TextClassContext.Provider>
+      {({ pressed }) => {
+        const buttonTextStyles = getButtonTextStyles(
+          variant,
+          size,
+          pressed,
+          theme,
+        );
+
+        // Merge textStyleProps to override default styles
+        const finalTextStyles = textStyle
+          ? { ...buttonTextStyles, ...textStyle }
+          : buttonTextStyles;
+
+        return (
+          <TextStyleProvider style={finalTextStyles}>
+            {isLoading ? (
+              <View>
+                <CircleSnail size={20} color={loadColor} />
+              </View>
+            ) : iconLeft ? (
+              <View style={iconLeftStyle}>
+                <Icon icon={iconLeft} />
+              </View>
+            ) : undefined}
+            {text ? <Text>{text}</Text> : (children as React.ReactNode)}
+            {iconRight ? (
+              <View style={iconRightStyle}>
+                <Icon icon={iconRight} />
+              </View>
+            ) : undefined}
+          </TextStyleProvider>
+        );
+      }}
+    </Pressable>
   );
 }
 
-export { Button, buttonTextVariants, buttonVariants };
-export type { ButtonProps };
+export { Button };
+export type { ButtonProps, ButtonVariant, ButtonSize };

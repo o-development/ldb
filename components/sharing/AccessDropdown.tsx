@@ -13,8 +13,9 @@ import {
 import { Text } from '../ui/text';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
-import { ChevronDown } from '../../lib/icons/ChevronDown';
-import { View } from 'react-native';
+import { ChevronDown } from 'lucide-react-native';
+import { StyleSheet } from 'react-native';
+import { Icon } from '../ui/icon';
 
 interface AccessDropdownProps {
   value: AccessModeList;
@@ -53,12 +54,10 @@ export const AccessDropdown: FunctionComponent<AccessDropdownProps> = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className=" w-[130px] justify-between gap-0">
+      <DropdownMenuTrigger asChild style={styles.button}>
+        <Button variant="outline">
           <Text>{accessDescription}</Text>
-          <Text>
-            <ChevronDown size={14} />
-          </Text>
+          <Icon icon={ChevronDown} style={styles.buttonChevron} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -93,3 +92,15 @@ export const AccessDropdown: FunctionComponent<AccessDropdownProps> = ({
     </DropdownMenu>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    display: 'flex',
+    width: 130,
+    justifyContent: 'space-between',
+    gap: 0,
+  },
+  buttonChevron: {
+    fontSize: 14,
+  },
+});

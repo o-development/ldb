@@ -1,7 +1,7 @@
 import { SolidProfileShapeType } from '../../../.ldo/profile.shapeTypes';
 import { useResource, useSolidAuth, useSubject } from '@ldo/solid-react';
 import React, { FunctionComponent, ReactNode } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ProfileAvatar } from '../../common/ProfileAvatar';
 import { Text } from '../../ui/text';
 
@@ -19,9 +19,9 @@ export const AgentInformation: FunctionComponent<AgentInformationProps> = ({
   const agentProfile = useSubject(SolidProfileShapeType, webId);
 
   return (
-    <View className="flex-row gap-4 flex-1 items-center">
+    <View style={styles.container}>
       <ProfileAvatar profile={agentProfile} />
-      <View className="flex-1">
+      <View style={styles.textContainer}>
         <Text>
           {agentProfile['@id'] === session.webId
             ? 'You'
@@ -31,6 +31,19 @@ export const AgentInformation: FunctionComponent<AgentInformationProps> = ({
           {webId}
         </Text>
       </View>
+      {accessoryRight}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    gap: 16,
+    flex: 1,
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+  },
+});

@@ -1,6 +1,6 @@
 import * as ProgressPrimitive from '@rn-primitives/progress';
 import * as React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -8,39 +8,40 @@ import Animated, {
   useDerivedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { cn } from '../../lib/utils';
+import { useTheme } from '@react-navigation/native';
 
 function Progress({
-  className,
+  style,
   value,
-  indicatorClassName,
+  indicatorStyle,
   ...props
 }: ProgressPrimitive.RootProps & {
   ref?: React.RefObject<ProgressPrimitive.RootRef>;
-  indicatorClassName?: string;
+  indicatorStyle?: any;
 }) {
+  const { colors } = useTheme();
+
+  const progressStyles = StyleSheet.flatten([
+    styles.progress,
+    { backgroundColor: colors.border },
+    style,
+  ]);
+
   return (
-    <ProgressPrimitive.Root
-      className={cn(
-        'relative h-4 w-full overflow-hidden rounded-full bg-secondary',
-        className,
-      )}
-      {...props}
-    >
-      <Indicator value={value} className={indicatorClassName} />
+    <ProgressPrimitive.Root style={progressStyles} {...props}>
+      <Indicator value={value} style={indicatorStyle} />
     </ProgressPrimitive.Root>
   );
 }
 
-export { Progress };
-
 function Indicator({
   value,
-  className,
+  style,
 }: {
   value: number | undefined | null;
-  className?: string;
+  style?: any;
 }) {
+  const { colors } = useTheme();
   const progress = useDerivedValue(() => value ?? 0);
 
   const indicator = useAnimatedStyle(() => {
@@ -55,15 +56,16 @@ function Indicator({
   if (Platform.OS === 'web') {
     return (
       <View
-        className={cn(
-          'h-full w-full flex-1 bg-primary web:transition-all',
-          className,
-        )}
-        style={{ transform: `translateX(-${100 - (value ?? 0)}%)` }}
+        style={StyleSheet.flatten([
+          styles.indicatorWeb,
+          {
+            transform: `translateX(-${100 - (value ?? 0)}%)`,
+            backgroundColor: colors.primary,
+          },
+          style,
+        ])}
       >
-        <ProgressPrimitive.Indicator
-          className={cn('h-full w-full', className)}
-        />
+        <ProgressPrimitive.Indicator />
       </View>
     );
   }
@@ -71,9 +73,33 @@ function Indicator({
   return (
     <ProgressPrimitive.Indicator asChild>
       <Animated.View
-        style={indicator}
-        className={cn('h-full bg-foreground', className)}
+        style={StyleSheet.flatten([
+          indicator,
+          styles.indicator,
+          { backgroundColor: colors.primary },
+          style,
+        ])}
       />
     </ProgressPrimitive.Indicator>
   );
 }
+
+const styles = StyleSheet.create({
+  progress: {
+    position: 'relative',
+    height: 16,
+    width: '100%',
+    overflow: 'hidden',
+    borderRadius: 8,
+  },
+  indicator: {
+    height: '100%',
+  },
+  indicatorWeb: {
+    height: '100%',
+    width: '100%',
+    flex: 1,
+  },
+});
+
+export { Progress };

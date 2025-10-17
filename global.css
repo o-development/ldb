@@ -1,6 +1,96 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* =========================================================
+   Global Focus Ring Baseline for Radix + Native Controls
+   ========================================================= */
+
+/* ---- Design tokens (tweak these to your brand) ---- */
+:root {
+  --focus-ring-color: hsl(221 83% 53%);
+  /* accent color */
+  --focus-ring-width: 2px;
+  /* thickness */
+  --focus-ring-offset: 2px;
+  /* gap from element */
+  --focus-ring-shadow:
+    0 0 0 var(--focus-ring-offset) transparent,
+    0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color);
+}
+
+/* ---- What counts as "focusable control" ---- */
+/* Includes native controls + common Radix roles */
+:where(button,
+  a[href],
+  area[href],
+  input:not([type="hidden"]),
+  select,
+  textarea,
+  summary,
+  [role="button"],
+  [role="link"],
+  [role="menuitem"],
+  [role="menuitemradio"],
+  [role="menuitemcheckbox"],
+  [role="option"],
+  [role="treeitem"],
+  [role="tab"],
+  [role="switch"],
+  [role="checkbox"],
+  [role="radio"],
+  [role="slider"],
+  [role="spinbutton"],
+  [role="textbox"],
+  [role="combobox"],
+  [role="gridcell"],
+  [role="rowheader"],
+  [role="columnheader"],
+  [tabindex]:not([tabindex^="-"])) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ---- Disabled states: suppress rings ---- */
+:where(button, a[href], area[href], input:not([type="hidden"]), select, textarea, summary,
+  [role="button"], [role="link"], [role="menuitem"], [role="menuitemradio"],
+  [role="menuitemcheckbox"], [role="option"], [role="treeitem"], [role="tab"],
+  [role="switch"], [role="checkbox"], [role="radio"], [role="slider"],
+  [role="spinbutton"], [role="textbox"], [role="combobox"], [role="gridcell"],
+  [role="rowheader"], [role="columnheader"], [tabindex]:not([tabindex^="-"]))[disabled],
+:where([aria-disabled="true"], [data-disabled], [data-state="disabled"]) {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* ---- Keyboard-visible focus only ---- */
+/* :where(button, a[href], area[href], input:not([type="hidden"]), select, textarea, summary,
+  [role="button"], [role="link"], [role="menuitem"], [role="menuitemradio"],
+  [role="menuitemcheckbox"], [role="option"], [role="treeitem"], [role="tab"],
+  [role="switch"], [role="checkbox"], [role="radio"], [role="slider"],
+  [role="spinbutton"], [role="textbox"], [role="combobox"], [role="gridcell"],
+  [role="rowheader"], [role="columnheader"], [tabindex]:not([tabindex^="-"])):focus-visible {
+  box-shadow: var(--focus-ring-shadow);
+  border-radius: inherit;
+} */
+
+/* ---- Suppress mouse/pointer focus rings ---- */
+:where(button, a[href], area[href], input:not([type="hidden"]), select, textarea, summary,
+  [role="button"], [role="link"], [role="menuitem"], [role="menuitemradio"],
+  [role="menuitemcheckbox"], [role="option"], [role="treeitem"], [role="tab"],
+  [role="switch"], [role="checkbox"], [role="radio"], [role="slider"],
+  [role="spinbutton"], [role="textbox"], [role="combobox"], [role="gridcell"],
+  [role="rowheader"], [role="columnheader"], [tabindex]:not([tabindex^="-"])):focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ---- Firefox UA quirks ---- */
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+button:-moz-focusring:not(:focus-visible) {
+  outline: none;
+}
+
 
 @layer base {
   :root {

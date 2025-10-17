@@ -1,9 +1,9 @@
 import * as LabelPrimitive from '@rn-primitives/label';
 import * as React from 'react';
-import { cn } from '../../lib/utils';
+import { StyleSheet } from 'react-native';
 
 function Label({
-  className,
+  style,
   onPress,
   onLongPress,
   onPressIn,
@@ -14,21 +14,30 @@ function Label({
 }) {
   return (
     <LabelPrimitive.Root
-      className="web:cursor-default"
+      style={styles.root}
       onPress={onPress}
       onLongPress={onLongPress}
       onPressIn={onPressIn}
       onPressOut={onPressOut}
     >
       <LabelPrimitive.Text
-        className={cn(
-          'text-sm text-foreground native:text-base font-medium leading-none web:peer-disabled:cursor-not-allowed web:peer-disabled:opacity-70',
-          className,
-        )}
+        style={StyleSheet.flatten([styles.text, style])}
         {...props}
       />
     </LabelPrimitive.Root>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    // web:cursor-default - handled by platform
+  },
+  text: {
+    fontSize: 14, // text-sm
+    color: 'hsl(var(--foreground))',
+    fontWeight: '500',
+    lineHeight: 14, // leading-none
+  },
+});
 
 export { Label };

@@ -1,27 +1,42 @@
+import { useTheme } from '@react-navigation/native';
 import * as SeparatorPrimitive from '@rn-primitives/separator';
 import * as React from 'react';
-import { cn } from '../../lib/utils';
+import { StyleSheet } from 'react-native';
 
 function Separator({
-  className,
+  style,
   orientation = 'horizontal',
   decorative = true,
   ...props
 }: SeparatorPrimitive.RootProps & {
   ref?: React.RefObject<SeparatorPrimitive.RootRef>;
 }) {
+  const { colors } = useTheme();
   return (
     <SeparatorPrimitive.Root
       decorative={decorative}
       orientation={orientation}
-      className={cn(
-        'shrink-0 bg-border',
-        orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
-        className,
-      )}
+      style={StyleSheet.flatten([
+        orientation === 'horizontal' ? styles.horizontal : styles.vertical,
+        { backgroundColor: colors.border },
+        style,
+      ])}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  horizontal: {
+    flexShrink: 0,
+    height: 1,
+    width: '100%',
+  },
+  vertical: {
+    flexShrink: 0,
+    height: '100%',
+    width: 1,
+  },
+});
 
 export { Separator };

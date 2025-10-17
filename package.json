@@ -1,20 +1,26 @@
 {
   "name": "linked-data-browser",
-  "main": "index.js",
-  "version": "0.0.7",
+  "version": "0.0.8-alpha.2",
+  "exports": {
+    ".": {
+      "types": "./dist-lib/index.d.ts",
+      "import": "./dist-lib/index.mjs",
+      "require": "./dist-lib/index.js"
+    }
+  },
   "scripts": {
     "dev:ios": "expo start -c --ios",
     "dev:web": "concurrently \"npm run solid-server\" \"expo start -c --web\"",
     "dev:android": "expo start -c --android",
     "dev:server-hosted": "concurrently \"npm run solid-server\" \"npm run build:server:watch\"",
-    "clean": "rm -rf .expo node_modules dist-standalone dist-server",
-    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
+    "clean": "rm -rf .expo node_modules dist-standalone dist-server dist-lib",
     "build:standalone": "expo export -p web --output-dir dist-standalone && node scripts/adjust-standalone-paths.js",
     "build:server": "EXPO_PUBLIC_IS_SERVER_HOSTED=true expo export -p web --output-dir dist-server && node scripts/adjust-server-paths.js",
     "build:server:watch": "npx chokidar '**/*' -i 'dist-standalone/**' -i 'dist-server/**' -i 'node_modules/**' -i 'data/**' -c 'npm run build:server'",
     "solid-server": "community-solid-server -c ./test-server/server-config.json -f ./data --seed-config ./test-server/solid-css-seed.json",
     "build:ldo": "ldo build --input .shapes --output .ldo",
-    "build": "npm run build:standalone && npm run build:server",
+    "build:lib": "tsup lib/index.js --format cjs,esm --dts --out-dir dist-lib --clean",
+    "build": "npm run build:standalone && npm run build:server && npm run build:lib",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
@@ -72,20 +78,17 @@
     "expo-system-ui": "~5.0.7",
     "lodash": "^4.17.21",
     "lucide-react-native": "^0.511.0",
-    "nativewind": "^4.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
     "react-native-notifier": "^2.0.0",
     "react-native-progress": "^5.0.1",
-    "react-native-reanimated": "~3.17.5",
+    "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
-    "tailwind-merge": "^2.2.1",
-    "tailwindcss": "3.3.5",
-    "tailwindcss-animate": "^1.0.7"
+    "react-native-worklets": "^0.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -102,7 +105,13 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
     "prettier": "^3.5.3",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   },
-  "private": false
+  "private": false,
+  "files": [
+    "dist-lib",
+    "dist-server",
+    "dist-standalone"
+  ]
 }
