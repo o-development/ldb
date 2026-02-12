@@ -12,6 +12,7 @@ import {
   ProfileResourceView,
   ContainerResourceView,
   RawCodeResourceView,
+  ImageResourceView,
 } from '../resourceViews';
 
 export function Screen() {
@@ -28,6 +29,7 @@ export function Screen() {
         resourceViews={[
           ProfileResourceView,
           ContainerResourceView,
+          ImageResourceView,
           RawCodeResourceView,
         ]}
         resourceCreators={[

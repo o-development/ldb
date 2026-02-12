@@ -11,3 +11,7 @@ export * from './Profile/ProfileView';
 export * from './RawCode/RawCodeResourceView';
 export * from './RawCode/RawCodeEditor';
 export * from './RawCode/RawCodeView';
+
+// Resource views - Image
+export * from './Image/ImageResourceView';
+export * from './Image/ImageView';

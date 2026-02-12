@@ -2,11 +2,11 @@ import { SolidContainer } from '@ldo/connected-solid';
 import { LucideIcon } from 'lucide-react-native';
 
 /**
- * Messager is passed to resourceCreator plugins so they can interact with the user.
+ * Utilities passed to resourceCreator plugins to interact with the user.
  * The host component (e.g. ContainerView) implements this and handles rendering
  * prompts, toasts, and loading messages.
  */
-export interface ResourceCreatorMessager {
+export interface ResourceCreatorUtils {
   /** Prompt the user for text input. Returns null if cancelled. */
   prompt: (
     title: string,
@@ -34,7 +34,7 @@ export interface ResourceCreatorContext {
   /** The parent LDO container to create the resource in. */
   container: SolidContainer;
   /** Utilities to prompt the user, show toasts, and stream loading messages. */
-  messager: ResourceCreatorMessager;
+  createUtils: ResourceCreatorUtils;
 }
 
 /**
@@ -55,6 +55,6 @@ export interface ResourceCreatorConfig {
   displayIcon: LucideIcon;
   /** Whether this creator can run in the given container. */
   canCreate: (container: SolidContainer) => boolean;
-  /** Creates the resource. Uses messager for prompts, toasts, and loading messages. */
+  /** Creates the resource. Uses createUtils for prompts, toasts, and loading messages. */
   create: ResourceCreatorFn;
 }

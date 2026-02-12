@@ -10,7 +10,9 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
+  Platform,
 } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
 import { Text } from '../../components/ui/text';
 import { Button } from '../../components/ui/button';
 import {
@@ -34,7 +36,7 @@ import { useTheme } from '@react-navigation/native';
 import { Icon } from '../../components/ui/icon';
 import { useDataBrowserConfig } from '../../components/DataBrowserContext';
 import {
-  ResourceCreatorMessager,
+  ResourceCreatorUtils,
   ResourceCreatorConfig,
 } from '../../components/ResourceCreator';
 import { Loader2 } from 'lucide-react-native';
@@ -53,10 +55,28 @@ export const ContainerView: FunctionComponent = () => {
     return resourceCreators.filter((c) => c.canCreate(targetResource));
   }, [targetResource, resourceCreators]);
 
-  const messager = useMemo<ResourceCreatorMessager>(
+  const createUtils = useMemo<ResourceCreatorUtils>(
     () => ({
       prompt,
-      promptFile: async () => null, // Not implemented; host can override with a file picker
+      promptFile: async (options) => {
+        const result = await DocumentPicker.getDocumentAsync({
+          copyToCacheDirectory: true,
+          type: options?.accept ?? '*/*',
+        });
+        if (result.canceled) return null;
+        const asset = result.assets[0];
+        if (Platform.OS === 'web' && 'file' in asset && asset.file) {
+          return asset.file;
+        }
+        const response = await fetch(asset.uri);
+        const blob = await response.blob();
+        const mimeType =
+          asset.mimeType ?? blob.type ?? 'application/octet-stream';
+        return Object.assign(blob, {
+          name: asset.name,
+          type: mimeType,
+        }) as File;
+      },
       toast: (message, options) => {
         Notifier.showNotification({ title: options?.title ?? message });
       },
@@ -75,14 +95,14 @@ export const ContainerView: FunctionComponent = () => {
       try {
         await creator.create({
           container: targetResource,
-          messager,
+          createUtils,
         });
       } finally {
         setIsCreating(false);
         setLoadingMessages([]);
       }
     },
-    [targetResource, messager],
+    [targetResource, createUtils],
   );
 
   const onDelete = useCallback(

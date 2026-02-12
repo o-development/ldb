@@ -8,18 +8,18 @@ export const ContainerResourceCreator: ResourceCreatorConfig = {
   displayIcon: Folder,
   canCreate: (container): container is SolidContainer =>
     container.type === 'SolidContainer',
-  create: async ({ container, messager }) => {
-    messager.loadingMessage('Asking for container name…');
-    const givenName = await messager.prompt('Enter Container Name');
+  create: async ({ container, createUtils }) => {
+    createUtils.loadingMessage('Asking for container name…');
+    const givenName = await createUtils.prompt('Enter Container Name');
     if (!givenName) return;
-    messager.loadingMessage(`Creating container ${givenName}…`);
+    createUtils.loadingMessage(`Creating container ${givenName}…`);
     const slug = (
       givenName.endsWith('/') ? givenName : `${givenName}/`
     ) as SolidContainerSlug;
     const createResult = await container.createChildIfAbsent(slug);
     if (createResult.isError)
-      messager.toast(createResult.message, { title: 'Error' });
+      createUtils.toast(createResult.message, { title: 'Error' });
     else if (createResult.type === 'containerReadSuccess')
-      messager.toast(`${slug} already exists.`);
+      createUtils.toast(`${slug} already exists.`);
   },
 };

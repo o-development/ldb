@@ -8,18 +8,18 @@ export const RdfResourceCreator: ResourceCreatorConfig = {
   displayIcon: Code,
   canCreate: (container): container is SolidContainer =>
     container.type === 'SolidContainer',
-  create: async ({ container, messager }) => {
-    messager.loadingMessage('Asking for file name…');
-    const givenName = await messager.prompt('Enter File Name');
+  create: async ({ container, createUtils }) => {
+    createUtils.loadingMessage('Asking for file name…');
+    const givenName = await createUtils.prompt('Enter File Name');
     if (!givenName) return;
-    messager.loadingMessage(`Creating ${givenName}…`);
+    createUtils.loadingMessage(`Creating ${givenName}…`);
     const slug = (
       givenName.endsWith('.ttl') ? givenName : `${givenName}.ttl`
     ) as SolidContainerSlug;
     const createResult = await container.createChildIfAbsent(slug);
     if (createResult.isError)
-      messager.toast(createResult.message, { title: 'Error' });
+      createUtils.toast(createResult.message, { title: 'Error' });
     else if (createResult.type === 'containerReadSuccess')
-      messager.toast(`${slug} already exists.`);
+      createUtils.toast(`${slug} already exists.`);
   },
 };
