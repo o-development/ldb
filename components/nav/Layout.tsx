@@ -54,11 +54,19 @@ export const Layout: FunctionComponent = () => {
  */
 
 export const RenderView: FunctionComponent = () => {
-  const { curViewConfig, targetResource } = useViewContext();
+  const { curViewConfig, validViews, targetResource } = useViewContext();
+
+  // Don't render any view until data is loaded and canDisplays have been calculated.
+  // curViewConfig is state updated in useEffect, so it can lag one render behind
+  // validViews after navigation—avoid rendering a view that can't display the current resource.
+  const isCurrentViewValid = validViews.some(
+    (v) => v.name === curViewConfig.name,
+  );
+  const viewToRender = isCurrentViewValid ? curViewConfig : validViews[0];
 
   if (targetResource?.isDoingInitialFetch()) return <></>;
 
-  const CurView = curViewConfig.view;
+  const CurView = viewToRender.view;
   return <CurView />;
 };
 
