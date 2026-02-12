@@ -131,7 +131,9 @@ export const ContainerView: FunctionComponent = () => {
         </DropdownMenu>
 
         {isCreating && (
-          <View style={styles.creatingPanel}>
+          <View
+            style={[styles.creatingPanel, { backgroundColor: colors.border }]}
+          >
             <View style={styles.creatingHeader}>
               <Loader2 size={16} style={styles.spinner} />
               <Text>Creating…</Text>
@@ -153,7 +155,12 @@ export const ContainerView: FunctionComponent = () => {
       </View>
 
       {/* Right Panel */}
-      <View style={styles.rightPanel}>
+      <View
+        style={[
+          styles.rightPanel,
+          { borderLeftWidth: 1, borderLeftColor: colors.border },
+        ]}
+      >
         <FlatList
           data={targetResource.children()}
           keyExtractor={(item) => item.uri}
@@ -202,15 +209,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   leftPanel: {
-    maxWidth: 200,
+    maxWidth: 220,
     flex: 1,
     padding: 16,
+    paddingRight: 12,
   },
   creatingPanel: {
     marginTop: 12,
     padding: 12,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0,0,0,0.04)',
+    borderRadius: 10,
   },
   creatingHeader: {
     flexDirection: 'row',
@@ -233,14 +240,11 @@ const styles = StyleSheet.create({
   },
   rightPanel: {
     flex: 3,
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingRight: 16,
   },
   listItem: {
     flexDirection: 'row',
-    padding: 16,
-    borderRadius: 4,
+    padding: 14,
+    borderRadius: 8,
     justifyContent: 'space-between',
     alignItems: 'center',
   },

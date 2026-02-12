@@ -30,7 +30,7 @@ export function Screen() {
           uploadFileResourceCreator,
         ]}
         mode={mode}
-        renderLogo={() => <Text>LDB</Text>}
+        renderLogo={() => <Text bold size="lg">LDB</Text>}
         defaultIssuer={defaultIssuer}
       />
     </SafeAreaProvider>

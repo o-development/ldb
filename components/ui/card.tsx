@@ -92,7 +92,7 @@ function CardFooter({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
   },
   header: {
@@ -103,11 +103,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '600',
-    lineHeight: 24,
+    lineHeight: 28,
     letterSpacing: -0.025,
   },
   description: {
     fontSize: 14,
+    lineHeight: 20,
   },
   content: {
     padding: 24,

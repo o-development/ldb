@@ -75,12 +75,12 @@ export function Input({
 // Global base styles for input component
 const inputBaseStyles = StyleSheet.create({
   base: {
-    height: 40, // h-10 equivalent
-    borderRadius: 6, // rounded-md
+    height: 40,
+    borderRadius: 8,
     borderWidth: 1,
-    paddingHorizontal: 12, // px-3
-    paddingVertical: 8, // py-2
-    fontSize: 16, // text-base
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 16,
     // Platform specific adjustments
     ...(Platform.OS === 'web' && {
       width: '100%',
@@ -101,19 +101,19 @@ const inputBaseStyles = StyleSheet.create({
     borderRadius: 'none',
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    borderTopLeftRadius: 6,
-    borderBottomLeftRadius: 6,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   container: {
     flexDirection: 'row',
   },
   labelContainer: {
-    gap: 4, // gap-1
+    gap: 6,
   },
   buttonRadius: {
     borderRadius: 'none',
-    borderTopRightRadius: 6,
-    borderBottomRightRadius: 6,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
   },

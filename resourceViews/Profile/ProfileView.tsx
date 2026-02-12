@@ -62,15 +62,16 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 16,
+    padding: 24,
   },
   container: {
-    maxWidth: 600,
+    maxWidth: 560,
     flex: 1,
-    padding: 16,
-    gap: 16,
+    padding: 24,
+    gap: 20,
   },
   updateButton: {
     alignSelf: 'flex-end',
+    minWidth: 140,
   },
 });

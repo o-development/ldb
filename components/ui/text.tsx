@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     // web:select-text - this is handled by selectable prop in React Native
   },
   bold: {
-    fontWeight: '600', // font-semibold
+    fontWeight: '600',
   },
   // muted color is now handled dynamically with theme
   // Size variants

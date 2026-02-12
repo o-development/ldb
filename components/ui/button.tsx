@@ -38,9 +38,9 @@ const getButtonStyles = (
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    borderRadius: 6,
+    borderRadius: 8,
     opacity: isDisabled ? 0.5 : 1,
-    gap: 4,
+    gap: 6,
   };
 
   // Size styles

@@ -48,7 +48,6 @@ export function useThemeChange() {
 }
 
 const usePlatformSpecificSetup = Platform.select({
-  web: useSetWebBackgroundClassName,
   android: useSetAndroidNavigationBar,
   default: noop,
 });
@@ -59,7 +58,9 @@ export const ThemeProvider: FunctionComponent<PropsWithChildren> = ({
   const [colorScheme, setColorScheme] = useState<ColorSchemeName>();
   const [loadingColorScheme, setLoadingColorScheme] = useState(true);
 
+  const resolvedScheme = colorScheme ?? 'light';
   usePlatformSpecificSetup();
+  useSetWebBackgroundClassName(resolvedScheme);
 
   useEffect(() => {
     const lookupCurColorScheme = async () => {
@@ -105,11 +106,20 @@ const useIsomorphicLayoutEffect =
     ? React.useEffect
     : React.useLayoutEffect;
 
-function useSetWebBackgroundClassName() {
+function useSetWebBackgroundClassName(colorScheme: NonNullable<ColorSchemeName>) {
   useIsomorphicLayoutEffect(() => {
-    // Adds the background color to the html element to prevent white background on overscroll.
-    document.documentElement.classList.add('bg-background');
-  }, []);
+    if (Platform.OS !== 'web' || typeof document === 'undefined') return;
+    const el = document.documentElement;
+    el.classList.add('bg-background');
+    if (colorScheme === 'dark') {
+      el.classList.add('dark');
+    } else {
+      el.classList.remove('dark');
+    }
+    return () => {
+      el.classList.remove('dark');
+    };
+  }, [colorScheme]);
 }
 
 function useSetAndroidNavigationBar() {

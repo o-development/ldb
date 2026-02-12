@@ -161,7 +161,7 @@ export {
 
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -173,26 +173,23 @@ const styles = StyleSheet.create({
     left: 0,
   },
   overlayNative: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,
   },
   content: {
-    maxWidth: 512, // max-w-lg
-    gap: 16, // gap-4
+    maxWidth: 512,
+    gap: 16,
     borderWidth: 1,
-    padding: 24, // p-6
+    padding: 24,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 25,
-    elevation: 10,
-    borderRadius: 8, // rounded-lg
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 8,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   closeButton: {
