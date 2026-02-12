@@ -1,6 +1,6 @@
 {
   "name": "linked-data-browser",
-  "version": "0.0.8-alpha.2",
+  "version": "0.0.8-alpha.4",
   "exports": {
     ".": {
       "types": "./dist-lib/index.d.ts",

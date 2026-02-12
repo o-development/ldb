@@ -26,7 +26,6 @@ import { Code } from 'lucide-react-native';
 import { File } from 'lucide-react-native';
 import { Trash } from 'lucide-react-native';
 import { Plus } from 'lucide-react-native';
-import { Separator } from '../../components/ui/separator';
 import { useDialog } from '../../components/nav/DialogProvider';
 import { SolidContainer, SolidLeaf } from '@ldo/connected-solid';
 import { Notifier } from 'react-native-notifier';
@@ -117,7 +116,7 @@ export const ContainerView: FunctionComponent = () => {
               disabled={isCreating || availableCreators.length === 0}
             />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent style={styles.createDropdownContent}>
             {availableCreators.map((creator) => (
               <DropdownMenuItem
                 key={creator.name}
@@ -164,37 +163,49 @@ export const ContainerView: FunctionComponent = () => {
         <FlatList
           data={targetResource.children()}
           keyExtractor={(item) => item.uri}
-          renderItem={({ item, index }) => {
+          ItemSeparatorComponent={() => (
+            <View
+              style={[styles.listSeparator, { backgroundColor: colors.border }]}
+            />
+          )}
+          renderItem={({ item }) => {
             const TypeIcon =
               item.type === 'SolidContainer'
                 ? Folder
                 : item.uri.endsWith('.ttl')
                   ? Code
                   : File;
+            const displayName =
+              item.uri.replace(targetResource.uri, '').replace(/\/$/, '') ||
+              '/';
             return (
-              <>
-                {index === 0 && <Separator />}
-                <Pressable
-                  onPress={() => navigateTo(item.uri)}
-                  style={({ hovered }) => ({
-                    backgroundColor: hovered ? colors.border : undefined,
-                  })}
-                >
-                  <View style={styles.listItem}>
-                    <View style={styles.listItemText}>
-                      <Icon icon={TypeIcon} />
-                      <Text>{item.uri.replace(targetResource.uri, '')}</Text>
-                    </View>
-                    <Button
-                      variant="ghost"
-                      style={styles.deleteButton}
-                      onPress={() => onDelete(item)}
-                      iconLeft={Trash}
-                    />
+              <Pressable
+                onPress={() => navigateTo(item.uri)}
+                style={({ hovered }) => [
+                  styles.listItemRow,
+                  hovered && { backgroundColor: colors.border },
+                ]}
+              >
+                <View style={styles.listItem}>
+                  <View style={styles.listItemText}>
+                    <Icon icon={TypeIcon} size={18} />
+                    <Text
+                      style={styles.listItemLabel}
+                      numberOfLines={1}
+                      ellipsizeMode="middle"
+                    >
+                      {displayName}
+                    </Text>
                   </View>
-                </Pressable>
-                <Separator />
-              </>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    style={styles.deleteButton}
+                    onPress={() => onDelete(item)}
+                    iconLeft={Trash}
+                  />
+                </View>
+              </Pressable>
             );
           }}
         />
@@ -241,19 +252,39 @@ const styles = StyleSheet.create({
   rightPanel: {
     flex: 3,
   },
+  createDropdownContent: {
+    minWidth: 220,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+  },
+  listSeparator: {
+    height: 1,
+    width: '100%',
+  },
+  listItemRow: {
+    minHeight: 48,
+    justifyContent: 'center',
+  },
   listItem: {
     flexDirection: 'row',
-    padding: 14,
-    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   listItemText: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
+    flex: 1,
+    minWidth: 0,
+  },
+  listItemLabel: {
+    flex: 1,
   },
   deleteButton: {
-    height: 24,
+    width: 36,
+    height: 36,
     padding: 0,
   },
 });

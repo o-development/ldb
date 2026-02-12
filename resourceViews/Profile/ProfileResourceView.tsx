@@ -3,7 +3,7 @@ import { ResourceViewConfig } from '../../components/ResourceView';
 import { User } from 'lucide-react-native';
 import { ProfileView } from './ProfileView';
 
-export const ProfileConfig: ResourceViewConfig = {
+export const ProfileResourceView: ResourceViewConfig = {
   name: 'profile',
   displayName: 'Profile',
   displayIcon: User,

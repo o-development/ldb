@@ -2,7 +2,7 @@ import { SolidContainer } from '@ldo/connected-solid';
 import { FileUp } from 'lucide-react-native';
 import { ResourceCreatorConfig } from '../components/ResourceCreator';
 
-export const uploadFileResourceCreator: ResourceCreatorConfig = {
+export const FileUploadResourceCreator: ResourceCreatorConfig = {
   name: 'uploadFile',
   displayName: 'File Upload',
   displayIcon: FileUp,

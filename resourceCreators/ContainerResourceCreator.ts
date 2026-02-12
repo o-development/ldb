@@ -2,7 +2,7 @@ import { SolidContainer, SolidContainerSlug } from '@ldo/connected-solid';
 import { Folder } from 'lucide-react-native';
 import { ResourceCreatorConfig } from '../components/ResourceCreator';
 
-export const createContainerResourceCreator: ResourceCreatorConfig = {
+export const ContainerResourceCreator: ResourceCreatorConfig = {
   name: 'createContainer',
   displayName: 'Container',
   displayIcon: Folder,

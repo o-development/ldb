@@ -2,7 +2,7 @@ import { SolidContainer, SolidContainerSlug } from '@ldo/connected-solid';
 import { Code } from 'lucide-react-native';
 import { ResourceCreatorConfig } from '../components/ResourceCreator';
 
-export const createRdfResourceCreator: ResourceCreatorConfig = {
+export const RdfResourceCreator: ResourceCreatorConfig = {
   name: 'createRdf',
   displayName: 'RDF Turtle',
   displayIcon: Code,

@@ -18,7 +18,7 @@ import { useLdo } from '@ldo/solid-react';
 export const [ViewContextProvider, useViewContext] = createContainer(() => {
   const { targetUri, targetResource, refresh, navigateTo } =
     useTargetResource();
-  const { views } = useDataBrowserConfig();
+  const { resourceViews } = useDataBrowserConfig();
   const { dataset } = useLdo();
 
   /**
@@ -44,14 +44,14 @@ export const [ViewContextProvider, useViewContext] = createContainer(() => {
     const errorViews = getErrorViews(targetResource);
     if (errorViews) return errorViews;
 
-    const potentialViews = views.filter((view) =>
+    const potentialViews = resourceViews.filter((view) =>
       view.canDisplay(targetUri!, targetResource!, dataset),
     );
 
     return potentialViews.length > 0
       ? potentialViews
       : [constructErrorView(`No valid view for ${targetUri}`, OctagonX)];
-  }, [targetResource, targetUri, views, dataset]);
+  }, [targetResource, targetUri, resourceViews, dataset]);
 
   const [curViewConfig, setCurViewConfig] = useState<ResourceViewConfig>(
     validViews[0],

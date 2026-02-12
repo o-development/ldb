@@ -2,7 +2,7 @@ import { ResourceViewConfig } from '../../components/ResourceView';
 import { Folders } from 'lucide-react-native';
 import { ContainerView } from './ContainerView';
 
-export const ContainerConfig: ResourceViewConfig = {
+export const ContainerResourceView: ResourceViewConfig = {
   name: 'container',
   displayName: 'Container',
   displayIcon: Folders,

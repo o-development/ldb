@@ -1,16 +1,18 @@
 import React from 'react';
 import { DataBrowser } from '../components/DataBrowser';
 import { Text } from '../components/ui/text';
-import { RawCodeConfig } from '../resourceViews/RawCode/RawCodeConfig';
-import { ContainerConfig } from '../resourceViews/Container/ContainerConfig';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
-import { ProfileConfig } from '../resourceViews/Profile/ProfileConfig';
 import {
-  createContainerResourceCreator,
-  createRdfResourceCreator,
-  uploadFileResourceCreator,
+  ContainerResourceCreator,
+  FileUploadResourceCreator,
+  RdfResourceCreator,
 } from '../resourceCreators';
+import {
+  ProfileResourceView,
+  ContainerResourceView,
+  RawCodeResourceView,
+} from '../resourceViews';
 
 export function Screen() {
   const mode = process.env.EXPO_PUBLIC_IS_SERVER_HOSTED
@@ -23,14 +25,22 @@ export function Screen() {
     <SafeAreaProvider>
       <StatusBar />
       <DataBrowser
-        views={[ProfileConfig, ContainerConfig, RawCodeConfig]}
+        resourceViews={[
+          ProfileResourceView,
+          ContainerResourceView,
+          RawCodeResourceView,
+        ]}
         resourceCreators={[
-          createContainerResourceCreator,
-          createRdfResourceCreator,
-          uploadFileResourceCreator,
+          ContainerResourceCreator,
+          RdfResourceCreator,
+          FileUploadResourceCreator,
         ]}
         mode={mode}
-        renderLogo={() => <Text bold size="lg">LDB</Text>}
+        renderLogo={() => (
+          <Text bold size="lg">
+            LDB
+          </Text>
+        )}
         defaultIssuer={defaultIssuer}
       />
     </SafeAreaProvider>

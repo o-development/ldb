@@ -3,8 +3,8 @@ import { ResourceViewConfig } from './ResourceView';
 import { ResourceCreatorConfig } from './ResourceCreator';
 
 export interface DataBrowserConfigProps {
-  views: ResourceViewConfig[];
-  resourceCreators?: ResourceCreatorConfig[];
+  resourceViews: ResourceViewConfig[];
+  resourceCreators: ResourceCreatorConfig[];
   mode: 'standalone-app' | 'server-ui';
   defaultIssuer?: string;
   origin?: string;

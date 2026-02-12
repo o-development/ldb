@@ -1,3 +1,3 @@
-export { createContainerResourceCreator } from './createContainer';
-export { createRdfResourceCreator } from './createRdf';
-export { uploadFileResourceCreator } from './uploadFile';
+export * from './ContainerResourceCreator';
+export * from './RdfResourceCreator';
+export * from './FileUploadResourceCreator';
