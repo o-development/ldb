@@ -1,5 +1,16 @@
-import React, { FunctionComponent, useCallback } from 'react';
-import { View, FlatList, StyleSheet, Pressable } from 'react-native';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+} from 'react-native';
 import { Text } from '../../components/ui/text';
 import { Button } from '../../components/ui/button';
 import {
@@ -17,54 +28,63 @@ import { Trash } from 'lucide-react-native';
 import { Plus } from 'lucide-react-native';
 import { Separator } from '../../components/ui/separator';
 import { useDialog } from '../../components/nav/DialogProvider';
-import {
-  SolidContainer,
-  SolidContainerSlug,
-  SolidLeaf,
-} from '@ldo/connected-solid';
+import { SolidContainer, SolidLeaf } from '@ldo/connected-solid';
 import { Notifier } from 'react-native-notifier';
 import { useViewContext } from '../../components/useViewContext';
 import { useTheme } from '@react-navigation/native';
 import { Icon } from '../../components/ui/icon';
+import { useDataBrowserConfig } from '../../components/DataBrowserContext';
+import {
+  ResourceCreatorMessager,
+  ResourceCreatorConfig,
+} from '../../components/ResourceCreator';
+import { Loader2 } from 'lucide-react-native';
 
 export const ContainerView: FunctionComponent = () => {
   const { targetResource, navigateTo } = useViewContext();
   const { prompt } = useDialog();
   const { colors } = useTheme();
+  const { resourceCreators = [] } = useDataBrowserConfig();
 
-  const onCreateContainer = useCallback(async () => {
-    if (targetResource?.type !== 'SolidContainer') return;
-    const givenName = await prompt('Enter Container Name');
-    if (!givenName) return;
-    const slug = (
-      givenName.endsWith('/') ? givenName : `${givenName}/`
-    ) as SolidContainerSlug;
-    const createResult = await targetResource.createChildIfAbsent(slug);
-    if (createResult.isError)
-      Notifier.showNotification({ title: createResult.message });
-    if (createResult.type === 'containerReadSuccess')
-      Notifier.showNotification({ title: `${slug} already exists.` });
-  }, [prompt, targetResource]);
+  const [isCreating, setIsCreating] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState<string[]>([]);
 
-  const onCreateRdf = useCallback(async () => {
-    if (targetResource?.type !== 'SolidContainer') return;
-    const givenName = await prompt('Enter File Name');
-    if (!givenName) return;
-    const slug = (
-      givenName.endsWith('.ttl') ? givenName : `${givenName}.ttl`
-    ) as SolidContainerSlug;
-    const createResult = await targetResource.createChildIfAbsent(slug);
-    if (createResult.isError)
-      Notifier.showNotification({ title: createResult.message });
-    if (createResult.type === 'containerReadSuccess')
-      Notifier.showNotification({ title: `${slug} already exists.` });
-  }, [prompt, targetResource]);
+  const availableCreators = useMemo(() => {
+    if (targetResource?.type !== 'SolidContainer') return [];
+    return resourceCreators.filter((c) => c.canCreate(targetResource));
+  }, [targetResource, resourceCreators]);
 
-  const onUpload = useCallback(async () => {
-    if (targetResource?.type !== 'SolidContainer') return;
-    // Not Implemented
-    Notifier.showNotification({ title: 'Not Implemented' });
-  }, [targetResource?.type]);
+  const messager = useMemo<ResourceCreatorMessager>(
+    () => ({
+      prompt,
+      promptFile: async () => null, // Not implemented; host can override with a file picker
+      toast: (message, options) => {
+        Notifier.showNotification({ title: options?.title ?? message });
+      },
+      loadingMessage: (message) => {
+        setLoadingMessages((prev) => [...prev, message]);
+      },
+    }),
+    [prompt],
+  );
+
+  const runCreator = useCallback(
+    async (creator: ResourceCreatorConfig) => {
+      if (targetResource?.type !== 'SolidContainer') return;
+      setIsCreating(true);
+      setLoadingMessages([]);
+      try {
+        await creator.create({
+          container: targetResource,
+          messager,
+        });
+      } finally {
+        setIsCreating(false);
+        setLoadingMessages([]);
+      }
+    },
+    [targetResource, messager],
+  );
 
   const onDelete = useCallback(
     async (item: SolidLeaf | SolidContainer) => {
@@ -91,20 +111,45 @@ export const ContainerView: FunctionComponent = () => {
       <View style={styles.leftPanel}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button text="Create" iconLeft={Plus} />
+            <Button
+              text="Create"
+              iconLeft={Plus}
+              disabled={isCreating || availableCreators.length === 0}
+            />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onPress={onCreateContainer}>
-              <Text>Container</Text>
-            </DropdownMenuItem>
-            <DropdownMenuItem onPress={onCreateRdf}>
-              <Text>RDF Turtle</Text>
-            </DropdownMenuItem>
-            <DropdownMenuItem onPress={onUpload}>
-              <Text>File Upload</Text>
-            </DropdownMenuItem>
+            {availableCreators.map((creator) => (
+              <DropdownMenuItem
+                key={creator.name}
+                onPress={() => runCreator(creator)}
+              >
+                <Icon icon={creator.displayIcon} />
+                <Text>{creator.displayName}</Text>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {isCreating && (
+          <View style={styles.creatingPanel}>
+            <View style={styles.creatingHeader}>
+              <Loader2 size={16} style={styles.spinner} />
+              <Text>Creating…</Text>
+            </View>
+            {loadingMessages.length > 0 && (
+              <ScrollView
+                style={styles.loadingMessages}
+                contentContainerStyle={styles.loadingMessagesContent}
+              >
+                {loadingMessages.map((msg, i) => (
+                  <Text key={i} style={styles.loadingMessageItem}>
+                    {msg}
+                  </Text>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+        )}
       </View>
 
       {/* Right Panel */}
@@ -160,6 +205,31 @@ const styles = StyleSheet.create({
     maxWidth: 200,
     flex: 1,
     padding: 16,
+  },
+  creatingPanel: {
+    marginTop: 12,
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0,0,0,0.04)',
+  },
+  creatingHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  spinner: {
+    opacity: 0.7,
+  },
+  loadingMessages: {
+    maxHeight: 120,
+    marginTop: 8,
+  },
+  loadingMessagesContent: {
+    gap: 4,
+  },
+  loadingMessageItem: {
+    fontSize: 12,
+    opacity: 0.85,
   },
   rightPanel: {
     flex: 3,

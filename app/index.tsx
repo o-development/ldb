@@ -6,6 +6,11 @@ import { ContainerConfig } from '../resourceViews/Container/ContainerConfig';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 import { ProfileConfig } from '../resourceViews/Profile/ProfileConfig';
+import {
+  createContainerResourceCreator,
+  createRdfResourceCreator,
+  uploadFileResourceCreator,
+} from '../resourceCreators';
 
 export function Screen() {
   const mode = process.env.EXPO_PUBLIC_IS_SERVER_HOSTED
@@ -19,6 +24,11 @@ export function Screen() {
       <StatusBar />
       <DataBrowser
         views={[ProfileConfig, ContainerConfig, RawCodeConfig]}
+        resourceCreators={[
+          createContainerResourceCreator,
+          createRdfResourceCreator,
+          uploadFileResourceCreator,
+        ]}
         mode={mode}
         renderLogo={() => <Text>LDB</Text>}
         defaultIssuer={defaultIssuer}
