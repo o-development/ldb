@@ -106,7 +106,9 @@ const useIsomorphicLayoutEffect =
     ? React.useEffect
     : React.useLayoutEffect;
 
-function useSetWebBackgroundClassName(colorScheme: NonNullable<ColorSchemeName>) {
+function useSetWebBackgroundClassName(
+  colorScheme: NonNullable<ColorSchemeName>,
+) {
   useIsomorphicLayoutEffect(() => {
     if (Platform.OS !== 'web' || typeof document === 'undefined') return;
     const el = document.documentElement;

@@ -8,7 +8,7 @@ import {
 import { SolidLeaf, SolidContainer } from '@ldo/connected-solid';
 import { InvalidIdentifierResource } from '@ldo/connected';
 import { useDataBrowserConfig } from './DataBrowserContext';
-import { useResource } from '@ldo/solid-react';
+import { useResource, useSolidAuth } from '@ldo/solid-react';
 import { Platform } from 'react-native';
 
 interface UseTargetResourceContext {
@@ -29,6 +29,7 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const { mode, origin } = useDataBrowserConfig();
+  const { ranInitialAuthCheck } = useSolidAuth();
 
   /**
    * URL Management
@@ -102,6 +103,22 @@ export const TargetResourceProvider: FunctionComponent<PropsWithChildren> = ({
     return `${curOrigin}${curPathname}${curHash}`;
   }, [currentUrl, mode]);
 
+  if (!ranInitialAuthCheck) return <></>;
+  return (
+    <TargetResourceLoader targetUri={targetUri} navigateTo={navigateTo}>
+      {children}
+    </TargetResourceLoader>
+  );
+};
+
+export interface TargetResourceLoaderProps extends PropsWithChildren {
+  targetUri?: string;
+  navigateTo: (newRoute: string) => void;
+}
+
+export const TargetResourceLoader: FunctionComponent<
+  TargetResourceLoaderProps
+> = ({ targetUri, navigateTo, children }) => {
   const targetResource = useResource(targetUri);
 
   const refresh = useCallback(async () => {
