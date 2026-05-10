@@ -14,7 +14,7 @@ function Card({
     <View
       style={StyleSheet.flatten([
         styles.card,
-        { backgroundColor: colors.background, borderColor: colors.border },
+        { backgroundColor: colors.card, borderColor: colors.border },
         style,
       ])}
       {...props}
