@@ -24,6 +24,7 @@ import {
 import { ErrorMessageResourceView } from '../../components/utilityResourceViews/ErrorMessageResourceView';
 import { CircleX } from 'lucide-react-native';
 import { Folder } from 'lucide-react-native';
+import { FolderOpen } from 'lucide-react-native';
 import { Code } from 'lucide-react-native';
 import { File } from 'lucide-react-native';
 import { Trash } from 'lucide-react-native';
@@ -136,7 +137,11 @@ export const ContainerView: FunctionComponent = () => {
               disabled={isCreating || availableCreators.length === 0}
             />
           </DropdownMenuTrigger>
-          <DropdownMenuContent style={styles.createDropdownContent}>
+          <DropdownMenuContent
+            align="start"
+            sideOffset={4}
+            style={styles.createDropdownContent}
+          >
             {availableCreators.map((creator) => (
               <DropdownMenuItem
                 key={creator.name}
@@ -183,6 +188,21 @@ export const ContainerView: FunctionComponent = () => {
         <FlatList
           data={targetResource.children()}
           keyExtractor={(item) => item.uri}
+          style={styles.flatList}
+          contentContainerStyle={styles.flatListContent}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <View style={styles.emptyStateIcon}>
+                <FolderOpen size={40} color={colors.text} />
+              </View>
+              <Text muted>This container is empty</Text>
+              {availableCreators.length > 0 && (
+                <Text muted size="sm">
+                  Use Create to add resources
+                </Text>
+              )}
+            </View>
+          }
           ItemSeparatorComponent={() => (
             <View
               style={[styles.listSeparator, { backgroundColor: colors.border }]}
@@ -306,5 +326,22 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     padding: 0,
+  },
+  flatList: {
+    flex: 1,
+  },
+  flatListContent: {
+    flexGrow: 1,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingVertical: 48,
+  },
+  emptyStateIcon: {
+    opacity: 0.2,
+    marginBottom: 8,
   },
 });

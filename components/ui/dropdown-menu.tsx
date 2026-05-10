@@ -151,7 +151,7 @@ function DropdownMenuItem({
 }) {
   const theme = useTheme();
   return (
-    <TextStyleProvider style={{ color: theme.colors.text }}>
+    <TextStyleProvider size="sm" style={{ color: theme.colors.text }}>
       <DropdownMenuPrimitive.Item asChild {...props}>
         <Pressable
           style={({ pressed, hovered }) =>
@@ -353,10 +353,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 4, // mt-1
     padding: 4, // p-1
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05, // shadow-foreground/5
-    shadowRadius: 2,
-    elevation: 2, // Android shadow
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 8, // Android shadow
     // Border color, background color, and shadow color applied at render time
   },
 
@@ -368,10 +368,10 @@ const styles = StyleSheet.create({
     borderRadius: 6, // rounded-md
     borderWidth: 1,
     padding: 4, // p-1
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05, // shadow-foreground/5
-    shadowRadius: 2,
-    elevation: 2, // Android shadow
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 8, // Android shadow
     // Border color, background color, and shadow color applied at render time
   },
 

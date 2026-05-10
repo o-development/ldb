@@ -1,11 +1,11 @@
 import { SolidContainer, SolidContainerSlug } from '@ldo/connected-solid';
-import { Code } from 'lucide-react-native';
+import { FileCode } from 'lucide-react-native';
 import { ResourceCreatorConfig } from '../components/ResourceCreator';
 
 export const RdfResourceCreator: ResourceCreatorConfig = {
   name: 'createRdf',
   displayName: 'RDF Turtle',
-  displayIcon: Code,
+  displayIcon: FileCode,
   canCreate: (container): container is SolidContainer =>
     container.type === 'SolidContainer',
   create: async ({ container, createUtils }) => {
