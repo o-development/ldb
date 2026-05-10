@@ -6,9 +6,9 @@ module.exports = function (api) {
         'babel-preset-expo',
         {
           unstable_transformProfile: 'hermes-canary',
+          unstable_transformImportMeta: true,
         },
       ],
     ],
-    plugins: ['@babel/plugin-syntax-import-meta'],
   };
 };

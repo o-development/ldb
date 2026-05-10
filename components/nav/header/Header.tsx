@@ -25,7 +25,7 @@ export const Header: FunctionComponent = () => {
       ]}
     >
       <AddressBox />
-      {session.isLoggedIn && (
+      {session.isActive && (
         <Button
           key="setMemu"
           variant="ghost"
@@ -35,7 +35,7 @@ export const Header: FunctionComponent = () => {
         />
       )}
       <ViewMenu />
-      {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />}
+      {session.isActive ? <AvatarMenu /> : <SignInMenu />}
     </Card>
   );
 };
