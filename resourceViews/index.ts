@@ -1,6 +1,11 @@
 // Resource views - Container
 export * from './Container/ContainerResourceView';
 export * from './Container/ContainerView';
+export * from './Container/DefaultContainerView';
+export * from './Container/DefaultContainerLayout';
+export * from './Container/DefaultContainerSideMenu';
+export * from './Container/DefaultContainerContent';
+export * from './Container/DefaultContainerResourceItem';
 
 // Resource views - Profile
 export * from './Profile/ProfileResourceView';

@@ -19,6 +19,40 @@ import { useTheme } from '@react-navigation/native';
 import { TextStyleProvider } from '../../components/ui/text';
 import { Icon } from './icon';
 
+// Inject dropdown animation styles once on web. Runs on first DropdownMenuContent mount.
+// Targets [role="menu"] which Radix sets on both Content and SubContent.
+const DROPDOWN_ANIMATION_CSS = `
+@keyframes dropdown-in {
+  from { opacity: 0; transform: scaleY(0) translateY(-8px); }
+  to   { opacity: 1; transform: scaleY(1) translateY(0); }
+}
+@keyframes dropdown-out {
+  from { opacity: 1; transform: scaleY(1) translateY(0); }
+  to   { opacity: 0; transform: scaleY(0) translateY(-8px); }
+}
+[role="menu"] {
+  transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+}
+[role="menu"][data-state="open"] {
+  animation: dropdown-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[role="menu"][data-state="closed"] {
+  animation: dropdown-out 150ms ease-in;
+}
+`;
+
+function useDropdownAnimation() {
+  React.useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    const id = 'rnp-dropdown-menu-animations';
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id;
+    el.textContent = DROPDOWN_ANIMATION_CSS;
+    document.head.appendChild(el);
+  }, []);
+}
+
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -108,6 +142,7 @@ function DropdownMenuContent({
   portalHost?: string;
 }) {
   const theme = useTheme();
+  useDropdownAnimation();
   return (
     <DropdownMenuPrimitive.Portal hostName={portalHost}>
       <DropdownMenuPrimitive.Overlay

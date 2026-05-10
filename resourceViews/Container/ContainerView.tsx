@@ -4,48 +4,64 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Platform,
-} from 'react-native';
+import { Platform } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import { Text } from '../../components/ui/text';
-import { Button } from '../../components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '../../components/ui/dropdown-menu';
-import { ErrorMessageResourceView } from '../../components/utilityResourceViews/ErrorMessageResourceView';
 import { CircleX } from 'lucide-react-native';
-import { Folder } from 'lucide-react-native';
-import { FolderOpen } from 'lucide-react-native';
-import { Code } from 'lucide-react-native';
-import { File } from 'lucide-react-native';
-import { Trash } from 'lucide-react-native';
-import { Plus } from 'lucide-react-native';
-import { useDialog } from '../../components/nav/DialogProvider';
-import { SolidContainer, SolidLeaf } from '@ldo/connected-solid';
 import { Notifier } from 'react-native-notifier';
+import { SolidContainer, SolidLeaf } from '@ldo/connected-solid';
+import { ErrorMessageResourceView } from '../../components/utilityResourceViews/ErrorMessageResourceView';
+import { useDialog } from '../../components/nav/DialogProvider';
 import { useViewContext } from '../../components/useViewContext';
-import { useTheme } from '@react-navigation/native';
-import { Icon } from '../../components/ui/icon';
 import { useDataBrowserConfig } from '../../components/DataBrowserContext';
 import {
-  ResourceCreatorUtils,
   ResourceCreatorConfig,
+  ResourceCreatorUtils,
 } from '../../components/ResourceCreator';
-import { Loader2 } from 'lucide-react-native';
 
-export const ContainerView: FunctionComponent = () => {
+// ─── Slot prop interfaces ─────────────────────────────────────────────────────
+
+export interface ContainerLayoutProps {
+  sideMenu: React.ReactNode;
+  content: React.ReactNode;
+}
+
+export interface ContainerSideMenuProps {
+  creators: ResourceCreatorConfig[];
+  isCreating: boolean;
+  loadingMessages: string[];
+  onCreate: (creator: ResourceCreatorConfig) => void;
+}
+
+export interface ContainerContentProps {
+  resources: (SolidLeaf | SolidContainer)[];
+  renderResource: (item: SolidLeaf | SolidContainer) => React.ReactElement;
+  creatorsAvailable: boolean;
+}
+
+export interface ContainerResourceItemProps {
+  item: SolidLeaf | SolidContainer;
+  displayName: string;
+  onNavigate: () => void;
+  onDelete: () => void;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export interface ContainerViewProps {
+  Layout: React.ComponentType<ContainerLayoutProps>;
+  SideMenu: React.ComponentType<ContainerSideMenuProps>;
+  Content: React.ComponentType<ContainerContentProps>;
+  ResourceItem: React.ComponentType<ContainerResourceItemProps>;
+}
+
+export const ContainerView: FunctionComponent<ContainerViewProps> = ({
+  Layout,
+  SideMenu,
+  Content,
+  ResourceItem,
+}) => {
   const { targetResource, navigateTo } = useViewContext();
   const { prompt } = useDialog();
-  const { colors } = useTheme();
   const { resourceCreators = [] } = useDataBrowserConfig();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -94,10 +110,7 @@ export const ContainerView: FunctionComponent = () => {
       setIsCreating(true);
       setLoadingMessages([]);
       try {
-        await creator.create({
-          container: targetResource,
-          createUtils,
-        });
+        await creator.create({ container: targetResource, createUtils });
       } finally {
         setIsCreating(false);
         setLoadingMessages([]);
@@ -109,9 +122,8 @@ export const ContainerView: FunctionComponent = () => {
   const onDelete = useCallback(
     async (item: SolidLeaf | SolidContainer) => {
       if (targetResource?.type !== 'SolidContainer') return;
-      const createResult = await item.delete();
-      if (createResult.isError)
-        Notifier.showNotification({ title: createResult.message });
+      const result = await item.delete();
+      if (result.isError) Notifier.showNotification({ title: result.message });
     },
     [targetResource?.type],
   );
@@ -125,223 +137,37 @@ export const ContainerView: FunctionComponent = () => {
     );
   }
 
+  const renderResource = (item: SolidLeaf | SolidContainer) => {
+    const displayName =
+      item.uri.replace(targetResource.uri, '').replace(/\/$/, '') || '/';
+    return (
+      <ResourceItem
+        key={item.uri}
+        item={item}
+        displayName={displayName}
+        onNavigate={() => navigateTo(item.uri)}
+        onDelete={() => onDelete(item)}
+      />
+    );
+  };
+
   return (
-    <View style={styles.mainContainer}>
-      {/* Left Panel */}
-      <View style={styles.leftPanel}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              text="Create"
-              iconLeft={Plus}
-              disabled={isCreating || availableCreators.length === 0}
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            sideOffset={4}
-            style={styles.createDropdownContent}
-          >
-            {availableCreators.map((creator) => (
-              <DropdownMenuItem
-                key={creator.name}
-                onPress={() => runCreator(creator)}
-              >
-                <Icon icon={creator.displayIcon} />
-                <Text>{creator.displayName}</Text>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {isCreating && (
-          <View
-            style={[styles.creatingPanel, { backgroundColor: colors.border }]}
-          >
-            <View style={styles.creatingHeader}>
-              <Loader2 size={16} style={styles.spinner} />
-              <Text>Creating…</Text>
-            </View>
-            {loadingMessages.length > 0 && (
-              <ScrollView
-                style={styles.loadingMessages}
-                contentContainerStyle={styles.loadingMessagesContent}
-              >
-                {loadingMessages.map((msg, i) => (
-                  <Text key={i} style={styles.loadingMessageItem}>
-                    {msg}
-                  </Text>
-                ))}
-              </ScrollView>
-            )}
-          </View>
-        )}
-      </View>
-
-      {/* Right Panel */}
-      <View
-        style={[
-          styles.rightPanel,
-          { borderLeftWidth: 1, borderLeftColor: colors.border },
-        ]}
-      >
-        <FlatList
-          data={targetResource.children()}
-          keyExtractor={(item) => item.uri}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <View style={styles.emptyStateIcon}>
-                <FolderOpen size={40} color={colors.text} />
-              </View>
-              <Text muted>This container is empty</Text>
-              {availableCreators.length > 0 && (
-                <Text muted size="sm">
-                  Use Create to add resources
-                </Text>
-              )}
-            </View>
-          }
-          ItemSeparatorComponent={() => (
-            <View
-              style={[styles.listSeparator, { backgroundColor: colors.border }]}
-            />
-          )}
-          renderItem={({ item }) => {
-            const TypeIcon =
-              item.type === 'SolidContainer'
-                ? Folder
-                : item.uri.endsWith('.ttl')
-                  ? Code
-                  : File;
-            const displayName =
-              item.uri.replace(targetResource.uri, '').replace(/\/$/, '') ||
-              '/';
-            return (
-              <Pressable
-                onPress={() => navigateTo(item.uri)}
-                style={({ hovered }) => [
-                  styles.listItemRow,
-                  hovered && { backgroundColor: colors.border },
-                ]}
-              >
-                <View style={styles.listItem}>
-                  <View style={styles.listItemText}>
-                    <Icon icon={TypeIcon} size={18} />
-                    <Text
-                      style={styles.listItemLabel}
-                      numberOfLines={1}
-                      ellipsizeMode="middle"
-                    >
-                      {displayName}
-                    </Text>
-                  </View>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    style={styles.deleteButton}
-                    onPress={() => onDelete(item)}
-                    iconLeft={Trash}
-                  />
-                </View>
-              </Pressable>
-            );
-          }}
+    <Layout
+      sideMenu={
+        <SideMenu
+          creators={availableCreators}
+          isCreating={isCreating}
+          loadingMessages={loadingMessages}
+          onCreate={runCreator}
         />
-      </View>
-    </View>
+      }
+      content={
+        <Content
+          resources={targetResource.children()}
+          renderResource={renderResource}
+          creatorsAvailable={availableCreators.length > 0}
+        />
+      }
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  leftPanel: {
-    maxWidth: 220,
-    flex: 1,
-    padding: 16,
-    paddingRight: 12,
-  },
-  creatingPanel: {
-    marginTop: 12,
-    padding: 12,
-    borderRadius: 10,
-  },
-  creatingHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  spinner: {
-    opacity: 0.7,
-  },
-  loadingMessages: {
-    maxHeight: 120,
-    marginTop: 8,
-  },
-  loadingMessagesContent: {
-    gap: 4,
-  },
-  loadingMessageItem: {
-    fontSize: 12,
-    opacity: 0.85,
-  },
-  rightPanel: {
-    flex: 3,
-  },
-  createDropdownContent: {
-    minWidth: 220,
-    paddingVertical: 6,
-    paddingHorizontal: 6,
-  },
-  listSeparator: {
-    height: 1,
-    width: '100%',
-  },
-  listItemRow: {
-    minHeight: 48,
-    justifyContent: 'center',
-  },
-  listItem: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  listItemText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    flex: 1,
-    minWidth: 0,
-  },
-  listItemLabel: {
-    flex: 1,
-  },
-  deleteButton: {
-    width: 36,
-    height: 36,
-    padding: 0,
-  },
-  flatList: {
-    flex: 1,
-  },
-  flatListContent: {
-    flexGrow: 1,
-  },
-  emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    paddingVertical: 48,
-  },
-  emptyStateIcon: {
-    opacity: 0.2,
-    marginBottom: 8,
-  },
-});

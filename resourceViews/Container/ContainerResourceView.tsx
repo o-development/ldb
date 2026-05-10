@@ -1,12 +1,12 @@
 import { ResourceViewConfig } from '../../components/ResourceView';
 import { Folders } from 'lucide-react-native';
-import { ContainerView } from './ContainerView';
+import { DefaultContainerView } from './DefaultContainerView';
 
 export const ContainerResourceView: ResourceViewConfig = {
   name: 'container',
   displayName: 'Container',
   displayIcon: Folders,
-  view: ContainerView,
+  view: DefaultContainerView,
   canDisplay: (targetUri, targetResource) => {
     return targetResource.type === 'SolidContainer';
   },

@@ -34,7 +34,7 @@ import { WacRuleForm } from './WacRuleForm';
 import { isEqual } from 'lodash';
 
 interface SharingModalMethods {
-  openSharingModal: () => void;
+  openSharingModal: (resource?: SolidLeaf | SolidContainer) => void;
   closeSharingModal: () => void;
   isModalOpen: boolean;
 }
@@ -54,6 +54,9 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   const { targetResource } = useViewContext();
   const { colors } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [resourceOverride, setResourceOverride] = useState<
+    SolidLeaf | SolidContainer | undefined
+  >();
   const [wacResult, setWacResult] = useState<
     | GetWacRuleError<SolidLeaf | SolidContainer>
     | GetWacRuleSuccess<SolidLeaf | SolidContainer>
@@ -67,15 +70,17 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   });
   const { width, height } = useWindowDimensions();
 
+  const activeResource = resourceOverride ?? targetResource;
+
   useEffect(() => {
     if (
-      targetResource &&
-      targetResource.type !== 'InvalidIdentifierResource' &&
-      isOpen
+      isOpen &&
+      (activeResource?.type === 'SolidContainer' ||
+        activeResource?.type === 'SolidLeaf')
     ) {
       setIsLoading(true);
 
-      targetResource.getWac().then((wac) => {
+      activeResource.getWac().then((wac) => {
         setWacResult(
           wac as
             | GetWacRuleError<SolidLeaf | SolidContainer>
@@ -87,7 +92,7 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
         setIsLoading(false);
       });
     }
-  }, [targetResource, isOpen]);
+  }, [activeResource, isOpen]);
 
   const didEdit = useMemo(() => {
     if (wacResult?.type !== 'getWacRuleSuccess') return false;
@@ -97,8 +102,14 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   const context = useMemo(
     () => ({
       isModalOpen: isOpen,
-      openSharingModal: () => setIsOpen(true),
-      closeSharingModal: () => setIsOpen(false),
+      openSharingModal: (resource?: SolidLeaf | SolidContainer) => {
+        setResourceOverride(resource);
+        setIsOpen(true);
+      },
+      closeSharingModal: () => {
+        setIsOpen(false);
+        setResourceOverride(undefined);
+      },
     }),
     [isOpen],
   );
@@ -106,16 +117,17 @@ export const SharingModalProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   const onApplyChanges = useCallback(async () => {
     if (
       didEdit &&
-      (targetResource?.type === 'SolidContainer' ||
-        targetResource?.type === 'SolidLeaf')
+      (activeResource?.type === 'SolidContainer' ||
+        activeResource?.type === 'SolidLeaf')
     ) {
       setIsLoading(true);
-      const result = await targetResource.setWac(editedRules);
+      const result = await activeResource.setWac(editedRules);
       // TODO throw error with toast
       setIsLoading(false);
     }
     setIsOpen(false);
-  }, [editedRules, targetResource, didEdit]);
+    setResourceOverride(undefined);
+  }, [editedRules, activeResource, didEdit]);
 
   return (
     <sharingModalContext.Provider value={context}>
@@ -165,7 +177,6 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     borderTopWidth: 1,
-    borderBottomWidth: 1,
     paddingTop: 8,
     paddingBottom: 8,
     marginLeft: -24,

@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 6, // gap-1.5
     textAlign: 'center',
-    borderBottomWidth: 1,
   },
   footer: {
     flexDirection: 'column-reverse',
