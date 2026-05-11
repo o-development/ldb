@@ -1,4 +1,3 @@
-import './solidFetchConfig';
 import { useMemo } from 'react';
 import { BrowserSolidLdoProvider } from '@ldo/solid-react';
 import React, { FunctionComponent } from 'react';

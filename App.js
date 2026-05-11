@@ -6,6 +6,7 @@ import { Screen } from './app/index';
 // @uvdsl/solid-oidc-client-browser resolve RefreshWorker.js relative to the server root,
 // not the current page path (which varies per-resource in server-hosted mode).
 if (typeof location !== 'undefined') {
+  // eslint-disable-next-line no-undef
   globalThis.__ExpoImportMetaRegistry = { url: location.origin + '/' };
 }
 

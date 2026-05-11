@@ -10,10 +10,22 @@ import { Card } from '../../ui/card';
 import { Button } from '../../ui/button';
 import { UserPlus } from 'lucide-react-native';
 import { useSharingModal } from '../../sharing/SharingModal';
+import { useViewContext } from '../../useViewContext';
 
 export const Header: FunctionComponent = () => {
   const { session } = useSolidAuth();
   const { openSharingModal } = useSharingModal();
+  const { targetResource } = useViewContext();
+
+  const handleShare = () => {
+    if (
+      targetResource?.type === 'SolidLeaf' ||
+      targetResource?.type === 'SolidContainer'
+    ) {
+      openSharingModal(targetResource);
+    }
+  };
+
   return (
     <Card style={styles.card}>
       <AddressBox />
@@ -22,7 +34,7 @@ export const Header: FunctionComponent = () => {
           key="setMemu"
           variant="ghost"
           style={styles.shareButton}
-          onPress={openSharingModal}
+          onPress={handleShare}
           iconLeft={UserPlus}
         />
       )}

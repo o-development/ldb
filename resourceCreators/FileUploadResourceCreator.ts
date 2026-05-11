@@ -1,5 +1,6 @@
 import { SolidContainer, SolidLeafSlug } from '@ldo/connected-solid';
 import { FileUp } from 'lucide-react-native';
+import { Platform } from 'react-native';
 import { ResourceCreatorConfig } from '../components/ResourceCreator';
 
 /** Basename of a path or file name (handles forward slashes). */
@@ -25,9 +26,12 @@ export const FileUploadResourceCreator: ResourceCreatorConfig = {
     const slug = basename(file.name) as SolidLeafSlug;
     const mimeType = file.type || 'application/octet-stream';
     createUtils.loadingMessage(`Uploading ${slug}…`);
+    // RN's fetch doesn't marshal Blob as a request body — convert to ArrayBuffer first.
+    const body = Platform.OS !== 'web' ? await file.arrayBuffer() : file;
     const result = await container.uploadChildAndOverwrite(
       slug,
-      file,
+      // @ts-ignore
+      body,
       mimeType,
     );
     if (result.isError) {
