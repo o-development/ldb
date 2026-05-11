@@ -16,13 +16,15 @@ Three steps are required for Expo/Metro. Vite and webpack 5 handle `import.meta.
 
 #### 1. Serve `RefreshWorker.js`
 
-`@ldo/solid-react` uses a `SharedWorker` for background token refresh (via `@uvdsl/solid-oidc-client-browser`). Metro cannot serve worker scripts automatically, so copy `RefreshWorker.js` into your project's `public/` folder:
+`@ldo/solid-react` uses a `SharedWorker` for background token refresh (via `@uvdsl/solid-oidc-client-browser`). Metro cannot serve worker scripts automatically, so copy `RefreshWorker.js` into your project's `public/` folder by adding this to your `package.json`:
 
 ```json
-"postinstall": "mkdir -p public && cp node_modules/@uvdsl/solid-oidc-client-browser/dist/esm/web/RefreshWorker.js public/RefreshWorker.js"
+"postinstall": "ldb-copy-refresh-worker"
 ```
 
-Add `public/RefreshWorker.js` to your `.gitignore` — it's generated, not hand-authored.
+The `ldb-copy-refresh-worker` binary is included in the package and placed in `node_modules/.bin/` on install. It finds `@uvdsl/solid-oidc-client-browser` in your install tree automatically regardless of how npm/pnpm/yarn hoists it.
+
+Add `public/RefreshWorker.js` to your `.gitignore` — it is generated, not hand-authored.
 
 #### 2. Enable `import.meta` transform in `babel.config.js`
 
@@ -50,6 +52,22 @@ if (typeof location !== 'undefined') {
 ```
 
 This must run before any `@ldo` imports.
+
+## Development
+
+After cloning and running `npm install`, copy the worker file before starting the dev server:
+
+```
+npm run copy-refresh-worker
+```
+
+Then start the dev server:
+
+```
+npm run dev:web      # Solid test server + Expo web
+npm run dev:ios      # iOS simulator
+npm run dev:android  # Android emulator
+```
 
 ## Publishing
 

@@ -1,6 +1,6 @@
 {
   "name": "linked-data-browser",
-  "version": "0.0.8-alpha.6",
+  "version": "0.0.8-alpha.7",
   "exports": {
     ".": {
       "types": "./dist-lib/index.d.ts",
@@ -21,7 +21,7 @@
     "build:ldo": "ldo build --input .shapes --output .ldo",
     "build:lib": "tsup lib/index.js --format cjs,esm --dts --out-dir dist-lib --clean",
     "build": "npm run build:standalone && npm run build:server && npm run build:lib",
-    "postinstall": "mkdir -p public && cp node_modules/@uvdsl/solid-oidc-client-browser/dist/esm/web/RefreshWorker.js public/RefreshWorker.js",
+    "copy-refresh-worker": "node scripts/copy-refresh-worker.js",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
@@ -109,10 +109,14 @@
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   },
+  "bin": {
+    "ldb-copy-refresh-worker": "scripts/copy-refresh-worker.js"
+  },
   "private": false,
   "files": [
     "dist-lib",
     "dist-server",
-    "dist-standalone"
+    "dist-standalone",
+    "scripts/copy-refresh-worker.js"
   ]
 }
