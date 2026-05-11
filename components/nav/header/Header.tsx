@@ -2,7 +2,6 @@ import React from 'react';
 import { useSolidAuth } from '@ldo/solid-react';
 import { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 import { AddressBox } from './AddressBox';
 import { AvatarMenu } from './AvatarMenu';
 import { SignInMenu } from './SignInMenu';
@@ -11,31 +10,36 @@ import { Card } from '../../ui/card';
 import { Button } from '../../ui/button';
 import { UserPlus } from 'lucide-react-native';
 import { useSharingModal } from '../../sharing/SharingModal';
+import { useViewContext } from '../../useViewContext';
 
 export const Header: FunctionComponent = () => {
   const { session } = useSolidAuth();
   const { openSharingModal } = useSharingModal();
-  const { colors } = useTheme();
+  const { targetResource } = useViewContext();
+
+  const handleShare = () => {
+    if (
+      targetResource?.type === 'SolidLeaf' ||
+      targetResource?.type === 'SolidContainer'
+    ) {
+      openSharingModal(targetResource);
+    }
+  };
 
   return (
-    <Card
-      style={[
-        styles.card,
-        { borderBottomWidth: 1, borderBottomColor: colors.border },
-      ]}
-    >
+    <Card style={styles.card}>
       <AddressBox />
-      {session.isLoggedIn && (
+      {session.isActive && (
         <Button
           key="setMemu"
           variant="ghost"
           style={styles.shareButton}
-          onPress={openSharingModal}
+          onPress={handleShare}
           iconLeft={UserPlus}
         />
       )}
       <ViewMenu />
-      {session.isLoggedIn ? <AvatarMenu /> : <SignInMenu />}
+      {session.isActive ? <AvatarMenu /> : <SignInMenu />}
     </Card>
   );
 };

@@ -39,7 +39,7 @@ export const SignInMenu: FunctionComponent = () => {
   const onIdpSubmit = useCallback(async () => {
     setIdpError(undefined);
     try {
-      await login(idpValue);
+      await login(idpValue, window.location.href);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setIdpError(err.message);
@@ -55,7 +55,7 @@ export const SignInMenu: FunctionComponent = () => {
         {!isSmallScreen && (
           <Button
             key="signUp"
-            onPress={() => signUp(defaultIssuer)}
+            onPress={() => signUp(defaultIssuer, window.location.href)}
             variant="ghost"
             text="Sign Up"
           />
@@ -63,7 +63,7 @@ export const SignInMenu: FunctionComponent = () => {
         {!isSmallScreen && (
           <Button
             key="logIn"
-            onPress={() => login(defaultIssuer)}
+            onPress={() => login(defaultIssuer, window.location.href)}
             variant="default"
             text="Log In"
           />
@@ -82,14 +82,14 @@ export const SignInMenu: FunctionComponent = () => {
             <DropdownMenuGroup>
               {isSmallScreen && (
                 <DropdownMenuItem
-                  onPress={() => signUp(defaultIssuer)}
+                  onPress={() => signUp(defaultIssuer, window.location.href)}
                 >
                   <Text>Sign Up</Text>
                 </DropdownMenuItem>
               )}
               {isSmallScreen && (
                 <DropdownMenuItem
-                  onPress={() => login(defaultIssuer)}
+                  onPress={() => login(defaultIssuer, window.location.href)}
                 >
                   <Text>Log In</Text>
                 </DropdownMenuItem>

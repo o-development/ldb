@@ -68,6 +68,11 @@
           "@type": "StaticAssetEntry",
           "relativeUrl": "/.ui-static/",
           "filePath": "./dist-server/"
+        },
+        {
+          "@type": "StaticAssetEntry",
+          "relativeUrl": "/RefreshWorker.js",
+          "filePath": "./node_modules/@uvdsl/solid-oidc-client-browser/dist/esm/web/RefreshWorker.js"
         }
       ]
     }
